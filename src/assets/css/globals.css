@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+    @apply bg-body-bg-light dark:bg-body-bg-dark text-body-fg-light dark:text-body-fg-dark text-[14.4px] min-h-screen relative;
+    font-family: 'Roboto', sans-serif;
+}
+
+.authcontainer {
+    @apply w-full h-full min-[1200px]:max-w-[1140px] min-[992px]:max-w-[960px] min-[768px]:max-w-[720px] min-[576px]:max-w-[540px] mx-auto px-3;
+}
+
+.authenticated-bg {
+    background-image: url('/bg-auth3.png');
+    @apply bg-cover bg-center;
+}
+
+body.dark .authenticated-bg {
+    background-image: url('/bg-auth-dark.jpg');
+    @apply bg-cover bg-center;
+}
+
+.scroller {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(200, 200, 200) rgb(235, 239, 242);
+}
+
+body.dark .scroller {
+    scrollbar-color: rgb(58, 66, 80) rgb(40, 46, 56);
+}
+
+.scroller::-webkit-scrollbar {
+    @apply w-2 h-2 bg-body-bg-light dark:bg-body-bg-dark;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+    @apply bg-[rgb(200,200,200)] dark:bg-border-dark;
+}
+
+.scroller::-webkit-scrollbar-thumb:hover {
+    @apply bg-[rgb(200,200,200)]/[0.5] dark:bg-border-dark/[0.5];
+}
+
+#quantity_input::-webkit-outer-spin-button,
+#quantity_input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
