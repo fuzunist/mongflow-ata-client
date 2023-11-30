@@ -19,7 +19,7 @@ const Footer = () => {
     return (
         <footer className='-mx-3 bg-footer-bg-light dark:bg-footer-bg-dark text-footer-fg-light dark:text-footer-fg-dark pt-[19px] px-[15px] pb-5 flex justify-between max-[768px]:justify-center items-center'>
             <div>
-                2023 © MG Demir Çelik Yazılımı{' '}
+                2023 © Ata Fiber Şİrket Yazılımı{' '}
                 <Link
                     to='/'
                     className='text-link-fg-light dark:text-link-fg-dark hover:text-link-hover-light hover:dark:text-link-hover-dark transition-colors'
