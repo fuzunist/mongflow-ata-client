@@ -27,7 +27,7 @@ import LogOut from "@/pages/LogOut";
 import ForgetPassword from "@/pages/ForgetPassword";
 import Profile from "@/pages/Profile";
 
-const routes = createHashRouter([
+const routes = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
