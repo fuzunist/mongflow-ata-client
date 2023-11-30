@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
 import { verify } from "@/services/auth";
 import { setUser } from "@/store/actions/user";
 import { promiseAll } from "@/store/actions/apps";
@@ -26,7 +25,6 @@ const Root = () => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
     });
   }
-
   const verifyHandle = async () => {
     const beforePathname = sessionStorage.getItem("beforePathname");
     console.log("verifyHandle - beforePathnam: ", beforePathname);
