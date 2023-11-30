@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, createHashRouter } from "react-router-dom";
 import Root from "./Root";
 import NotFound from "@/pages/not-found";
 
@@ -27,7 +27,7 @@ import LogOut from "@/pages/LogOut";
 import ForgetPassword from "@/pages/ForgetPassword";
 import Profile from "@/pages/Profile";
 
-const routes = createBrowserRouter([
+const routes = createHashRouter([
   {
     path: "/",
     element: <Root />,
