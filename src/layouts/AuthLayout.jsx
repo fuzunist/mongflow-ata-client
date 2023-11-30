@@ -21,7 +21,7 @@ const AuthLayout = () => {
             <div className='authcontainer'>
                 <div className='flex flex-col justify-center items-center'>
                     <div className='flex flex-col justify-center items-center gap-4 px-4 min-[1200px]:w-1/3 min-[992px]:w-1/2 min-[768px]:w-2/3 w-full'>
-                        <div className='flex flex-col items-center justify-center'>
+                        {/* <div className='flex flex-col items-center justify-center'>
                             <Link
                                 to='/'
                                 className='flex justify-center items-center'
@@ -36,7 +36,7 @@ const AuthLayout = () => {
                                 />
                             </Link>
                             <p className='mb-9 mt-3 text-light-fg-secondary dark:text-dark-fg-secondary'>Responsive Admin Dashboard</p>
-                        </div>
+                        </div> */}
                         <Outlet />
                     </div>
                 </div>
