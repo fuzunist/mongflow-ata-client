@@ -1,16 +1,16 @@
-import { useEffect } from 'react'
-import { useCookies } from 'react-cookie'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { verify } from '@/services/auth'
-import { setUser } from '@/store/actions/user'
-import { promiseAll } from '@/store/actions/apps'
+import { verify } from "@/services/auth";
+import { setUser } from "@/store/actions/user";
+import { promiseAll } from "@/store/actions/apps";
 
-import Loader from '@/components/Loader'
+import Loader from "@/components/Loader";
 
 const Root = () => {
-    const [cookies, setCookies] = useCookies(['access_token', 'refresh_token'])
-    const navigate = useNavigate()
+  const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
+  const navigate = useNavigate();
 
   let [searchParams, setSearchParams] = useSearchParams();
 
@@ -25,39 +25,40 @@ const Root = () => {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
     });
-  } 
+  }
 
+  const verifyHandle = async () => {
+    const beforePathname = sessionStorage.getItem("beforePathname");
+    console.log("verifyHandle - beforePathnam: ", beforePathname);
 
+    if (!cookies?.access_token && !access_token) {
+      console.log("49 line patladı");
 
-    const verifyHandle = async () => {
-        const beforePathname = sessionStorage.getItem('beforePathname')
-        console.log('verifyHandle - beforePathnam: ', beforePathname)
-
-        if (!cookies?.access_token && !access_token) {
-            console.log("49 line patladı")
-           return navigate("/auth/login");
-       }
-       const response = await verify(access_token ?? cookies?.access_token);
-       if (response?.error) {
-         console.log(response?.error);
-         return navigate("/auth/login");
-       }
-       setUser({
-         ...response,
-         tokens: {
-           access_token: access_token ?? cookies?.access_token,
-           refresh_token: refresh_token ?? cookies?.refresh_token,
-         },
-       });
-       promiseAll(access_token ?? cookies?.access_token, response.usertype);
-       navigate("/dashboard");
+      //  return navigate("/auth/login");
+      window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
+    const response = await verify(access_token ?? cookies?.access_token);
+    if (response?.error) {
+      console.log(response?.error);
+      //  return navigate("/auth/login");
+      window.location.href = import.meta.env.VITE_CENTRAL_URL;
+    }
+    setUser({
+      ...response,
+      tokens: {
+        access_token: access_token ?? cookies?.access_token,
+        refresh_token: refresh_token ?? cookies?.refresh_token,
+      },
+    });
+    promiseAll(access_token ?? cookies?.access_token, response.usertype);
+    navigate("/dashboard");
+  };
 
-    useEffect(() => {
-        verifyHandle()
-    }, [])
+  useEffect(() => {
+    verifyHandle();
+  }, []);
 
-    return <Loader />
-}
+  return <Loader />;
+};
 
-export default Root
+export default Root;
