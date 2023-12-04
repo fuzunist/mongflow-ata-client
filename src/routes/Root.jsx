@@ -51,7 +51,7 @@ const Root = () => {
       },
     });
     promiseAll(access_token ?? cookies?.access_token, response.usertype);
-    navigate("/dashboard");
+    navigate(beforePathname ?? "/dashboard");
   };
 
   useEffect(() => {
