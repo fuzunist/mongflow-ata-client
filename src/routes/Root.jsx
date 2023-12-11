@@ -42,6 +42,8 @@ const Root = () => {
     }
     const response = await verify(access_token ?? cookies?.access_token);
     if (response?.error) {
+      console.log(response?.error);
+
       setTimeout(()=>{
       console.log(response?.error);
 
@@ -50,7 +52,7 @@ const Root = () => {
 
       }, 5000)
       // return navigate("/auth/login");
-      window.location.href = import.meta.env.VITE_CENTRAL_URL;
+      // window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     setUser({
       ...response,
