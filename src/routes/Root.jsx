@@ -2,17 +2,17 @@ import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { verify } from "@/services/auth";
-import { setUser } from "@/store/actions/user";
-import { promiseAll } from "@/store/actions/apps";
+import { verify } from "../services/auth";
+import { setUser } from "../store/actions/user";
+import { promiseAll } from "../store/actions/apps";
 
-import Loader from "@/components/Loader";
+import Loader from "../components/Loader";
+
+import store from "store";
 
 const Root = () => {
-  const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
-  const navigate = useNavigate();
-
   let [searchParams, setSearchParams] = useSearchParams();
+  const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
 
   let access_token = searchParams.get("access_token");
   let refresh_token = searchParams.get("refresh_token");
@@ -27,6 +27,7 @@ const Root = () => {
     });
   }
 
+  const navigate = useNavigate();
   let beforePathname;
   const verifyHandle = async () => {
     beforePathname = sessionStorage.getItem("beforePathname");
@@ -34,14 +35,13 @@ const Root = () => {
 
     if (!cookies?.access_token && !access_token) {
       console.log("49 line patladı");
-
-      //  return navigate("/auth/login");
+      // return navigate("/auth/login");
       window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     const response = await verify(access_token ?? cookies?.access_token);
     if (response?.error) {
       console.log(response?.error);
-      //  return navigate("/auth/login");
+      // return navigate("/auth/login");
       window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     setUser({
