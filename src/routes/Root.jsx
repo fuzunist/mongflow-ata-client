@@ -27,8 +27,9 @@ const Root = () => {
     });
   }
 
+  let beforePathname;
   const verifyHandle = async () => {
-    const beforePathname = sessionStorage.getItem("beforePathname");
+    beforePathname = sessionStorage.getItem("beforePathname");
     console.log("verifyHandle - beforePathnam: ", beforePathname);
 
     if (!cookies?.access_token && !access_token) {
