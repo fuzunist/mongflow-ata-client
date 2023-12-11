@@ -65,7 +65,7 @@ const Root = () => {
 
   useEffect(() => {
     verifyHandle();
-  }, [cookies, response]);
+  }, [cookies]);
 
   return <Loader />;
 };
