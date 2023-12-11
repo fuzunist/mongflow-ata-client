@@ -32,13 +32,23 @@ const Root = () => {
     console.log("verifyHandle - beforePathnam: ", beforePathname);
 
     if (!cookies?.access_token && !access_token) {
-      console.log("49 line patladı");
+      console.log("36 line patladı");
+
+      setTimeout(()=>{
+        console.log("36 line patladı");
+      }, 5000)
       // return navigate("/auth/login");
       window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     const response = await verify(access_token ?? cookies?.access_token);
     if (response?.error) {
+      setTimeout(()=>{
       console.log(response?.error);
+
+        console.log("44 line patladı");
+      console.log(response?.error);
+
+      }, 5000)
       // return navigate("/auth/login");
       window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
@@ -55,7 +65,7 @@ const Root = () => {
 
   useEffect(() => {
     verifyHandle();
-  }, []);
+  }, [cookies, response]);
 
   return <Loader />;
 };
