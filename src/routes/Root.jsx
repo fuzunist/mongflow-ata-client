@@ -8,8 +8,6 @@ import { promiseAll } from "../store/actions/apps";
 
 import Loader from "../components/Loader";
 
-import store from "store";
-
 const Root = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
