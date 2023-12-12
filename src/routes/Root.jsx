@@ -33,14 +33,14 @@ const Root = () => {
 
     if (!cookies?.access_token && !access_token) {
       console.log("36 line patladı");
-      window.location.href = import.meta.env.VITE_CENTRAL_URL;
+      navigate("/auth/logout");
     }
     const response = await verify(access_token ?? cookies?.access_token);
     if (response?.error) {
       console.log("44 line patladı");
       console.log(response?.error);
 
-      window.location.href = import.meta.env.VITE_CENTRAL_URL;
+      navigate("/auth/logout");
     }
     setUser({
       ...response,
