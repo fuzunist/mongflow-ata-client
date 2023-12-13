@@ -12,22 +12,21 @@ const Root = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
 
-  let access_token = searchParams.get("access_token");
-  let refresh_token = searchParams.get("refresh_token");
-  if (access_token && refresh_token) {
-    setCookies("access_token", access_token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
-    });
-    setCookies("refresh_token", refresh_token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-    });
-  }
-
   const navigate = useNavigate();
   let beforePathname;
   const verifyHandle = async () => {
+    let access_token = searchParams.get("access_token");
+    let refresh_token = searchParams.get("refresh_token");
+    if (access_token && refresh_token) {
+      setCookies("access_token", access_token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      });
+      setCookies("refresh_token", refresh_token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      });
+    }
     beforePathname = sessionStorage.getItem("beforePathname");
     console.log("verifyHandle - beforePathnam: ", beforePathname);
 
