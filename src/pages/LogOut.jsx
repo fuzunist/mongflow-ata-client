@@ -18,18 +18,14 @@ const LogOut = () => {
         removeCookie("refresh_token");
         sessionStorage.removeItem("beforePathname");
         setLogOut();
-        if (!cookies?.refresh_token && !cookies?.access_token) {
-          window.location.href = import.meta.env.VITE_CENTRAL_URL;
-        } else {
-          navigate("/");
-        }
+        window.location.href = import.meta.env.VITE_CENTRAL_URL;
       } catch (error) {
         console.error("Logout failed:", error);
       }
     };
 
     performLogout();
-  }, []);
+  }, [navigate, removeCookie]);
 
   return <Loader className="fixed top-0 left-0 z-[9999]" />;
 };

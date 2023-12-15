@@ -9,6 +9,8 @@ import { promiseAll } from "../store/actions/apps";
 import Loader from "../components/Loader";
 
 const Root = () => {
+  const navigate = useNavigate();
+  let beforePathname;
   let [searchParams, setSearchParams] = useSearchParams();
   const [cookies, setCookies] = useCookies(["access_token", "refresh_token"]);
 
@@ -25,22 +27,19 @@ const Root = () => {
     });
   }
 
-  const navigate = useNavigate();
-  let beforePathname;
   const verifyHandle = async () => {
     beforePathname = sessionStorage.getItem("beforePathname");
     console.log("verifyHandle - beforePathnam: ", beforePathname);
 
     if (!cookies?.access_token && !access_token) {
       console.log("36 line patladı");
-      navigate("/auth/logout");
+      window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     const response = await verify(access_token ?? cookies?.access_token);
     if (response?.error) {
       console.log("44 line patladı");
       console.log(response?.error);
-
-      navigate("/auth/logout");
+      window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
     setUser({
       ...response,
@@ -55,7 +54,7 @@ const Root = () => {
 
   useEffect(() => {
     verifyHandle();
-  }, [cookies]);
+  }, []);
 
   return <Loader />;
 };
