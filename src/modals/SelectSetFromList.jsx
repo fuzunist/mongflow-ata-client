@@ -10,7 +10,7 @@ const SelectSetFromList = ({ selectedSet, selectedCustomer, onContinueOrder }) =
     const setId = selectedSet?.set_id
     const customerId = selectedCustomer?.customerid
     const [quantity, setQuantity] = useState(1)
-    const [productType, setProductType] = useState('pcs')
+    const [productType, setProductType] = useState('ton')
     const [isOpen, setIsOpen] = useState(false)
     const { t } = useTranslation()
 
@@ -26,11 +26,11 @@ const SelectSetFromList = ({ selectedSet, selectedCustomer, onContinueOrder }) =
     useEffect(() => {
         setQuantity(1)
         setIsOpen(false)
-        setProductType('pcs')
+        setProductType('ton')
         return () => {
             setQuantity(1)
             setIsOpen(false)
-            setProductType('pcs')
+            setProductType('ton')
         }
     }, [])
 
@@ -83,6 +83,8 @@ const SelectSetFromList = ({ selectedSet, selectedCustomer, onContinueOrder }) =
                             <option value='pcs'>{t('pcs')}</option>
                             <option value='sqm'>{t('sqm')}</option>
                             <option value='roll'>{t('roll')}</option>
+                            <option value='ton'>ton</option>
+
                         </select>
                         <button
                             type='button'

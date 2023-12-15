@@ -13,7 +13,7 @@ const SelectProductFromList = ({ selectedProduct, selectedCustomer, onContinueOr
     const productId = selectedProduct?.product_id
     const customerId = selectedCustomer?.customerid
     const [quantity, setQuantity] = useState(1)
-    const [productType, setProductType] = useState('pcs')
+    const [productType, setProductType] = useState('ton')
     const [isOpen, setIsOpen] = useState(false)
     const { t } = useTranslation()
 
@@ -64,11 +64,11 @@ const SelectProductFromList = ({ selectedProduct, selectedCustomer, onContinueOr
     useEffect(() => {
         setQuantity(1)
         setIsOpen(false)
-        setProductType('pcs')
+        setProductType('ton')
         return () => {
             setQuantity(1)
             setIsOpen(false)
-            setProductType('pcs')
+            setProductType('ton')
         }
     }, [])
 
@@ -113,15 +113,7 @@ const SelectProductFromList = ({ selectedProduct, selectedCustomer, onContinueOr
                                 MozAppearance: 'textfield'
                             }}
                         />
-                        <select
-                            value={productType}
-                            onChange={(e) => setProductType(e.target.value)}
-                            className='py-2 px-3 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark'
-                        >
-                            <option value='pcs'>{t('pcs')}</option>
-                            <option value='sqm'>{t('sqm')}</option>
-                            <option value='roll'>{t('roll')}</option>
-                        </select>
+                      
                         <button
                             type='button'
                             onClick={() => setQuantity((quantity) => quantity + 1)}

@@ -18,7 +18,9 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
         productName: {
             tag: 'input',
             type: 'text',
-            value: selectedProduct?.product_name ?? ''
+            placeholder: "Ürün İsmi Girin",
+            value: selectedProduct?.product_name ?? '',
+            
         },
         // defaultPrice: {
         //     tag: 'input',
@@ -38,6 +40,7 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
         attributes: {
             tag: 'attributes',
             type: 'text',
+            placeholder: "Ürün Özelliği Girin",
             value: selectedProduct?.attributes ? mergeDeep([], [...selectedProduct.attributes]) : []
         }
     }
