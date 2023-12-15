@@ -31,7 +31,7 @@ const Root = () => {
     beforePathname = sessionStorage.getItem("beforePathname");
     console.log("verifyHandle - beforePathnam: ", beforePathname);
 
-    if (!cookies?.access_token && !access_token) {
+    if (!cookies?.access_token) {
       console.log("36 line patladı");
       window.location.href = import.meta.env.VITE_CENTRAL_URL;
     }
