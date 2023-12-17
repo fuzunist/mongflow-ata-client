@@ -14,11 +14,17 @@ const LogOut = () => {
   useEffect(() => {
     const performLogout = async () => {
       try {
+        sessionStorage.removeItem("beforePathname");
+
+        console.log("logout");
         removeCookie("access_token");
         removeCookie("refresh_token");
-        sessionStorage.removeItem("beforePathname");
+        console.log(
+          "removed sessison:",
+          sessionStorage.getItem("beforePathname")
+        );
         setLogOut();
-        window.location.href = import.meta.env.VITE_CENTRAL_URL;
+        return (window.location.href = import.meta.env.VITE_CENTRAL_URL);
       } catch (error) {
         console.error("Logout failed:", error);
       }
