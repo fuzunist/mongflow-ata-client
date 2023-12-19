@@ -197,6 +197,10 @@ const apps = createSlice({
     _addRecipe: (state, action) => {
       state.recipes = [...state.recipes, action.payload];
     },
+    _addRecipeMaterials: (state, action) => {
+       console.log("recipematerial from addrecipemat: ", action.payload)
+      state.recipeMaterials = [state.recipeMaterials, ...action.payload];
+    },
     _editRecipe: (state, action) => {
       state.recipes = state.recipes.map((recipe) => {
         if (recipe.id === action.payload.id)
@@ -485,6 +489,7 @@ export const {
   _editProduct,
   _delProduct,
   _addRecipe,
+  _addRecipeMaterials,
   _editRecipe,
   _delRecipe,
   _addSet,

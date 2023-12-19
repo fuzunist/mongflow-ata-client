@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { useRecipes } from "@/store/hooks/apps";
+import { formatDigits } from "@/utils/helpers";
 
 const Order = ({ order }) => {
   const user = useUser();
@@ -28,10 +29,10 @@ const Order = ({ order }) => {
   };
 
   return (
-    <Col variant="full">
+    // <Col variant="full">
       <Card>
         <Card.Body>
-          <div className="flex flex-col gap-2 ">
+          <div className="flex flex-col gap-2 overflow-x-scroll ">
             <div className="absolute right-0 top-0 flex gap-2 justify-center items-center rounded  text-text-dark-dark cursor-pointer select-none">
               <Link
                 className="bg-purple hover:bg-purple-hover rounded p-1.5"
@@ -95,14 +96,14 @@ const Order = ({ order }) => {
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {t("totalPrice")}
                 </span>
-                <span className="basis-[calc(20%_-_0.5rem)] mx-1">
+                <span className="basis-[calc(12%_-_0.5rem)] mx-1">
                   {t("orderStatus")}
                 </span>
               </div>
               <hr className="border-border-light dark:border-border-dark" />
               {order?.products?.map((product, index) => (
-                <div className="flex flex-wrap items-center" key={index}>
-                  <span className="basis-[calc(30%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5">
+                <div className="flex flex-wrap items-start mt-2" key={index}>
+                  <span className="basis-[calc(30%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5 -mt-2">
                     <span>{product.product_name}</span>
                     <span className="text-sm">
                       {Object.entries(product.attributes)
@@ -114,20 +115,20 @@ const Order = ({ order }) => {
                     {product.quantity} ton
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {product.unitCost} {order?.currency_code}
+                    {formatDigits(product.unitCost)} {order?.currency_code}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {product.unitPrice} {order?.currency_code}
+                    {formatDigits(product.unitPrice)} {order?.currency_code}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {product.totalCost} {order?.currency_code}
+                    {formatDigits(product.totalCost)} {order?.currency_code}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {product.totalPrice} {order?.currency_code}
+                    {formatDigits(product.totalPrice)} {order?.currency_code}
                   </span>
                   {user.usertype === "stock_manager" ||
                   user.usertype === "admin" ? (
-                    <span className="basis-[calc(20%_-_0.5rem)] mx-1 text-center">
+                    <span className="basis-[calc(12%_-_0.5rem)] mx-1 text-center">
                       <Modal
                         className=""
                         text={
@@ -156,7 +157,7 @@ const Order = ({ order }) => {
                       </Modal>
                     </span>
                   ) : (
-                    <div className="basis-[calc(20%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
+                    <div className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
                       {product?.orderStatus ? (
                         product.orderStatus.map((status, index) => (
                           <span key={index + 300}>
@@ -200,7 +201,7 @@ const Order = ({ order }) => {
                   {user.usertype === "stock_manager" ||
                   user.usertype === "admin" ? (
                     <Modal
-                      className="basis-[calc(31%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem]"
+                      className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 min-h-[1rem]"
                       text={
                         set?.orderStatus ? (
                           set.orderStatus.map((status, index) => (
@@ -228,7 +229,7 @@ const Order = ({ order }) => {
                       )}
                     </Modal>
                   ) : (
-                    <div className="basis-[calc(31%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
+                    <div className="basis-[calc(31%_-_0.5rem)] mx-1 flex flex-col gap-0.5  min-h-[1rem] justify-center items-center">
                       {set?.orderStatus ? (
                         set.orderStatus.map((status, index) => (
                           <span key={index + 600}>
@@ -248,7 +249,12 @@ const Order = ({ order }) => {
               ))}
             </div>
             <span className="text-right px-4">
-              {t("taxed_total")}: {order.total_with_tax} {order.currency_code}
+              {t("totalCost")}: {formatDigits(parseFloat(order.total_cost))}{" "}
+              {order.currency_code}
+            </span>
+            <span className="text-right px-4">
+              {t("taxed_total")}: {formatDigits(parseFloat(order.total_with_tax))}{" "}
+              {order.currency_code}
             </span>
             {order.currency_code !== "TL" && (
               <span className="text-right px-4">
@@ -258,7 +264,7 @@ const Order = ({ order }) => {
           </div>
         </Card.Body>
       </Card>
-    </Col>
+    // </Col>
   );
 };
 

@@ -32,6 +32,7 @@ import invoiceToPDF_Eng from "@/utils/invoiceToPDF_Eng";
 import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { formatFloat, formatDigits } from "@/utils/helpers";
 
 const Invoice = ({ selectedCustomer, editingOrder }) => {
   const user = useUser();
@@ -216,14 +217,14 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
 
   if (!selectedCustomer) return null;
   return (
-    <Card>
-      <Card.Body>
+    <Card >
+      <Card.Body >
         {successMessage && (
           <p className="text-green-500 mb-4">{successMessage}</p>
         )}
-        <div className="flex flex-col gap-4 text-lg mb-4" id="invoice">
+        <div className="flex flex-col text-lg gap-4 mb-4 overflow-x-scroll" id="invoice">
           <div className="flex justify-between items-start">
-            <div className="flex-1 flex flex-col gap-2">
+            <div className=" flex flex-1 flex-col gap-2">
               <span>
                 <span className="font-semibold">{t("customername")}:</span>{" "}
                 {selectedCustomer.customername}
@@ -259,48 +260,66 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
             </div>
           </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
-          <div className="flex flex-wrap text-center font-semibold">
-            <span className={`${ editingOrder ? "basis-[calc(10%_-_0.5rem)] " : "basis-[calc(25%_-_0.5rem)] "} mx-1 px-2`}>
+          <div className="flex flex-col gap-2 justify-center border border-border-light dark:border-border-dark relative p-4 mt-4 mb-2">
+          <div className="flex flex-wrap text-center font-medium">
+            <span
+              className={`${
+                editingOrder
+                  ? "basis-[calc(10%_-_0.5rem)] "
+                  : "basis-[calc(30%_-_0.5rem)] "
+              } mx-1`}
+            >
               {t("product")}
             </span>
-            <span className="basis-[calc(30%_-_0.5rem)] mx-1 px-2">
+            <span className="basis-[calc(25%_-_0.5rem)] mx-1 ">
               {t("attributes")}
             </span>
-            <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+            <span className="basis-[calc(10%_-_0.5rem)] mx-1 ">
               {t("unit")}
             </span>
             {editingOrder && (
-              <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+              <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
                 {t("unitCost")}
               </span>
             )}
-            <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+            <span className="basis-[calc(10%_-_0.5rem)] mx-1">
               {t("unitPrice")}
             </span>
             {editingOrder && (
-              <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
+              <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
                 {t("totalCost")}
               </span>
             )}
-            <span className={`${ editingOrder ? "basis-[calc(15%_-_0.5rem)] " : "basis-[calc(25%_-_0.5rem)] "} mx-1 px-2`}>
+            <span
+              className={`${
+                editingOrder
+                  ? "basis-[calc(15%_-_0.5rem)] "
+                  : "basis-[calc(25%_-_0.5rem)] "
+              } mx-1`}
+            >
               {t("total")}
             </span>
           </div>
+          </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-y-2 justify-center">
             {selectedProducts.map((product, index) => (
               <div
-                className="flex flex-wrap text-center items-center"
-                key={product.product_id}
+                className="flex text-center ml-1"
+                key={index}
               >
                 <span
-                  className={`${ editingOrder ? "basis-[calc(10%_-_0.5rem)] " : "basis-[calc(25%_-_0.5rem)] "} mx-1 px-2 hover:line-through hover:text-red-500 cursor-pointer`}
+                  className={`${
+                    editingOrder
+                      ? "basis-[calc(10%_-_0.5rem)] "
+                      : "basis-[calc(30%_-_0.5rem)] "
+                  } mx-1  hover:line-through hover:text-red-500 cursor-pointer `}
                   onClick={() => delSelectProduct(index)}
                 >
                   {product.product_name}
                 </span>
-                <span className="basis-[calc(30%_-_0.5rem)] mx-1 px-2 flex flex-col text-sm">
+                <span className="basis-[calc(25%_-_0.5rem)] flex flex-col text-sm">
                   {Object.entries(product.attributes).map(
                     ([attrName, attrValue], index) => (
                       <span key={index}>
@@ -309,38 +328,43 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     )
                   )}
                 </span>
-                <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+                <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {product.quantity} {t(product.productType)}
                 </span>
                 {editingOrder && (
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
-                    {product.unitCost}
+                  <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
+                    {formatDigits(product.unitCost)}
                   </span>
                 )}
-                <span  className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
-                <Modal
-                  text={product.unitPrice.toFixed(2)}
-                  className=" mx-1 px-2 cursor-pointer select-none"
-
-                >
-                  <input
-                    type="number"
-                    value={product.unitPrice}
-                    onChange={(e) =>
-                      editSelectProduct(index, e.target.valueAsNumber)
-                    }
-                    className="w-full py-2 px-3 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
-                  />
-                </Modal>
+                <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                  <Modal
+                    text={formatDigits(product.unitPrice)}
+                    className=" mx-1 cursor-pointer select-none"
+                  >
+                    <input
+                      type="number"
+                      value={product.unitPrice}
+                      onChange={(e) =>
+                        editSelectProduct(index, e.target.valueAsNumber)
+                      }
+                      className="w-full py-2 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
+                    />
+                  </Modal>
                 </span>
                 {editingOrder && (
-                  <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
-                    {product.totalCost.toFixed(2)}
+                  <span className="basis-[calc(15%_-_0.5rem)] mx-1">
+                    {formatDigits(product.totalCost)}
                   </span>
                 )}
 
-                <span className={`mx-1 px-2 ${ editingOrder ? "basis-[calc(15%_-_0.5rem)]" : "basis-[calc(25%_-_0.5rem)]"}`}>
-                  {product.totalPrice.toFixed(2)}
+                <span
+                  className={`mx-1 ${
+                    editingOrder
+                      ? "basis-[calc(15%_-_0.5rem)]"
+                      : "basis-[calc(25%_-_0.5rem)]"
+                  }`}
+                >
+                  {formatDigits(product.totalPrice)}
                 </span>
               </div>
             ))}
@@ -351,12 +375,12 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                 key={set.set_id}
               >
                 <span
-                  className="basis-[calc(24%_-_0.5rem)] mx-1 px-2 hover:line-through hover:text-red-500 cursor-pointer"
+                  className="basis-[calc(24%_-_0.5rem)] mx-1  hover:line-through hover:text-red-500 cursor-pointer"
                   onClick={() => delSelectSet(index)}
                 >
                   {set.set_name}
                 </span>
-                <span className="basis-[calc(30%_-_0.5rem)] mx-1 px-2 flex flex-col text-sm">
+                <span className="basis-[calc(30%_-_0.5rem)] mx-1  flex flex-col text-sm">
                   <div className="flex flex-col gap-2">
                     {set.products.map((product, indx) => (
                       <div className="flex flex-col gap-1" key={indx}>
@@ -377,11 +401,11 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     ))}
                   </div>
                 </span>
-                <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+                <span className="basis-[calc(10%_-_0.5rem)] mx-1 ">
                   {set.quantity} {t(set.productType)}
                 </span>
                 <Modal
-                  className="basis-[calc(12%_-_0.5rem)] mx-1 px-2 cursor-pointer select-none"
+                  className="basis-[calc(12%_-_0.5rem)] mx-1 cursor-pointer select-none"
                   text={set.unitPrice.toFixed(2)}
                 >
                   <input
@@ -390,10 +414,10 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     onChange={(e) =>
                       editSelectSet(index, e.target.valueAsNumber)
                     }
-                    className="w-full py-2 px-3 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
+                    className="w-full py-2  transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
                   />
                 </Modal>
-                <span className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+                <span className="basis-[calc(24%_-_0.5rem)] mx-1 ">
                   {set.totalPrice.toFixed(2)}
                 </span>
               </div>
@@ -402,15 +426,15 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
 
           <div className="flex flex-col">
             <div className="flex flex-wrap justify-end text-center">
-              <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+              <div className="basis-[calc(24%_-_0.5rem)] mx-1 ">
                 <span>
                   <span className="font-semibold">{t("amount")}:</span>{" "}
-                  {totalPrice.toFixed(2)}
+                  {formatDigits(totalPrice)}
                 </span>
               </div>
             </div>
             <div className="flex flex-wrap justify-end text-center">
-              <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+              <div className="basis-[calc(24%_-_0.5rem)] mx-1 ">
                 <span className="font-semibold">{t("vat")}:</span>
                 <select
                   value={initialValues.taxRate}
@@ -420,7 +444,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                       taxRate: parseFloat(e.target.value),
                     }))
                   }
-                  className="py-2 px-3 ml-2 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
+                  className="py-2 ml-2 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
                 >
                   <option value={0}>%0</option>
                   <option value={0.1}>%10</option>
@@ -431,7 +455,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
           </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
           <div className="flex flex-wrap justify-end text-center">
-            <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+            <div className="basis-[calc(24%_-_0.5rem)] mx-1 ">
               <span className="font-semibold text-2xl flex gap-2 justify-center items-center">
                 <Modal
                   text={
@@ -494,7 +518,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     />
                   )}
                 </Modal>{" "}
-                {(totalPrice * (1 + initialValues.taxRate)).toFixed(2)}
+                {formatDigits((totalPrice * (1 + initialValues.taxRate)))}
               </span>
             </div>
           </div>

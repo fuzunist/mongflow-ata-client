@@ -28,7 +28,7 @@ const CreateRecipe = ({
   order_id,
   recipe_id,
   isFilled,
-  totalRecipeCost,
+  product,
 }) => {
   const recipeMaterials = useRecipeMaterials();
   const recipes = useRecipes();
@@ -45,6 +45,7 @@ const CreateRecipe = ({
     initialValues2[String(row.id)] = {
       id: row.id,
       name: row.material,
+      label:row.material ,
       tag: "input",
       type: "number",
       placeholder: "Miktar girin (kg)",
@@ -84,8 +85,8 @@ const CreateRecipe = ({
     let allCost = 0;
     for (const key in orderProducts) {
       if (orderProducts[key].recipe_id === recipe_id) {
-        orderProducts[key].unitCost = cost;
-        orderProducts[key].totalCost = cost * orderProducts[key].quantity;
+        orderProducts[key].unitCost = cost / orderProducts[key].quantity;
+        orderProducts[key].totalCost = cost;
       }
       allCost += orderProducts[key].totalCost;
     }
@@ -154,8 +155,8 @@ const CreateRecipe = ({
     let allCost = 0;
     for (const key in orderProducts) {
       if (orderProducts[key].recipe_id === recipe_id) {
-        orderProducts[key].unitCost = cost;
-        orderProducts[key].totalCost = cost * orderProducts[key].quantity;
+        orderProducts[key].unitCost = cost / orderProducts[key].quantity;
+        orderProducts[key].totalCost = cost;
       }
       allCost += orderProducts[key].totalCost;
     }
@@ -192,12 +193,16 @@ const CreateRecipe = ({
   return (
     <>
       <FormikForm
-        //   onSubmit={selectedProduct ? onEdit : onSubmit}
+        className={"flex flex-row"}
         onSubmit={isFilled ? onEdit : onSubmit}
         //   validate={validate}
         initialValues={initialValues2}
         error={error}
-        title="Reçete Bilgilerini Ekle"
+        title={
+          isFilled ? "Reçete Bilgilerini Düzenle" : "Reçete Bilgilerini Ekle"
+        }
+        recipe={true}
+        product={product}
         //   {t(selectedProduct ? (!!type ? 'editOtherProduct' : 'editProduct') : !!type ? 'addOtherProduct' : 'addProduct')}
       />
       {/* {selectedProduct && (

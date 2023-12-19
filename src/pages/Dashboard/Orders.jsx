@@ -6,6 +6,7 @@ import Order from '@/modals/Order'
 import { setSearch } from '@/store/actions/apps'
 import { useOrders, useSearch } from '@/store/hooks/apps'
 import { useUser } from '@/store/hooks/user'
+import { formatDigits } from '@/utils/helpers'
 import { useMemo } from 'react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -124,7 +125,7 @@ const Orders = () => {
                                                         </div>
                                                     </div>
                                                     <span className='basis-[calc(16%_-_0.50rem)] max-[900px]:basis-[calc(19%_-_0.50rem)] max-[768px]:basis-[calc(25%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-center'>
-                                                        {order.total_with_tax} {order.currency_code}
+                                                        {formatDigits(order.total_with_tax)} {order.currency_code}
                                                     </span>
                                                     <span className='basis-[calc(12%_-_0.50rem)] max-[900px]:basis-[calc(16%_-_0.50rem)] max-[768px]:basis-[calc(20%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-center'>
                                                         {order.order_date.split('T')[0]}
@@ -202,7 +203,7 @@ const Orders = () => {
                                             </div>
                                         </div>
                                         <span className='basis-[calc(16%_-_0.50rem)] max-[900px]:basis-[calc(19%_-_0.50rem)] max-[768px]:basis-[calc(25%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-center'>
-                                            {order.total_with_tax} {order.currency_code}
+                                            {formatDigits(order.total_with_tax)} {order.currency_code}
                                         </span>
                                         <span className='basis-[calc(12%_-_0.50rem)] max-[900px]:basis-[calc(16%_-_0.50rem)] max-[768px]:basis-[calc(20%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-center'>
                                             {order.order_date.split('T')[0]}

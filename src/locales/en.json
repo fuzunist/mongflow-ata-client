@@ -173,5 +173,9 @@
   "all": "All",
   "recipe": "Recipe",
   "unitCost": "Unit Cost",
-  "totalCost": "Total Cost"
+  "totalCost": "Total Cost",
+  "apps-materials": "Raw Materials",
+  "materials_added_successfully":"Raw Materials Costs' successfully updated."
+
+
 }

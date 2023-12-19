@@ -26,6 +26,8 @@ import Register from "@/pages/Register";
 import LogOut from "@/pages/LogOut";
 import ForgetPassword from "@/pages/ForgetPassword";
 import Profile from "@/pages/Profile";
+import Materials from "@/pages/Materials";
+
 
 const routes = createBrowserRouter([
   {
@@ -110,6 +112,11 @@ const routes = createBrowserRouter([
       {
         path: "apps/productions",
         element: <Productions />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/materials",
+        element: <Materials />,
         errorElement: <NotFound />,
       },
       {

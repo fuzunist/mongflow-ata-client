@@ -3,6 +3,7 @@ import {
   _addCustomer,
   _addProduct,
   _addRecipe,
+  _addRecipeMaterials,
   _addOrder,
   _setCustomer,
   _setProduct,
@@ -64,6 +65,9 @@ export const delProduct = (product_id) =>
   store.dispatch(_delProduct(product_id));
 
 export const addRecipe = (recipe) => store.dispatch(_addRecipe(recipe));
+export const addRecipeMaterials = (recipeMaterials) =>
+  store.dispatch(_addRecipeMaterials(recipeMaterials));
+
 export const editRecipe = (recipe) => store.dispatch(_editRecipe(recipe));
 export const delRecipe = (recipeId) => store.dispatch(_delRecipe(recipeId));
 

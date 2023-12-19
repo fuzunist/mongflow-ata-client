@@ -171,5 +171,7 @@
   "all": "Tümü",
   "recipe": "Reçete",
   "unitCost": "Birim Maliyet",
-  "totalCost": "Toplam Maliyet"
+  "totalCost": "Toplam Maliyet",
+  "apps-materials": "Hammaddeler",
+  "materials_added_successfully":"Hammadde Maliyetleri başarıyla güncellendi"
 }

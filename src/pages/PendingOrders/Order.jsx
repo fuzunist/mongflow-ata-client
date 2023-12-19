@@ -90,8 +90,6 @@ const Order = ({ order }) => {
                   (recipe) => recipe.id === product.recipe_id
                 );
 
-                let recipeCost = isFilled?.cost ?? 0;
-                let totalRecipeCost = recipeCost * product?.quantity ?? 0;
                 return (
                   <div className="flex flex-wrap items-center" key={index}>
                     <span className="basis-[calc(45%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5">
@@ -141,9 +139,9 @@ const Order = ({ order }) => {
                             <CreateRecipe
                               order_id={order.order_id}
                               recipe_id={product.recipe_id}
+                              product={product}
                               closeModal={close}
                               isFilled={isFilled}
-                              totalRecipeCost={totalRecipeCost}
                             />
                           )}
                         </Modal>
@@ -197,7 +195,7 @@ const Order = ({ order }) => {
               ))}
             </div>
             <span className="text-right px-4">
-              {t("taxed_total")}: {order?.total_with_tax} {order?.currency_code}
+              {t("taxed_total")}: {order?.total_with_tax?.toLocaleString()} {order?.currency_code}
             </span>
             {order.currency_code !== "TL" && (
               <span className="text-right px-4">

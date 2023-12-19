@@ -100,7 +100,13 @@ export default {
                 'box-lg': '0 0 45px 0 rgba(0, 0, 0, 0.12)',
                 'box-inset': 'inset 0 1px 2px rgba(0, 0, 0, 0.075)'
             }
-        }
+        },
+        screens: {
+            sm: "580px",
+            md: "790px",
+            lg: "960px",
+            xl: "1400px",
+          },
     },
     plugins: []
 }
