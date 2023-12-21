@@ -84,10 +84,10 @@ const Expenses = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <>
    
     <ExpensesForm
-      className={"flex flex-row"}
+      className={"flex flex-row "}
       onSubmit={onSubmit}
       //   validate={validate}
       initialValues={initialValues}
@@ -98,9 +98,9 @@ const Expenses = () => {
       //   {t(selectedProduct ? (!!type ? 'editOtherProduct' : 'editProduct') : !!type ? 'addOtherProduct' : 'addProduct')}
     />
      {successMessage && (
-      <p className="text-green-500 mb-4">{successMessage}</p>
+      <p className="flex mt-4 text-green-500 mb-4 self-center items-center justify-center">{successMessage}</p>
     )}
-  </div>
+  </>
   );
 
 };
