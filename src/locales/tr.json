@@ -173,5 +173,7 @@
   "unitCost": "Birim Maliyet",
   "totalCost": "Toplam Maliyet",
   "apps-materials": "Hammaddeler",
-  "materials_added_successfully":"Hammadde Maliyetleri başarıyla güncellendi"
+  "materials_added_successfully":"Hammadde Maliyetleri başarıyla güncellendi",
+  "apps-expenses":"Şirket Giderleri",
+  "expenses_added_successfully":"Şirket Giderleri başarıyla güncellendi"
 }

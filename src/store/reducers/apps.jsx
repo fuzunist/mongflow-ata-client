@@ -9,6 +9,11 @@ import { getUsersFromDB } from "@/services/auth";
 import { getTodayExchangeRates } from "@/services/other";
 import { getProductionsFromDB } from "@/services/production";
 import { getSetsFromDB } from "@/services/sets";
+import {
+  getExpensesItemsFromDB,
+  getExpensesClassesFromDB,
+  getMonthlyExpensesFromDB,
+} from "@/services/expenses";
 import { v4 as uuidv4 } from "uuid";
 
 export const _promiseAll = createAsyncThunk(
@@ -25,6 +30,9 @@ export const _promiseAll = createAsyncThunk(
       productions,
       users,
       exchangeRates,
+      expensesItems,
+      expensesClasses,
+      monthlyExpenses,
     ] = await Promise.all([
       getProductsFromDB(access_token),
       getRecipesFromDB(access_token),
@@ -36,6 +44,9 @@ export const _promiseAll = createAsyncThunk(
       getProductionsFromDB(access_token),
       usertype === "admin" ? getUsersFromDB(access_token) : [],
       getTodayExchangeRates(),
+      getExpensesItemsFromDB(access_token),
+      getExpensesClassesFromDB(access_token),
+      getMonthlyExpensesFromDB(access_token),
     ]);
 
     if (products?.error)
@@ -94,6 +105,9 @@ export const _promiseAll = createAsyncThunk(
         banknote_buying: child.children[5].value,
         banknote_selling: child.children[6].value,
       })),
+      expensesItems,
+      expensesClasses,
+      monthlyExpenses,
     };
   }
 );
@@ -110,6 +124,9 @@ const initialState = {
   productions: [],
   users: [],
   exchangeRates: [],
+  expensesItems: [],
+  expensesClasses: [],
+  monthlyExpenses: [],
   selected: {
     customer: null,
     product: null,
@@ -198,7 +215,7 @@ const apps = createSlice({
       state.recipes = [...state.recipes, action.payload];
     },
     _addRecipeMaterials: (state, action) => {
-       console.log("recipematerial from addrecipemat: ", action.payload)
+      console.log("recipematerial from addrecipemat: ", action.payload);
       state.recipeMaterials = [state.recipeMaterials, ...action.payload];
     },
     _editRecipe: (state, action) => {
@@ -423,6 +440,12 @@ const apps = createSlice({
         return user;
       });
     },
+    _addExpenseItem: (state, action) => {
+      state.expensesItems = [state.expensesItems, ...action.payload];
+    },
+    _editExpenses: (state, action) => {
+      state.monthlyExpenses = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(_promiseAll.pending, (state) => {
@@ -448,6 +471,9 @@ const apps = createSlice({
       state.search = "";
       state.filter = 0;
       state.sorter = "suggested";
+      state.expensesClasses = [];
+      state.expensesItems = [];
+      state.monthlyExpenses = [];
     });
 
     builder.addCase(_promiseAll.fulfilled, (state, action) => {
@@ -462,6 +488,9 @@ const apps = createSlice({
       state.users = action.payload.users;
       state.exchangeRates = action.payload.exchangeRates;
       state.loading = false;
+      state.expensesClasses = action.payload.expensesClasses;
+      state.expensesItems = action.payload.expensesItems;
+      state.monthlyExpenses = action.payload.monthlyExpenses;
     });
 
     builder.addCase(_promiseAll.rejected, (state, action) => {
@@ -513,5 +542,7 @@ export const {
   _setFilter,
   _setSorter,
   _changeUserType,
+  _addExpenseItem,
+  _editExpenses
 } = apps.actions;
 export default apps.reducer;

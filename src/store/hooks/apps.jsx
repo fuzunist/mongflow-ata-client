@@ -34,3 +34,10 @@ export const useSorter = () => useSelector((state) => state.apps.sorter);
 
 export const useExchangeRates = () =>
   useSelector((state) => state.apps.exchangeRates);
+
+export const useExpensesItems = () =>
+  useSelector((state) => state.apps.expensesItems);
+export const useExpensesClasses = () =>
+  useSelector((state) => state.apps.expensesClasses);
+export const useMonthlyExpenses = () =>
+  useSelector((state) => state.apps.monthlyExpenses);

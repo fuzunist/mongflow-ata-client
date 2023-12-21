@@ -175,7 +175,8 @@
   "unitCost": "Unit Cost",
   "totalCost": "Total Cost",
   "apps-materials": "Raw Materials",
-  "materials_added_successfully":"Raw Materials Costs' successfully updated."
-
+  "materials_added_successfully": "Raw Materials Costs' successfully updated.",
+  "apps-expenses": "Company Expenses",
+  "expenses_added_successfully":"Company Expenses successfully updated."
 
 }
