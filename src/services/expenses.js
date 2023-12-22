@@ -106,9 +106,7 @@ export const updateExpensesToDB = async (access_token, params) => {
   try {
     const { data } = await axios.patch(
       `${import.meta.env.VITE_API_ENDPOINT}/expenses`,
-      {
-        ...params,
-      },
+      params,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,

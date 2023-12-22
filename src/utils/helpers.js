@@ -185,3 +185,14 @@ export const formatDigits = (number) => {
 export const formatFloat = (number) => {
   return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
+
+export const transformToFloat = (numberString) => {
+  if (typeof numberString === 'string') {
+    const parsedFloat = parseFloat(numberString.replace(',', '.'));
+    return parsedFloat.toFixed(2);
+  } else if (typeof numberString === 'number') {
+    return numberString.toFixed(2);
+  }
+  return null; 
+
+};
