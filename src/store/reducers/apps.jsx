@@ -216,7 +216,7 @@ const apps = createSlice({
     },
     _addRecipeMaterials: (state, action) => {
       console.log("recipematerial from addrecipemat: ", action.payload);
-      state.recipeMaterials = [state.recipeMaterials, ...action.payload];
+      state.recipeMaterials = [state.recipeMaterials[0], ...action.payload]
     },
     _editRecipe: (state, action) => {
       state.recipes = state.recipes.map((recipe) => {
@@ -444,7 +444,7 @@ const apps = createSlice({
       state.expensesItems = [state.expensesItems, ...action.payload];
     },
     _editExpenses: (state, action) => {
-      state.monthlyExpenses = [state.monthlyExpenses[0],...action.payload];
+      state.monthlyExpenses = {...state.monthlyExpenses[0],...action.payload};
     },
   },
   extraReducers: (builder) => {
