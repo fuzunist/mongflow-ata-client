@@ -63,46 +63,60 @@ const Expenses = () => {
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
-    const data = {
-      ...monthlyExpenses[0],
-      monthly_expenses: values,
-    };
+    try {
+      setSubmitting(true)
+      setError("")
+      const data = {
+        ...monthlyExpenses[0],
+        monthly_expenses: values,
+      };
 
-    const response = await updateExpensesToDB(user.tokens.access_token, data);
-    if (response?.error) {
-      console.log(response?.error);
-      setError(response?.error);
+      for(const key in data.monthly_expenses){
+        //  console.log("xxx.:",key, data.monthly_expenses[key])
+      }
+
+       console.log("data of post expense: ", data)
+      const response = await updateExpensesToDB(user.tokens.access_token, data);
+      if (response?.error) {
+        console.log(response?.error);
+        setError(response?.error);
+        return;
+      }
+      editExpenses(response);
+      setSuccessMessage(t("expenses_added_successfully"));
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 1500);
+
+      setSubmitting(false)
+      console.log(response, "response data tosend expnse");
+    } catch (err) {
+      setSubmitting(false)
+      console.log(err);
+      setError(err);
     }
-    editExpenses(response);
-    setSuccessMessage(t("expenses_added_successfully"));
-
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 1000);
-
-    console.log(response, "response data tosend expnse");
   };
 
   return (
     <>
-   
-    <ExpensesForm
-      className={"flex flex-row "}
-      onSubmit={onSubmit}
-      //   validate={validate}
-      initialValues={initialValues}
-      error={error}
-      title={"Harcamaları Güncelle"}
-      classes={expensesClasses}
-      expensesItems={expensesItems}
-      //   {t(selectedProduct ? (!!type ? 'editOtherProduct' : 'editProduct') : !!type ? 'addOtherProduct' : 'addProduct')}
-    />
-     {successMessage && (
-      <p className="flex mt-4 text-green-500 mb-4 self-center items-center justify-center">{successMessage}</p>
-    )}
-  </>
+      <ExpensesForm
+        className={"flex flex-row "}
+        onSubmit={onSubmit}
+        //   validate={validate}
+        initialValues={initialValues}
+        error={error}
+        title={"Harcamaları Güncelle"}
+        classes={expensesClasses}
+        expensesItems={expensesItems}
+        //   {t(selectedProduct ? (!!type ? 'editOtherProduct' : 'editProduct') : !!type ? 'addOtherProduct' : 'addProduct')}
+      />
+      {successMessage && (
+        <p className="flex mt-4 text-green-500 mb-4 self-center items-center justify-center">
+          {successMessage}
+        </p>
+      )}
+    </>
   );
-
 };
 
 export default Expenses;

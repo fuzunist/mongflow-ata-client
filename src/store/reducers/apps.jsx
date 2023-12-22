@@ -444,7 +444,7 @@ const apps = createSlice({
       state.expensesItems = [state.expensesItems, ...action.payload];
     },
     _editExpenses: (state, action) => {
-      state.monthlyExpenses = action.payload;
+      state.monthlyExpenses = [state.monthlyExpenses[0],...action.payload];
     },
   },
   extraReducers: (builder) => {
