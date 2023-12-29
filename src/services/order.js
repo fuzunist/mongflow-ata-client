@@ -140,6 +140,7 @@ export const addOrderToDB = async (
         tax_rate,
         total_with_tax,
         exchange_rate,
+        total_cost: 0,
       },
       {
         headers: {

@@ -1,7 +1,7 @@
 const Body = ({ children, ...props }) => {
   return (
     <div
-      className="flex-[1_1_auto] p-6 min-w-[743px] overflow-x-scroll text-xs md:text-sm xl:text-base "
+      className={`flex-[1_1_auto] flex-col p-6 overflow-x-scroll text-xs md:text-sm xl:text-base`}
       {...props}
     >
       {children}

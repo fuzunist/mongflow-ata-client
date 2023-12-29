@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export const addRecipeMaterialToDB = async (access_token, params) => {
+export const addRawMaterialToDB = async (access_token, params) => {
   try {
-    const { material } = params;
+    const { material, cost, preprocesscost, stock } = params;
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials`,
       {
         material
       },
@@ -12,7 +12,7 @@ export const addRecipeMaterialToDB = async (access_token, params) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      }
+      } 
     );
 
     return data;
@@ -21,17 +21,17 @@ export const addRecipeMaterialToDB = async (access_token, params) => {
   }
 };
 
-export const getRecipeMaterialsFromDB = async (access_token) => {
+export const getRawMaterialsFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       }
     );
-    console.log("Successfully fetched recipeMaterials:", data);
+    console.log("Successfully fetched recipeRawMaterials:", data); // Log the fetched data
 
     return data;
   } catch (e) {
@@ -40,10 +40,10 @@ export const getRecipeMaterialsFromDB = async (access_token) => {
   }
 };
 
-export const editRecipeMaterialToDB = async (access_token, params, id) => {
+export const editRawMaterialToDB = async (access_token, params, id) => {
   try {
     const { data } = await axios.put(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/${id}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/${id}`,
       params,
       {
         headers: {
@@ -51,7 +51,7 @@ export const editRecipeMaterialToDB = async (access_token, params, id) => {
         },
       }
     );
-    console.log("Successfully updated recipeMaterials:", data);
+    console.log("Successfully updated recipeRawMaterials:", data); // Log the fetched data
 
     return data;
   } catch (e) {
@@ -60,11 +60,12 @@ export const editRecipeMaterialToDB = async (access_token, params, id) => {
   }
 };
 
-export const addRecipeMaterialLogToDB = async (access_token, params) => {
+
+export const addRawMaterialLogToDB = async (access_token, params) => {
   try {
     const { item_id, date, price, quantity, last_edited_by } = params;
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs`,
       {
         item_id,
         date,
@@ -85,17 +86,17 @@ export const addRecipeMaterialLogToDB = async (access_token, params) => {
   }
 };
 
-export const getRecipeMaterialLogsFromDB = async (access_token) => {
+export const getRawMaterialLogsFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       }
     );
-    console.log("Successfully fetched recipeMaterials Logs:", data);
+    console.log("Successfully fetched rawMaterials Logs:", data);
 
     return data;
   } catch (e) {
@@ -104,10 +105,10 @@ export const getRecipeMaterialLogsFromDB = async (access_token) => {
   }
 };
 
-export const editRecipeMaterialLogToDB = async (access_token, params, id) => {
+export const editRawMaterialLogToDB = async (access_token, params, id) => {
   try {
     const { data } = await axios.patch(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs/${id}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs/${id}`,
       params,
       {
         headers: {
@@ -115,7 +116,7 @@ export const editRecipeMaterialLogToDB = async (access_token, params, id) => {
         },
       }
     );
-    console.log("Successfully updated recipeMaterials logs:", data);
+    console.log("Successfully updated rawMaterials logs:", data);
 
     return data;
   } catch (e) {

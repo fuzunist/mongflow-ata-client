@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useRecipeMaterials, useRecipes } from "@/store/hooks/apps";
 import FormikForm from "@/components/FormikForm";
 import { useUser } from "@/store/hooks/user";
-import { editMaterialsToDB } from "@/services/recipematerial";
-import { addRecipeMaterials } from "@/store/actions/apps";
+import { editRecipeMaterialToDB } from "@/services/recipematerial";
+import { editRecipeMaterial } from "@/store/actions/apps";
 import { useTranslation } from "react-i18next";
 
 const index = () => {
@@ -13,8 +13,6 @@ const index = () => {
   const user = useUser();
   const recipeMaterials = useRecipeMaterials();
   const { t, i18n } = useTranslation();
-
-  console.log("recipemats:  ", recipeMaterials);
 
   useEffect(() => {
     const initialValues = {};
@@ -26,7 +24,7 @@ const index = () => {
         label: row.material,
         tag: "input",
         type: "number",
-        placeholder: "Maliyet girin (TL/kg)",
+        placeholder: "Maliyet girin USD/kg)",
         value: row.cost ?? "",
         min: 0,
       };
@@ -40,8 +38,7 @@ const index = () => {
 
     try {
       setError("");
-      console.log("vals of materials", values);
-      const response = await editMaterialsToDB(
+      const response = await editRecipeMaterialToDB(
         user.tokens.access_token,
         values
       );
@@ -51,7 +48,7 @@ const index = () => {
         setError(response.error);
       }
 
-      await addRecipeMaterials(response);
+      await editRecipeMaterial(response);
       setSuccessMessage(t("materials_added_successfully"));
       setSubmitting(false);
       setTimeout(() => {

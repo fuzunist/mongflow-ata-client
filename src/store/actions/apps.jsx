@@ -3,7 +3,12 @@ import {
   _addCustomer,
   _addProduct,
   _addRecipe,
-  _addRecipeMaterials,
+  _addRecipeMaterial,
+  _editRecipeMaterial,
+  _addRawMaterial,
+  _editRawMaterial,
+  _addRawMaterialLog,
+  _editRawMaterialLog,
   _addOrder,
   _setCustomer,
   _setProduct,
@@ -45,6 +50,8 @@ import {
   _setSorter,
   _addExpenseItem,
   _editExpenses,
+  _addRecipeMaterialLog,
+  _editRecipeMaterialLog,
 } from "../reducers/apps";
 
 export const promiseAll = (access_token, usertype) =>
@@ -67,11 +74,31 @@ export const delProduct = (product_id) =>
   store.dispatch(_delProduct(product_id));
 
 export const addRecipe = (recipe) => store.dispatch(_addRecipe(recipe));
-export const addRecipeMaterials = (recipeMaterials) =>
-  store.dispatch(_addRecipeMaterials(recipeMaterials));
-
 export const editRecipe = (recipe) => store.dispatch(_editRecipe(recipe));
 export const delRecipe = (recipeId) => store.dispatch(_delRecipe(recipeId));
+
+export const addRecipeMaterial = (recipeMaterial) =>
+  store.dispatch(_addRecipeMaterial(recipeMaterial));
+
+export const addRecipeMaterialLog = (recipeMaterialLog) =>
+  store.dispatch(_addRecipeMaterialLog(recipeMaterialLog));
+
+export const editRecipeMaterialLog = (recipeMaterialLog) =>
+  store.dispatch(_editRecipeMaterialLog(recipeMaterialLog));
+
+export const editRecipeMaterial = (recipeMaterial) =>
+  store.dispatch(_editRecipeMaterial(recipeMaterial));
+
+export const addRawMaterial = (rawMaterial) =>
+  store.dispatch(_addRawMaterial(rawMaterial));
+export const editRawMaterial = (rawMaterial) =>
+  store.dispatch(_editRawMaterial(rawMaterial));
+
+  export const addRawMaterialLog = (rawMaterialLog) =>
+  store.dispatch(_addRawMaterialLog(rawMaterialLog));
+
+export const editRawMaterialLog = (rawMaterialLog) =>
+  store.dispatch(_editRawMaterialLog(rawMaterialLog));
 
 export const addSet = (set) => store.dispatch(_addSet(set));
 export const editSet = (set) => store.dispatch(_editSet(set));
@@ -154,4 +181,5 @@ export const changeUserType = (userid, usertype) =>
   store.dispatch(_changeUserType({ userid, usertype }));
 
 export const addExpenseItems = (item) => store.dispatch(_addExpenseItem(item));
-export const editExpenses = (expenses) => store.dispatch(_editExpenses(expenses));
+export const editExpenses = (expenses) =>
+  store.dispatch(_editExpenses(expenses));

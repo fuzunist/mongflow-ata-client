@@ -28,6 +28,9 @@ import ForgetPassword from "@/pages/ForgetPassword";
 import Profile from "@/pages/Profile";
 import Materials from "@/pages/Materials";
 import Expenses from "@/pages/Expenses";
+import RecipeMaterialStocks from "@/pages/RecipeMaterialStocks";
+import RawMaterialStocks from "@/pages/RawMaterialStocks";
+import MaterialStocks from "@/pages/MaterialStocks";
 
 
 const routes = createBrowserRouter([
@@ -123,6 +126,11 @@ const routes = createBrowserRouter([
       {
         path: "apps/expenses",
         element: <Expenses />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/rawmaterials-stocks",
+        element: <MaterialStocks />,
         errorElement: <NotFound />,
       },
       {

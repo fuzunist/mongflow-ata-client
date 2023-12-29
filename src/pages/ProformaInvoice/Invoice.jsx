@@ -24,6 +24,7 @@ import {
   useOrders,
   useSelectedProducts,
   useSelectedSets,
+  useExpenses
 } from "@/store/hooks/apps";
 import { useUser } from "@/store/hooks/user";
 import { calculateAverageType } from "@/utils/apps";
@@ -41,9 +42,26 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
   const selectedProducts = useSelectedProducts();
   const selectedSets = useSelectedSets();
   const exchangeRates = useExchangeRates();
+  const expenses = useExpenses();
   const [successMessage, setSuccessMessage] = useState("");
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+
+  const totalProductQuantity = useMemo(() => {
+    if (!editingOrder || !editingOrder.products) return 0;
+
+    return editingOrder.products.reduce((total, product) => {
+      return total + (product.quantity || 0);
+    }, 0);
+  }, [editingOrder]);
+
+  const TLtoUSD = parseFloat(
+    exchangeRates?.find((exchangeRate) => exchangeRate.currency_code === "USD")
+      ?.banknote_selling
+  );
+
+  const hourlyExpenseCost = expenses[0]?.hourly_cost / TLtoUSD;
+
 
   const [initialValues, setInitialValues] = useState({
     beginningOrderStatus: editingOrder?.order_status ?? "İş Alındı",
@@ -54,7 +72,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
       )
         .toString()
         .padStart(2, "0")}/${new Date().getFullYear()}`,
-    currencyCode: editingOrder?.currency_code ?? "TL",
+    currencyCode: editingOrder?.currency_code ?? "USD",
     exchange_rate: editingOrder?.exchange_rate ?? 0.0,
     taxRate: 0.2,
   });
@@ -69,7 +87,6 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
   }, [selectedProducts, selectedSets]);
 
   const onSubmit = async () => {
-    console.log(selectedProducts, selectedSets);
     const response = await addOrderToDB(
       user.tokens.access_token,
       selectedCustomer.customerid,
@@ -86,7 +103,6 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
     );
 
     if (response.order_id) {
-      console.log("Order added successfully with OrderID:", response.order_id);
       setSuccessMessage(t("order_added_successfully"));
       addOrder({
         ...response,
@@ -214,15 +230,23 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
       }
     };
   }, []);
+  const excludedCosts = [
+    "domestic_market_marketing",
+    "foreign_market_marketing",
+    "production_manager",
+  ];
 
   if (!selectedCustomer) return null;
   return (
-    <Card >
-      <Card.Body >
+    <Card>
+      <Card.Body>
         {successMessage && (
           <p className="text-green-500 mb-4">{successMessage}</p>
         )}
-        <div className="flex flex-col text-lg gap-4 mb-4 overflow-x-scroll" id="invoice">
+        <div
+          className="flex flex-col text-lg gap-4 mb-4 overflow-x-scroll"
+          id="invoice"
+        >
           <div className="flex justify-between items-start">
             <div className=" flex flex-1 flex-col gap-2">
               <span>
@@ -261,57 +285,58 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
           </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
           <div className="flex flex-col gap-2 justify-center border border-border-light dark:border-border-dark relative p-4 mt-4 mb-2">
-          <div className="flex flex-wrap text-center font-medium">
-            <span
-              className={`${
-                editingOrder
-                  ? "basis-[calc(10%_-_0.5rem)] "
-                  : "basis-[calc(30%_-_0.5rem)] "
-              } mx-1`}
-            >
-              {t("product")}
-            </span>
-            <span className="basis-[calc(25%_-_0.5rem)] mx-1 ">
-              {t("attributes")}
-            </span>
-            <span className="basis-[calc(10%_-_0.5rem)] mx-1 ">
-              {t("unit")}
-            </span>
-            {editingOrder && (
-              <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
-                {t("unitCost")}
+            <div className="flex flex-wrap text-center font-medium">
+              <span
+                className={`${
+                  excludedCosts.includes(user.usertype)
+                    ? "basis-[calc(30%_-_0.5rem)] "
+                    : editingOrder
+                    ? "basis-[calc(10%_-_0.5rem)] "
+                    : "basis-[calc(30%_-_0.5rem)] "
+                } mx-1`}
+              >
+                {t("product")}
               </span>
-            )}
-            <span className="basis-[calc(10%_-_0.5rem)] mx-1">
-              {t("unitPrice")}
-            </span>
-            {editingOrder && (
-              <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
-                {t("totalCost")}
+              <span className="basis-[calc(25%_-_0.5rem)] mx-1 ">
+                {t("attributes")}
               </span>
-            )}
-            <span
-              className={`${
-                editingOrder
-                  ? "basis-[calc(15%_-_0.5rem)] "
-                  : "basis-[calc(25%_-_0.5rem)] "
-              } mx-1`}
-            >
-              {t("total")}
-            </span>
-          </div>
+              <span className="basis-[calc(10%_-_0.5rem)] mx-1 ">
+                {t("quantity")}
+              </span>
+              {editingOrder && !excludedCosts.includes(user.usertype) && (
+                <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
+                  {t("recipeCost")}
+                </span>
+              )}
+              <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                {t("unitPrice")}
+              </span>
+              {editingOrder && !excludedCosts.includes(user.usertype) && (
+                <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
+                  {t("totalRecipeCost")}
+                </span>
+              )}
+              <span
+                className={`${
+                  editingOrder
+                    ? "basis-[calc(15%_-_0.5rem)] "
+                    : "basis-[calc(25%_-_0.5rem)] "
+                } mx-1`}
+              >
+                {t("total")}
+              </span>
+            </div>
           </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
 
-          <div className="flex flex-col gap-y-2 justify-center">
+          <div className="flex flex-col gap-y-2 justify-center ml-3">
             {selectedProducts.map((product, index) => (
-              <div
-                className="flex text-center ml-1"
-                key={index}
-              >
+              <div className="flex text-center ml-1" key={index}>
                 <span
                   className={`${
-                    editingOrder
+                    excludedCosts.includes(user.usertype)
+                      ? "basis-[calc(30%_-_0.5rem)] "
+                      : editingOrder
                       ? "basis-[calc(10%_-_0.5rem)] "
                       : "basis-[calc(30%_-_0.5rem)] "
                   } mx-1  hover:line-through hover:text-red-500 cursor-pointer `}
@@ -331,14 +356,14 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {product.quantity} {t(product.productType)}
                 </span>
-                {editingOrder && (
+                {editingOrder && !excludedCosts.includes(user.usertype) && (
                   <span className="basis-[calc(15%_-_0.5rem)] mx-1 ">
                     {formatDigits(product.unitCost)}
                   </span>
                 )}
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   <Modal
-                    text={formatDigits(product.unitPrice)}
+                    text={product.unitPrice}
                     className=" mx-1 cursor-pointer select-none"
                   >
                     <input
@@ -351,7 +376,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     />
                   </Modal>
                 </span>
-                {editingOrder && (
+                {editingOrder && !excludedCosts.includes(user.usertype) && (
                   <span className="basis-[calc(15%_-_0.5rem)] mx-1">
                     {formatDigits(product.totalCost)}
                   </span>
@@ -454,17 +479,38 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
             </div>
           </div>
           <hr className="w-full border-border-light dark:border-border-dark" />
-          <div className="flex flex-wrap justify-end text-center">
-            <div className="basis-[calc(24%_-_0.5rem)] mx-1 ">
-              <span className="font-semibold text-2xl flex gap-2 justify-center items-center">
+          <div className="flex flex-wrap justify-end text-end">
+            <div className="basis-[calc(34%_-_0.5rem)] mx-1 ">
+              
+              {editingOrder && !excludedCosts.includes(user.usertype) && (
+                <div className="flex flex-col justify-end">
+                 <span className=" ">
+                 {t("totalRecipeCost")}:{" "}
+                 {formatDigits(parseFloat(editingOrder.total_cost))}{" "}
+                 {editingOrder.currency_code}
+               </span>
+               <span className=" ">
+                 {t("totalCost")}:
+                 {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
+                 {(
+                   (Number(editingOrder.total_cost) !== 0
+                     ? hourlyExpenseCost * 0.6 * totalProductQuantity
+                     : 0) + Number(editingOrder.total_cost)
+                 ).toFixed(2)}{" "}
+                 {editingOrder.currency_code}
+               </span>
+               </div>
+                )}
+              
+              <span className="flex font-semibold text-lg gap-2 justify-end mt-4">
                 <Modal
                   text={
                     <span className="flex flex-col justify-center items-center">
                       {initialValues.currencyCode}{" "}
-                      {initialValues.currencyCode !== "TL" && (
+                      {initialValues.currencyCode !== "USD" && (
                         <span className="text-sm">
                           ({initialValues.exchange_rate}
-                          {` `}TL)
+                          {` `}USD)
                         </span>
                       )}
                     </span>
@@ -478,7 +524,15 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                           ? {
                               ...val,
                               currencyCode: e.target.value,
-                              exchange_rate: 0.0,
+                              exchange_rate: (
+                                1 /
+                                parseFloat(
+                                  exchangeRates?.find(
+                                    (exchangeRate) =>
+                                      exchangeRate.currency_code === "USD"
+                                  )?.banknote_selling
+                                )
+                              ).toFixed(4),
                             }
                           : {
                               ...val,
@@ -497,14 +551,14 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     }
                     className="w-full py-2 px-3 transition-all outline-none bg-input-bg-light dark:bg-input-bg-dark border rounded border-input-border-light dark:border-input-border-dark"
                   >
-                    {["TL", "USD", "EURO"].map((option, index) => (
+                    {["USD", "EURO", "TL"].map((option, index) => (
                       <option key={index} value={option}>
                         {option}
                       </option>
                     ))}
                   </select>
 
-                  {initialValues.currencyCode !== "TL" && (
+                  {initialValues.currencyCode !== "USD" && (
                     <input
                       type="number"
                       value={initialValues.exchange_rate}
@@ -518,7 +572,8 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                     />
                   )}
                 </Modal>{" "}
-                {formatDigits((totalPrice * (1 + initialValues.taxRate)))}
+                <span>{t("taxed_total")}:</span>{" "}
+                {formatDigits(totalPrice * (1 + initialValues.taxRate))}
               </span>
             </div>
           </div>

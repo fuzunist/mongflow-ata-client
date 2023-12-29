@@ -22,7 +22,12 @@ const SideBarMenu = () => {
 
                 if (item?.authenticate?.type === 'username' && !item.authenticate.value.includes(user.username)) return null
                 if (item?.authenticate?.type === 'usertype' && !item.authenticate.value.includes(user.usertype)) return null
-
+                let keyTitle=null;
+                if(item?.key==="pending-orders"){
+                    if(user.usertype==="production_manager"){
+                        keyTitle="pending-recipes"
+                    }
+                }
                 return (
                     <NavLink
                         key={item.key}
@@ -37,7 +42,7 @@ const SideBarMenu = () => {
                             size={14}
                             strokeWidth={2}
                         />
-                        {t(item.key)}
+                        {t(keyTitle ?? item.key)}
                         {item?.badge && (
                             <div className='absolute right-0 mr-6'>
                                 <Badge variant={item.badge.variant}>{item.badge.text}</Badge>

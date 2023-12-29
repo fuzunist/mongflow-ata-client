@@ -15,21 +15,14 @@ const LogOut = () => {
     const performLogout = async () => {
       try {
         sessionStorage.removeItem("beforePathname");
-
-        console.log("logout");
         removeCookie("access_token");
         removeCookie("refresh_token");
-        console.log(
-          "removed sessison:",
-          sessionStorage.getItem("beforePathname")
-        );
         setLogOut();
         return (window.location.href = import.meta.env.VITE_CENTRAL_URL);
       } catch (error) {
         console.error("Logout failed:", error);
       }
     };
-
     performLogout();
   }, [navigate, removeCookie]);
 

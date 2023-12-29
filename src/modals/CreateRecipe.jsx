@@ -45,7 +45,7 @@ const CreateRecipe = ({
     initialValues2[String(row.id)] = {
       id: row.id,
       name: row.material,
-      label:row.material ,
+      label: row.material,
       tag: "input",
       type: "number",
       placeholder: "Miktar girin (kg)",
@@ -68,7 +68,6 @@ const CreateRecipe = ({
     const addRecipePromise = addRecipeToDB(user.tokens.access_token, data)
       .then((response) => {
         if (response?.error) {
-          console.log(response);
           setError(response.error);
         }
         return response;
@@ -85,8 +84,8 @@ const CreateRecipe = ({
     let allCost = 0;
     for (const key in orderProducts) {
       if (orderProducts[key].recipe_id === recipe_id) {
-        orderProducts[key].unitCost = cost / orderProducts[key].quantity;
-        orderProducts[key].totalCost = cost;
+        orderProducts[key].unitCost = cost ;
+        orderProducts[key].totalCost = cost * orderProducts[key].quantity;
       }
       allCost += orderProducts[key].totalCost;
     }
@@ -114,10 +113,6 @@ const CreateRecipe = ({
       addRecipe(addRecipeResponse);
       editOrder(updateOrderResponse);
       closeModal();
-
-      // Work with addRecipeResponse and updateOrderResponse here
-      console.log("addRecipeResponse:", addRecipeResponse);
-      console.log("updateOrderResponse:", updateOrderResponse);
     } catch (error) {
       setError(error);
       console.error("Error in executing promises:", error);
@@ -136,7 +131,6 @@ const CreateRecipe = ({
     const updateRecipePromise = editRecipeToDB(user.tokens.access_token, data)
       .then((response) => {
         if (response?.error) {
-          console.log(response);
           setError(response.error);
         }
         return response;
@@ -155,8 +149,8 @@ const CreateRecipe = ({
     let allCost = 0;
     for (const key in orderProducts) {
       if (orderProducts[key].recipe_id === recipe_id) {
-        orderProducts[key].unitCost = cost / orderProducts[key].quantity;
-        orderProducts[key].totalCost = cost;
+        orderProducts[key].unitCost = cost 
+        orderProducts[key].totalCost = cost*orderProducts[key].quantity;
       }
       allCost += orderProducts[key].totalCost;
     }

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Collapse } from "antd";
 
-const FormikForm = ({
+const ExpensesForm = ({
   title,
   initialValues,
   validate,
@@ -117,7 +117,9 @@ const FormikForm = ({
                                   <div className="w-1/6 mt-1 ml-2 text-xs font-light">
                                     {value.frequency === 1
                                       ? "(monthly)"
-                                      : value.frequency === 12 ? "(yearly)" : `1/${value.frequency}`}
+                                      : value.frequency === 12
+                                      ? "(yearly)"
+                                      : `1/${value.frequency}`}
                                   </div>
                                 </div>
                               );
@@ -154,4 +156,4 @@ const FormikForm = ({
   );
 };
 
-export default FormikForm;
+export default ExpensesForm;

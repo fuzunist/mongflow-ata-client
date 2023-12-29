@@ -7,7 +7,7 @@ import FormElements from "./FormElements";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 
-const FormikForm = ({
+const MaterialStocksForm = ({
   title,
   initialValues,
   validate,
@@ -61,7 +61,6 @@ const FormikForm = ({
           )}
 
           {recipe && (
-            <div className="flex flex-col justify-center items-center">
             <div className="flex justify-center items-center mx-1 gap-1">
               <span className="font-semibold">{product.product_name}</span>
               <span className="text-sm font-light">
@@ -70,9 +69,6 @@ const FormikForm = ({
                   .join(", ")}
               </span>
               <span className="font-bold">{product.quantity} ton</span>
-            </div>
-            <span className="w-full p-[0.2px] bg-black lg:w-full mt-1"></span>
-            <div className="mt-5 text-lg font-light">1 ton için gerekli miktar:</div>
             </div>
           )}
           <FormError
@@ -95,7 +91,7 @@ const FormikForm = ({
                 const elementValue = values[key] ?? value.value;
 
                 return (
-                  <div key={index} className={(recipe || material) ? " flex flex-row gap-x-3 items-center justify-between " : 'flex flex-col gap-2'}>
+                  <div key={index} className={(recipe || material) ? " flex flex-row gap-x-3 items-center justify-between mt-8" : 'flex flex-col gap-2'}>
                     { (recipe || material) &&
                       (
                         <label className="w-2/5 mt-1">
@@ -133,7 +129,7 @@ const FormikForm = ({
               type="submit"
               disabled={disabled || isSubmitting}
               className={classNames(
-                "mt-4 flex justify-center items-center rounded p-2 px-4 text-white transition-colors text-base font-semibold disabled:bg-disabled-light disabled:dark:bg-disabled-dark",
+                "mt-6 flex justify-center items-center rounded p-2 px-4 text-white transition-colors text-base font-semibold disabled:bg-disabled-light disabled:dark:bg-disabled-dark",
                 {
                   "bg-link-fg-light hover:bg-link-hover-light":
                     variant === "normal",
@@ -151,4 +147,4 @@ const FormikForm = ({
   );
 };
 
-export default FormikForm;
+export default MaterialStocksForm;

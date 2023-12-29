@@ -5,9 +5,19 @@ export const useLoading = () => useSelector((state) => state.apps.loading);
 export const useUsers = () => useSelector((state) => state.apps.users);
 
 export const useProducts = () => useSelector((state) => state.apps.products);
+
 export const useRecipes = () => useSelector((state) => state.apps.recipes);
 export const useRecipeMaterials = () =>
   useSelector((state) => state.apps.recipeMaterials);
+
+export const useRecipeMaterialLogs = () =>
+  useSelector((state) => state.apps.recipeMaterialLogs);
+
+export const useRawMaterialLogs = () =>
+  useSelector((state) => state.apps.rawMaterialLogs);
+
+export const useRawMaterials = () =>
+  useSelector((state) => state.apps.rawMaterials);
 
 export const useSets = () => useSelector((state) => state.apps.sets);
 export const useCustomers = () => useSelector((state) => state.apps.customers);
@@ -39,5 +49,5 @@ export const useExpensesItems = () =>
   useSelector((state) => state.apps.expensesItems);
 export const useExpensesClasses = () =>
   useSelector((state) => state.apps.expensesClasses);
-export const useMonthlyExpenses = () =>
-  useSelector((state) => state.apps.monthlyExpenses);
+export const useExpenses = () =>
+  useSelector((state) => state.apps.expenses);

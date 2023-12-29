@@ -10,12 +10,15 @@ import OrderStatus from "@/constants/OrderStatus";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
-import { useRecipes } from "@/store/hooks/apps";
+import { useExpenses, useExchangeRates } from "@/store/hooks/apps";
 import { formatDigits } from "@/utils/helpers";
+import { useState, useMemo } from "react";
 
 const Order = ({ order }) => {
   const user = useUser();
-  const recipes = useRecipes();
+  const expenses = useExpenses();
+  const exchangeRates = useExchangeRates();
+   console.log(exchangeRates)
 
   const { t } = useTranslation();
 
@@ -28,11 +31,33 @@ const Order = ({ order }) => {
     delOrder(order.order_id);
   };
 
+  const excludedCosts = [
+    "domestic_market_marketing",
+    "foreign_market_marketing",
+    "production_manager",
+  ];
+
+  const TLtoUSD = parseFloat(
+    exchangeRates?.find((exchangeRate) => exchangeRate.currency_code === "USD")
+      ?.banknote_selling
+  );
+
+  const hourlyExpenseCost = expenses[0]?.hourly_cost / TLtoUSD;
+
+  const totalProductQuantity = useMemo(() => {
+    if (!order || !order.products) return 0;
+
+    return order.products.reduce((total, product) => {
+      return total + (product.quantity || 0);
+    }, 0);
+  }, [order]);
+
+
   return (
-    // <Col variant="full">
-      <Card>
-        <Card.Body>
-          <div className="flex flex-col gap-2 overflow-x-scroll ">
+    <Col variant="full">
+      <Card classo="min-w-[643px]">
+        <Card.Body classo="min-w-[643px]">
+          <div className="flex flex-col gap-2  overflow-x-scroll">
             <div className="absolute right-0 top-0 flex gap-2 justify-center items-center rounded  text-text-dark-dark cursor-pointer select-none">
               <Link
                 className="bg-purple hover:bg-purple-hover rounded p-1.5"
@@ -78,21 +103,31 @@ const Order = ({ order }) => {
                 {t("products")}
               </span>
               <div className="flex flex-wrap text-center font-medium">
-                <span className="basis-[calc(30%_-_0.5rem)] mx-1 text-left">
+                <span
+                  className={`basis-[calc(30%_-_0.5rem)] mx-1 text-left ${
+                    excludedCosts.includes(user.usertype)
+                      ? "basis-[calc(52%_-_0.5rem)]"
+                      : "basis-[calc(22%_-_0.5rem)]"
+                  }`}
+                >
                   {t("product")}
                 </span>
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {t("quantity")}
                 </span>
-                <span className="basis-[calc(10%_-_0.5rem)] mx-1">
-                  {t("unitCost")}
-                </span>
+                {!excludedCosts.includes(user.usertype) && (
+                  <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                    {t("recipeCost")}
+                  </span>
+                )}
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {t("unitPrice")}
                 </span>
-                <span className="basis-[calc(10%_-_0.5rem)] mx-1">
-                  {t("totalCost")}
-                </span>
+                {!excludedCosts.includes(user.usertype) && (
+                  <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                    {t("totalRecipeCost")}
+                  </span>
+                )}
                 <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                   {t("totalPrice")}
                 </span>
@@ -101,78 +136,90 @@ const Order = ({ order }) => {
                 </span>
               </div>
               <hr className="border-border-light dark:border-border-dark" />
-              {order?.products?.map((product, index) => (
-                <div className="flex flex-wrap items-start mt-2" key={index}>
-                  <span className="basis-[calc(30%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5 -mt-2">
-                    <span>{product.product_name}</span>
-                    <span className="text-sm">
-                      {Object.entries(product.attributes)
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join(", ")}
+              {order?.products?.map((product, index) => {
+                return (
+                  <div className="flex flex-wrap items-start mt-2" key={index}>
+                    <span
+                      className={`basis-[calc(30%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5 -mt-2 ${
+                        excludedCosts.includes(user.usertype)
+                          ? "basis-[calc(52%_-_0.5rem)]"
+                          : "basis-[calc(22%_-_0.5rem)]"
+                      }`}
+                    >
+                      <span>{product.product_name}</span>
+                      <span className="text-sm">
+                        {Object.entries(product.attributes)
+                          .map(([key, value]) => `${key}: ${value}`)
+                          .join(", ")}
+                      </span>
                     </span>
-                  </span>
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {product.quantity} ton
-                  </span>
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {formatDigits(product.unitCost)} {order?.currency_code}
-                  </span>
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {formatDigits(product.unitPrice)} {order?.currency_code}
-                  </span>
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {formatDigits(product.totalCost)} {order?.currency_code}
-                  </span>
-                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                    {formatDigits(product.totalPrice)} {order?.currency_code}
-                  </span>
-                  {user.usertype === "stock_manager" ||
-                  user.usertype === "admin" ? (
-                    <span className="basis-[calc(12%_-_0.5rem)] mx-1 text-center">
-                      <Modal
-                        className=""
-                        text={
-                          product?.orderStatus ? (
-                            product.orderStatus.map((status, index) => (
-                              <span key={index + 100}>
-                                {status.quantity} ton {t(status.type)}.
+                    <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
+                      {product.quantity} ton
+                    </span>
+                    {!excludedCosts.includes(user.usertype) && (
+                      <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
+                        {formatDigits(product.unitCost)} {order?.currency_code}
+                      </span>
+                    )}
+                    <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
+                      {formatDigits(product.unitPrice)} {order?.currency_code}
+                    </span>
+                    {!excludedCosts.includes(user.usertype) && (
+                      <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
+                        {formatDigits(product.totalCost)} {order?.currency_code}
+                      </span>
+                    )}
+                    <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
+                      {formatDigits(product.totalPrice)} {order?.currency_code}
+                    </span>
+                    {user.usertype === "stock_manager" ||
+                    user.usertype === "admin" ? (
+                      <span className="basis-[calc(12%_-_0.5rem)] mx-1 text-center">
+                        <Modal
+                          className=""
+                          text={
+                            product?.orderStatus ? (
+                              product.orderStatus.map((status, index) => (
+                                <span key={index + 100}>
+                                  {status.quantity} ton {t(status.type)}.
+                                </span>
+                              ))
+                            ) : (
+                              <span>
+                                {product.quantity} ton {t(OrderStatus[0])}.
                               </span>
-                            ))
-                          ) : (
-                            <span>
-                              {product.quantity} ton {t(OrderStatus[0])}.
+                            )
+                          }
+                        >
+                          {({ close }) => (
+                            <ChangeOrderStatus
+                              closeModal={close}
+                              order={order}
+                              product={product}
+                              index={index}
+                              access_token={user.tokens.access_token}
+                            />
+                          )}
+                        </Modal>
+                      </span>
+                    ) : (
+                      <div className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
+                        {product?.orderStatus ? (
+                          product.orderStatus.map((status, index) => (
+                            <span key={index + 300}>
+                              {status.quantity} ton {t(status.type)}.
                             </span>
-                          )
-                        }
-                      >
-                        {({ close }) => (
-                          <ChangeOrderStatus
-                            closeModal={close}
-                            order={order}
-                            product={product}
-                            index={index}
-                            access_token={user.tokens.access_token}
-                          />
-                        )}
-                      </Modal>
-                    </span>
-                  ) : (
-                    <div className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
-                      {product?.orderStatus ? (
-                        product.orderStatus.map((status, index) => (
-                          <span key={index + 300}>
-                            {status.quantity} ton {t(status.type)}.
+                          ))
+                        ) : (
+                          <span>
+                            {product.quantity} ton {t(OrderStatus[0])}.
                           </span>
-                        ))
-                      ) : (
-                        <span>
-                          {product.quantity} ton {t(OrderStatus[0])}.
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
               {order?.sets?.map((set, index) => (
                 <div className="flex flex-wrap items-center" key={index}>
                   <span className="basis-[calc(35%_-_0.5rem)] mx-1 overflow-x-auto whitespace-nowrap scroller flex flex-col gap-0.5">
@@ -248,23 +295,39 @@ const Order = ({ order }) => {
                 </div>
               ))}
             </div>
-            <span className="text-right px-4">
-              {t("totalCost")}: {formatDigits(parseFloat(order.total_cost))}{" "}
-              {order.currency_code}
-            </span>
-            <span className="text-right px-4">
-              {t("taxed_total")}: {formatDigits(parseFloat(order.total_with_tax))}{" "}
-              {order.currency_code}
-            </span>
-            {order.currency_code !== "TL" && (
+
+            {!excludedCosts.includes(user.usertype) && (
               <span className="text-right px-4">
-                {t("exchange_rate")}: {order.exchange_rate} TL
+                {t("totalRecipeCost")}:{" "}
+                {formatDigits(parseFloat(order.total_cost))}{" "}
+                {order.currency_code}
+              </span>
+            )}
+            {!excludedCosts.includes(user.usertype) && (
+              <span className="text-right px-4">
+                {t("totalCost")}:
+                {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
+                {(
+                  (Number(order.total_cost)!==0 ? (hourlyExpenseCost * 0.6 * totalProductQuantity) : 0) +
+                 Number(order.total_cost) 
+                ).toFixed(2)}{" "}
+                {order.currency_code}
+              </span>
+            )}
+            <span className="text-right px-4">
+              {t("taxed_total")}:{" "}
+              {formatDigits(parseFloat(order.total_with_tax))}{" "}
+              {order.currency_code}
+            </span>
+            {order.currency_code !== "USD" && (
+              <span className="text-right px-4">
+                {t("exchange_rate")}: {order.exchange_rate} USD
               </span>
             )}
           </div>
         </Card.Body>
       </Card>
-    // </Col>
+    </Col>
   );
 };
 

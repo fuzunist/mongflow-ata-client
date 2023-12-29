@@ -10,8 +10,7 @@ import {
   CircleDollarSign,
   Factory,
   Layers,
-
-  Contact2
+  Contact2,
 } from "lucide-react";
 
 export default [
@@ -34,7 +33,7 @@ export default [
     url: "/users",
     authenticate: {
       type: "usertype",
-      value: ["admin"],
+      value: ["admin", "boss"],
     },
   },
   {
@@ -46,8 +45,7 @@ export default [
       value: [
         "admin",
         "boss",
-        "domestic_market_manager",
-        "foreign_market_manager",
+        "production_manager",
       ],
     },
   },
@@ -69,6 +67,7 @@ export default [
         "domestic_market_marketing",
         "foreign_market_marketing",
         "stock_manager",
+        "production_manager",
       ],
     },
   },
@@ -96,6 +95,7 @@ export default [
         "domestic_market_marketing",
         "foreign_market_marketing",
         "stock_manager",
+        "production_manager",
       ],
     },
   },
@@ -105,7 +105,7 @@ export default [
     url: "/apps/stocks",
     authenticate: {
       type: "usertype",
-      value: ["admin", "stock_manager"],
+      value: ["admin", "stock_manager", "boss"],
     },
   },
   {
@@ -114,7 +114,7 @@ export default [
     url: "/apps/productions",
     authenticate: {
       type: "usertype",
-      value: ["admin", "stock_manager"],
+      value: ["admin", "stock_manager", "boss"],
     },
   },
   {
@@ -131,6 +131,7 @@ export default [
         "domestic_market_marketing",
         "foreign_market_marketing",
         "stock_manager",
+        "production_manager",
       ],
     },
   },
@@ -138,6 +139,23 @@ export default [
     key: "apps-expenses",
     icon: Factory,
     url: "/apps/expenses",
+    authenticate: {
+      type: "usertype",
+      value: [
+        "admin",
+        "boss",
+        "domestic_market_manager",
+        "foreign_market_manager",
+        "domestic_market_marketing",
+        "foreign_market_marketing",
+        "stock_manager",
+      ],
+    },
+  },
+  {
+    key: "apps-rawmaterials-stocks",
+    icon: Layers,
+    url: "/apps/rawmaterials-stocks",
     authenticate: {
       type: "usertype",
       value: [

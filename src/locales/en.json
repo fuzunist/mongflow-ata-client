@@ -177,6 +177,32 @@
   "apps-materials": "Raw Materials",
   "materials_added_successfully": "Raw Materials Costs' successfully updated.",
   "apps-expenses": "Company Expenses",
-  "expenses_added_successfully":"Company Expenses successfully updated."
+  "expenses_added_successfully":"Company Expenses successfully updated.",
+  "apps-rawmaterials-stocks": "Raw Materials Stocks",
+  "addMaterialStock": "Add Material Stocks",
+  "cost": "Price",
+  "buyingprice": "Buying price ($/kg)",
+  "materialstock": "Stock (kg)",
+  "rawMaterial": "Preprocess",
+  "recipeMaterial": "Ready",
+  "buyinghistory": "Buying History",
+  "totalstock": "Total Stock",
+  "processit": "Process Material",
+  "pending-recipes": "Recipe Pending Approval",
+  "production_manager": "Production Manager",
+  "addMaterial": "Add Material",
+  "material": "Material",
+  "approvetoboss": "Send to Approval",
+  "recipeCost": "Recipe Cost",
+  "totalRecipeCost": "Total Recipe Cost"
+
+  
+
+
+
+
+
+
+
 
 }

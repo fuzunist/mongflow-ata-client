@@ -48,6 +48,7 @@ const Orders = () => {
                             <span className='flex-1 basis-[calc(62%_-_0.50rem)] max-[900px]:basis-[calc(43%_-_0.50rem)] max-[768px]:basis-[calc(30%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-text-dark-light dark:text-text-dark-dark'>
                                 {t('products')}
                             </span>
+                            
                             <span className='flex-1 basis-[calc(16%_-_0.50rem)] max-[900px]:basis-[calc(19%_-_0.50rem)] max-[768px]:basis-[calc(25%_-_0.50rem)] mx-1 overflow-hidden text-ellipsis whitespace-nowrap text-text-dark-light dark:text-text-dark-dark text-center'>
                                 {t('total_price')}
                             </span>

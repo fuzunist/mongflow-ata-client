@@ -3,7 +3,14 @@ import { getCustomersFromDB } from "@/services/customer";
 import { getOrdersFromDB } from "@/services/order";
 import { getProductsFromDB } from "@/services/product";
 import { getRecipesFromDB } from "@/services/recipe";
-import { getRecipeMaterialsFromDB } from "@/services/recipematerial";
+import {
+  getRecipeMaterialsFromDB,
+  getRecipeMaterialLogsFromDB,
+} from "@/services/recipematerial";
+import {
+  getRawMaterialsFromDB,
+  getRawMaterialLogsFromDB,
+} from "@/services/rawmaterial";
 import { getStocksFromDB } from "@/services/stock";
 import { getUsersFromDB } from "@/services/auth";
 import { getTodayExchangeRates } from "@/services/other";
@@ -12,7 +19,7 @@ import { getSetsFromDB } from "@/services/sets";
 import {
   getExpensesItemsFromDB,
   getExpensesClassesFromDB,
-  getMonthlyExpensesFromDB,
+  getExpensesFromDB,
 } from "@/services/expenses";
 import { v4 as uuidv4 } from "uuid";
 
@@ -22,31 +29,37 @@ export const _promiseAll = createAsyncThunk(
     let [
       products,
       recipes,
+      recipeMaterialLogs,
       recipeMaterials,
+      rawMaterialLogs,
+      rawMaterials,
       sets,
       customers,
       orders,
       stocks,
       productions,
-      users,
-      exchangeRates,
       expensesItems,
       expensesClasses,
-      monthlyExpenses,
+      expenses,
+      users,
+      exchangeRates,
     ] = await Promise.all([
       getProductsFromDB(access_token),
       getRecipesFromDB(access_token),
+      getRecipeMaterialLogsFromDB(access_token),
       getRecipeMaterialsFromDB(access_token),
+      getRawMaterialLogsFromDB(access_token),
+      getRawMaterialsFromDB(access_token),
       getSetsFromDB(access_token),
       getCustomersFromDB(access_token),
       getOrdersFromDB(access_token),
       getStocksFromDB(access_token),
       getProductionsFromDB(access_token),
-      usertype === "admin" ? getUsersFromDB(access_token) : [],
-      getTodayExchangeRates(),
       getExpensesItemsFromDB(access_token),
       getExpensesClassesFromDB(access_token),
-      getMonthlyExpensesFromDB(access_token),
+      getExpensesFromDB(access_token),
+      usertype === "admin" ? getUsersFromDB(access_token) : [],
+      getTodayExchangeRates(),
     ]);
 
     if (products?.error)
@@ -87,16 +100,32 @@ export const _promiseAll = createAsyncThunk(
         type: "getTodayExchangeRates",
         error: exchangeRates.error,
       });
+    else if (rawMaterials?.error)
+      return rejectWithValue({
+        type: "getRawMaterialStocks",
+        error: rawMaterials.error,
+      });
+    else if (recipeMaterialLogs?.error)
+      return rejectWithValue({
+        type: "getRecipeMaterialLogs",
+        error: recipeMaterialLogs.error,
+      });
 
     return {
       products,
       recipes,
+      recipeMaterialLogs,
       recipeMaterials,
+      rawMaterialLogs,
+      rawMaterials,
       sets,
       customers,
       orders,
       stocks,
       productions,
+      expensesItems,
+      expensesClasses,
+      expenses,
       users,
       exchangeRates: exchangeRates.children?.map?.((child) => ({
         currency_code: child.attributes.CurrencyCode,
@@ -105,9 +134,6 @@ export const _promiseAll = createAsyncThunk(
         banknote_buying: child.children[5].value,
         banknote_selling: child.children[6].value,
       })),
-      expensesItems,
-      expensesClasses,
-      monthlyExpenses,
     };
   }
 );
@@ -118,6 +144,9 @@ const initialState = {
   products: [],
   recipes: [],
   recipeMaterials: [],
+  recipeMaterialLogs: [],
+  rawMaterials: [],
+  rawMaterialLogs: [],
   sets: [],
   orders: [],
   stocks: [],
@@ -126,7 +155,7 @@ const initialState = {
   exchangeRates: [],
   expensesItems: [],
   expensesClasses: [],
-  monthlyExpenses: [],
+  expenses: [],
   selected: {
     customer: null,
     product: null,
@@ -214,9 +243,59 @@ const apps = createSlice({
     _addRecipe: (state, action) => {
       state.recipes = [...state.recipes, action.payload];
     },
-    _addRecipeMaterials: (state, action) => {
-      console.log("recipematerial from addrecipemat: ", action.payload);
-      state.recipeMaterials = [state.recipeMaterials[0], ...action.payload]
+    _addRecipeMaterial: (state, action) => {
+      state.recipeMaterials = [...state.recipeMaterials, action.payload];
+    },
+    _addRecipeMaterialLog: (state, action) => {
+      state.recipeMaterialLogs = [...state.recipeMaterialLogs, action.payload];
+    },
+    _editRecipeMaterialLog: (state, action) => {
+      state.recipeMaterialLogs = state.recipeMaterialLogs.map(
+        (recipeMaterialLog) => {
+          if (recipeMaterialLog.id === action.payload.id)
+            recipeMaterialLog = {
+              ...recipeMaterialLog,
+              ...action.payload,
+            };
+          return recipeMaterialLog;
+        }
+      );
+    },
+    _editRecipeMaterial: (state, action) => {
+      state.recipeMaterials = state.recipeMaterials.map((recipeMaterial) => {
+        if (recipeMaterial.id === action.payload.id)
+          recipeMaterial = {
+            ...recipeMaterial,
+            ...action.payload,
+          };
+        return recipeMaterial;
+      });
+    },
+    _addRawMaterial: (state, action) => {
+      state.rawMaterials = [...state.rawMaterials, action.payload];
+    },
+    _editRawMaterial: (state, action) => {
+      state.rawMaterials = state.rawMaterials.map((rawMaterial) => {
+        if (rawMaterial.id === action.payload.id)
+          rawMaterial = {
+            ...rawMaterial,
+            ...action.payload,
+          };
+        return rawMaterial;
+      });
+    },
+    _addRawMaterialLog: (state, action) => {
+      state.rawMaterialLogs = [...state.rawMaterialLogs, action.payload];
+    },
+    _editRawMaterialLog: (state, action) => {
+      state.rawMaterialLogs = state.rawMaterialLogs.map((rawMaterialLog) => {
+        if (rawMaterialLog.id === action.payload.id)
+          rawMaterialLog = {
+            ...rawMaterialLog,
+            ...action.payload,
+          };
+        return rawMaterialLog;
+      });
     },
     _editRecipe: (state, action) => {
       state.recipes = state.recipes.map((recipe) => {
@@ -444,14 +523,19 @@ const apps = createSlice({
       state.expensesItems = [state.expensesItems, ...action.payload];
     },
     _editExpenses: (state, action) => {
-      state.monthlyExpenses = {...state.monthlyExpenses[0],...action.payload};
+      state.expenses = {
+        ...state.expenses[0],
+        ...action.payload,
+      };
     },
   },
   extraReducers: (builder) => {
     builder.addCase(_promiseAll.pending, (state) => {
       state.products = [];
       state.recipes = [];
+      state.recipeMaterialLogs = [];
       state.recipeMaterials = [];
+      state.rawMaterials = [];
       state.sets = [];
       state.orders = [];
       state.customers = [];
@@ -473,13 +557,16 @@ const apps = createSlice({
       state.sorter = "suggested";
       state.expensesClasses = [];
       state.expensesItems = [];
-      state.monthlyExpenses = [];
+      state.expenses = [];
     });
 
     builder.addCase(_promiseAll.fulfilled, (state, action) => {
       state.products = action.payload.products;
       state.recipes = action.payload.recipes;
+      state.recipeMaterialLogs = action.payload.recipeMaterialLogs;
       state.recipeMaterials = action.payload.recipeMaterials;
+      state.rawMaterialLogs = action.payload.rawMaterialLogs;
+      state.rawMaterials = action.payload.rawMaterials;
       state.sets = action.payload.sets;
       state.orders = action.payload.orders;
       state.customers = action.payload.customers;
@@ -490,7 +577,7 @@ const apps = createSlice({
       state.loading = false;
       state.expensesClasses = action.payload.expensesClasses;
       state.expensesItems = action.payload.expensesItems;
-      state.monthlyExpenses = action.payload.monthlyExpenses;
+      state.expenses = action.payload.expenses;
     });
 
     builder.addCase(_promiseAll.rejected, (state, action) => {
@@ -518,7 +605,14 @@ export const {
   _editProduct,
   _delProduct,
   _addRecipe,
-  _addRecipeMaterials,
+  _editRecipeMaterial,
+  _addRecipeMaterialLog,
+  _editRecipeMaterialLog,
+  _addRecipeMaterial,
+  _addRawMaterial,
+  _editRawMaterial,
+  _addRawMaterialLog,
+  _editRawMaterialLog,
   _editRecipe,
   _delRecipe,
   _addSet,
@@ -543,6 +637,6 @@ export const {
   _setSorter,
   _changeUserType,
   _addExpenseItem,
-  _editExpenses
+  _editExpenses,
 } = apps.actions;
 export default apps.reducer;

@@ -3,7 +3,7 @@ import axios from "axios";
 const today = new Date();
 const formattedDate = `01/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
 
-export const getMonthlyExpensesFromDB = async (
+export const getExpensesFromDB = async (
   access_token,
   date = formattedDate
 ) => {
@@ -16,7 +16,7 @@ export const getMonthlyExpensesFromDB = async (
         },
       }
     );
-    console.log("Successfully fetched monthly expenses:", data); // Log the fetched data
+    console.log("Successfully fetched  expenses:", data); // Log the fetched data
     return data;
   } catch (e) {
     console.log(e);

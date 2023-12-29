@@ -14,17 +14,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   </Provider>
 );
 
-// window.addEventListener("beforeunload", () => {
-//   console.log("beforeunload", location.pathname);
-//   sessionStorage.setItem(
-//     "beforePathname",
-//     location.pathname === ("/" || "/dashboard")
-//       ? "/dashboard"
-//       : location.pathname
-//   );
-// });
 sessionStorage.setItem(
   "beforePathname",
   location.pathname === "/" ? "/dashboard" : location.pathname
 );
-console.log("beforeunload", location.pathname);
+

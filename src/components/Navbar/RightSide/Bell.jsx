@@ -68,10 +68,10 @@ const Bell = () => {
                     ) ? (
                         <>
                             {Object.entries(notification.notifications).map(([key, value], indx) => {
-                                return value.map((notification, index) => (
+                                return value?.map((notification, index) => (
                                     <div key={index + indx * 1000}>
                                         {key === 'orders' &&
-                                            `${orders.find((order) => order.order_id === notification).username}, ${t('added a new order.')}`}
+                                            `${orders.find((order) => order.order_id === notification)?.username}, ${t('added a new order.')}`}
 
                                         {key === 'stocks' &&
                                             `${stocks.find((stock) => stock.stock_id === notification).constituent_username}, ${t(
