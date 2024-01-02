@@ -194,7 +194,16 @@
   "material": "Material",
   "approvetoboss": "Send to Approval",
   "recipeCost": "Recipe Cost",
-  "totalRecipeCost": "Total Recipe Cost"
+  "totalRecipeCost": "Total Recipe Cost",
+  "addExpenseItem": "Add Expense Item",
+  "itemclassname": "Category",
+  "expenseitemname":"Expense Item Name",
+  "frequency": "frequency (month)",
+  "errorexistingitem": "Item name already exists!"
+
+
+
+
 
   
 

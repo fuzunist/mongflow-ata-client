@@ -305,6 +305,7 @@ const Order = ({ order }) => {
                   ).toFixed(2)}{" "}
                   {order.currency_code}
                 </span>
+                
                 <span className="text-right px-4">
                   {t("taxed_total")}: {order?.total_with_tax?.toLocaleString()}{" "}
                   {order?.currency_code}

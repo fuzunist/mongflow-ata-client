@@ -141,7 +141,7 @@ const Order = ({ closeModal, order }) => {
               <div className="flex flex-wrap justify-end text-center">
                 <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
                   <span className="font-semibold text-lg leading-none">
-                    {t("exchange_rate")}: {order.exchange_rate} 
+                    {t("exchange_rate")}: {order.exchange_rate}
                   </span>
                 </div>
               </div>

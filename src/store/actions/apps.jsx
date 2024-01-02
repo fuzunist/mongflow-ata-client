@@ -180,6 +180,6 @@ export const setSorter = (sorter) => store.dispatch(_setSorter(sorter));
 export const changeUserType = (userid, usertype) =>
   store.dispatch(_changeUserType({ userid, usertype }));
 
-export const addExpenseItems = (item) => store.dispatch(_addExpenseItem(item));
+export const addExpenseItem = (item) => store.dispatch(_addExpenseItem(item));
 export const editExpenses = (expenses) =>
   store.dispatch(_editExpenses(expenses));

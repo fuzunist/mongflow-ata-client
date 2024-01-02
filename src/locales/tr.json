@@ -193,6 +193,12 @@
   "material": "Hammadde",
   "approvetoboss": "Patrona Gönder",
   "recipeCost": "Reçete Maliyeti",
-  "totalRecipeCost": "Toplam Reçete Maliyeti"
+  "totalRecipeCost": "Toplam Reçete Maliyeti",
+  "addExpenseItem": "Gider Kalemi Ekle",
+  "itemclassname": "Kategori",
+  "expenseitemname":"Harcama Gider Kalemi",
+  "frequency": "Sıklık (ay)",
+  "errorexistingitem": "Girdiğiniz gider ismi zaten mevcut!"
+
 
 }

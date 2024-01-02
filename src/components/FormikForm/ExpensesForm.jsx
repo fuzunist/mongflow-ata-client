@@ -80,7 +80,7 @@ const ExpensesForm = ({
                         label: classvalue.name,
                         children: Object.entries(initialValues).map(
                           ([key, value], index) => {
-                            if (value.class === classvalue.id) {
+                            if (value.class_id === classvalue.id) {
                               const Element = FormElements[value?.tag];
                               const elementValue = values[key] ?? value.value;
 
@@ -105,7 +105,7 @@ const ExpensesForm = ({
                                     onBlur={handleBlur}
                                     errors={errors}
                                     touched={touched}
-                                    value={elementValue}
+                                    value={elementValue ?? 0}
                                     //   _label={value?.label}
                                     options={value?.options}
                                     readOnly={value?.readOnly ?? false}

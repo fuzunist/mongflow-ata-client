@@ -85,9 +85,7 @@ export const addExpenseItemToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(
       `${import.meta.env.VITE_API_ENDPOINT}/expenses/item`,
-      {
-        ...params,
-      },
+      params,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,

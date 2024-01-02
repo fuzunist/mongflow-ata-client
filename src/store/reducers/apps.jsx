@@ -520,7 +520,9 @@ const apps = createSlice({
       });
     },
     _addExpenseItem: (state, action) => {
-      state.expensesItems = [state.expensesItems, ...action.payload];
+      state.expensesItems = [...state.expensesItems, action.payload];
+  
+
     },
     _editExpenses: (state, action) => {
       state.expenses = {
