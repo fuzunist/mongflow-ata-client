@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getCustomersFromDB } from "@/services/customer";
 import { getOrdersFromDB } from "@/services/order";
 import { getProductsFromDB } from "@/services/product";
-import { getRecipesFromDB } from "@/services/recipe";
+import { getRecipesFromDB, getSpecialRecipesFromDB } from "@/services/recipe";
 import {
   getRecipeMaterialsFromDB,
   getRecipeMaterialLogsFromDB,
@@ -29,6 +29,7 @@ export const _promiseAll = createAsyncThunk(
     let [
       products,
       recipes,
+      specialRecipes,
       recipeMaterialLogs,
       recipeMaterials,
       rawMaterialLogs,
@@ -46,6 +47,7 @@ export const _promiseAll = createAsyncThunk(
     ] = await Promise.all([
       getProductsFromDB(access_token),
       getRecipesFromDB(access_token),
+      getSpecialRecipesFromDB(access_token),
       getRecipeMaterialLogsFromDB(access_token),
       getRecipeMaterialsFromDB(access_token),
       getRawMaterialLogsFromDB(access_token),
@@ -69,13 +71,18 @@ export const _promiseAll = createAsyncThunk(
       });
     else if (recipeMaterials?.error)
       return rejectWithValue({
-        type: "getProductsFromDB",
-        error: products.error,
+        type: "getRecipeMaterialsFromDB",
+        error: recipeMaterials.error,
       });
     else if (recipes?.error)
       return rejectWithValue({
-        type: "getProductsFromDB",
-        error: products.error,
+        type: "getRecipesFromDB",
+        error: recipes.error,
+      });
+    else if (specialRecipes?.error)
+      return rejectWithValue({
+        type: "getSpecialRecipesFromDB",
+        error: specialRecipes.error,
       });
     else if (sets?.error)
       return rejectWithValue({ type: "getSetsFromDB", error: sets.error });
@@ -110,10 +117,26 @@ export const _promiseAll = createAsyncThunk(
         type: "getRecipeMaterialLogs",
         error: recipeMaterialLogs.error,
       });
+    else if (expenses?.error)
+      return rejectWithValue({
+        type: "getExpenses",
+        error: expenses.error,
+      });
+    else if (expensesItems?.error)
+      return rejectWithValue({
+        type: "getExpensesItems",
+        error: expensesItems.error,
+      });
+    else if (expensesClasses?.error)
+      return rejectWithValue({
+        type: "getExpensesClassesFromDB",
+        error: expensesClasses.error,
+      });
 
     return {
       products,
       recipes,
+      specialRecipes,
       recipeMaterialLogs,
       recipeMaterials,
       rawMaterialLogs,
@@ -143,6 +166,7 @@ const initialState = {
   customers: [],
   products: [],
   recipes: [],
+  specialRecipes: [],
   recipeMaterials: [],
   recipeMaterialLogs: [],
   rawMaterials: [],
@@ -243,6 +267,29 @@ const apps = createSlice({
     _addRecipe: (state, action) => {
       state.recipes = [...state.recipes, action.payload];
     },
+    _editRecipe: (state, action) => {
+      state.recipes = state.recipes.map((recipe) => {
+        if (recipe.id === action.payload.id)
+          recipe = {
+            ...recipe,
+            ...action.payload,
+          };
+        return recipe;
+      });
+    },
+    _delRecipe: (state, action) => {
+      state.recipes = state.recipes.filter(
+        (recipe) => recipe.id !== action.payload
+      );
+    },
+    _addSpecialRecipe: (state, action) => {
+      state.specialRecipes = [...state.specialRecipes, action.payload];
+    },
+    _delSpecialRecipe: (state, action) => {
+      state.specialRecipes = state.specialRecipes.filter(
+        (specialRecipe) => specialRecipe.id !== action.payload
+      );
+    },
     _addRecipeMaterial: (state, action) => {
       state.recipeMaterials = [...state.recipeMaterials, action.payload];
     },
@@ -297,21 +344,7 @@ const apps = createSlice({
         return rawMaterialLog;
       });
     },
-    _editRecipe: (state, action) => {
-      state.recipes = state.recipes.map((recipe) => {
-        if (recipe.id === action.payload.id)
-          recipe = {
-            ...recipe,
-            ...action.payload,
-          };
-        return recipe;
-      });
-    },
-    _delRecipe: (state, action) => {
-      state.recipes = state.recipes.filter(
-        (recipe) => recipe.id !== action.payload
-      );
-    },
+
     _addSet: (state, action) => {
       state.sets = [...state.sets, action.payload];
     },
@@ -521,20 +554,26 @@ const apps = createSlice({
     },
     _addExpenseItem: (state, action) => {
       state.expensesItems = [...state.expensesItems, action.payload];
-  
-
     },
     _editExpenses: (state, action) => {
-      state.expenses = {
-        ...state.expenses[0],
-        ...action.payload,
-      };
+      state.expenses = { ...state.expenses, ...action.payload };
+    },
+    _editExpenseItemFreq: (state, action) => {
+      state.expensesItems = state.expensesItems.map((expensesItem) => {
+        if (expensesItem.id === action.payload.id)
+          expensesItem = {
+            ...expensesItem,
+            ...action.payload,
+          };
+        return expensesItem;
+      });
     },
   },
   extraReducers: (builder) => {
     builder.addCase(_promiseAll.pending, (state) => {
       state.products = [];
       state.recipes = [];
+      state.specialRecipes = [];
       state.recipeMaterialLogs = [];
       state.recipeMaterials = [];
       state.rawMaterials = [];
@@ -565,6 +604,7 @@ const apps = createSlice({
     builder.addCase(_promiseAll.fulfilled, (state, action) => {
       state.products = action.payload.products;
       state.recipes = action.payload.recipes;
+      state.specialRecipes = action.payload.specialRecipes;
       state.recipeMaterialLogs = action.payload.recipeMaterialLogs;
       state.recipeMaterials = action.payload.recipeMaterials;
       state.rawMaterialLogs = action.payload.rawMaterialLogs;
@@ -607,6 +647,7 @@ export const {
   _editProduct,
   _delProduct,
   _addRecipe,
+  _addSpecialRecipe,
   _editRecipeMaterial,
   _addRecipeMaterialLog,
   _editRecipeMaterialLog,
@@ -617,6 +658,7 @@ export const {
   _editRawMaterialLog,
   _editRecipe,
   _delRecipe,
+  _delSpecialRecipe,
   _addSet,
   _editSet,
   _delSet,
@@ -640,5 +682,6 @@ export const {
   _changeUserType,
   _addExpenseItem,
   _editExpenses,
+  _editExpenseItemFreq,
 } = apps.actions;
 export default apps.reducer;

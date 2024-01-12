@@ -44,7 +44,6 @@ const Selected = ({ selected }) => {
 
             <div className="flex flex-col w-full gap-4 min-h-[225px] max-h-[225px] overflow-y-auto scroller">
               {Object.entries(filteredStocks).map(([key, stocks], index) => {
-                
                 return (
                   <div
                     className="flex flex-col gap-2 bg-border-light dark:bg-border-dark rounded-md p-4 select-none"
@@ -65,11 +64,18 @@ const Selected = ({ selected }) => {
                             text={
                               <>
                                 <span>
-                                  {t("price")}: {stock.price}
+                                  {t("price")}: {stock.price}{" $"}
                                 </span>
                                 <span>
-                                  {t("stock")}: {stock.quantity}
+                                  {t("quantity")}: {stock.quantity}{" kg"}
                                 </span>
+                                <span>
+                                  {t("totalPrice")}: {stock.quantity*stock.price}{" $"}
+                                </span>
+                                <span>
+                                  {t("supplier")}: {stock.supplier}
+                                </span>
+                                <span>{t("waybill")}: {stock.waybill}</span>
                               </>
                             }
                             className="flex justify-between items-center p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer"

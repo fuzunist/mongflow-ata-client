@@ -11,7 +11,7 @@ const PendingOrderNumbers = () => {
     const myPendingOrders = useMemo(() => {
         if (!user.userid) return []
         if (!orders.length) return []
-        return orders.filter((order) => order.userid === user.userid && order.status !== 0)
+        return orders.filter((order) => order.userid === user.userid && (order.status.length===2 || order.status.length===3 ))
     }, [user, orders])
 
     if (myPendingOrders.length === 0) return null

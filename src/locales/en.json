@@ -132,6 +132,7 @@
   "Hazırlanıyor": "Getting ready",
   "Hazırlandı": "Prepared",
   "Sevk Edildi": "Shipped",
+  "Üretildi": "Produced",
   "checkTheQuantityValues": "Check the quantity values!",
   "todaysStock": "Today's Stock",
   "todaysProduction": "Today's Production",
@@ -177,7 +178,7 @@
   "apps-materials": "Raw Materials",
   "materials_added_successfully": "Raw Materials Costs' successfully updated.",
   "apps-expenses": "Company Expenses",
-  "expenses_added_successfully":"Company Expenses successfully updated.",
+  "expenses_added_successfully": "Company Expenses successfully updated.",
   "apps-rawmaterials-stocks": "Raw Materials Stocks",
   "addMaterialStock": "Add Material Stocks",
   "cost": "Price",
@@ -197,15 +198,29 @@
   "totalRecipeCost": "Total Recipe Cost",
   "addExpenseItem": "Add Expense Item",
   "itemclassname": "Category",
-  "expenseitemname":"Expense Item Name",
+  "expenseitemname": "Expense Item Name",
   "frequency": "frequency (month)",
-  "errorexistingitem": "Item name already exists!"
-
-
-
-
-
-  
+  "errorexistingitem": "Item name already exists!",
+  "editexpensefrequency": "Edit Expense Frequency",
+  "supplier": "Supplier",
+  "waybill": "Waybill No",
+  "wastage_percentage": "Wastage Percentage (%)",
+  "wastage_kg": "Wastage (kg)",
+  "total_bunker": "Total Bunker Quantity",
+  "recipeName": "Enter Recipe Name",
+  "saveRecipe": "Save Recipe",
+  "recipeNameError":"Recipe name cannot be empty!",
+  "registeredRecipes": "Registered Recipes",
+  "exceedStockValue": "Existed Stocks  ",
+  "totalRecipeInputKG": "Total Input KG ",
+  "Error processing details": "Lack of Stocks! Send back this to the production manager.",
+  "canceled-orders": "My Canceled Orders",
+  "pending-boss-approval": "My Pending Boss Approval Orders",
+  "totalBunkerCost": "Total Bunker Cost",
+  "bunkerCost": "Unit Bunker Cost",
+  "shiftname": "Shift",
+  "selectOrder": "Select Order",
+  "order": "Order"
 
 
 

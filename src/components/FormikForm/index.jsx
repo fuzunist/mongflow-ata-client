@@ -21,7 +21,6 @@ const FormikForm = ({
   material,
   product,
 }) => {
-
   const { t } = useTranslation();
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -62,17 +61,19 @@ const FormikForm = ({
 
           {recipe && (
             <div className="flex flex-col justify-center items-center">
-            <div className="flex justify-center items-center mx-1 gap-1">
-              <span className="font-semibold">{product.product_name}</span>
-              <span className="text-sm font-light">
-                {Object.entries(product.attributes)
-                  .map(([key, value]) => `${key}: ${value}`)
-                  .join(", ")}
-              </span>
-              <span className="font-bold">{product.quantity} ton</span>
-            </div>
-            <span className="w-full p-[0.2px] bg-black lg:w-full mt-1"></span>
-            <div className="mt-5 text-lg font-light">1 ton için gerekli miktar:</div>
+              <div className="flex justify-center items-center mx-1 gap-1">
+                <span className="font-semibold">{product.product_name}</span>
+                <span className="text-sm font-light">
+                  {Object.entries(product.attributes)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join(", ")}
+                </span>
+                <span className="font-bold">{product.quantity} ton</span>
+              </div>
+              <span className="w-full p-[0.2px] bg-black lg:w-full mt-1"></span>
+              <div className="mt-5 text-lg font-light">
+                1 ton için gerekli miktar:
+              </div>
             </div>
           )}
           <FormError
@@ -80,7 +81,10 @@ const FormikForm = ({
             variant={message?.variant ?? "danger"}
           />
           <form
-            onSubmit={(e) => { e.preventDefault(); handleSubmit(e)}}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(e);
+            }}
             className="flex flex-col items-center justify-center"
           >
             <div
@@ -95,16 +99,23 @@ const FormikForm = ({
                 const elementValue = values[key] ?? value.value;
 
                 return (
-                  <div key={index} className={(recipe || material) ? " flex flex-row gap-x-3 items-center justify-between " : 'flex flex-col gap-2'}>
-                    { (recipe || material) &&
-                      (
-                        <label className="w-2/5 mt-1">
-                          {value?.label} {recipe ? " (kg)" : material ? " (USD/kg)" : ""}
-                        </label>
-                      )}
+                  <div
+                    key={index}
+                    className={
+                      recipe || material
+                        ? " flex flex-row gap-x-3 items-center justify-between "
+                        : "flex flex-col gap-2"
+                    }
+                  >
+                    {(recipe || material) && (
+                      <label className="w-2/5 mt-1">
+                        {value?.label}{" "}
+                        {recipe ? " (kg)" : material ? " (USD/kg)" : ""}
+                      </label>
+                    )}
 
                     <Element
-                      className={(recipe || material) ? "w-3/5 " : ""}
+                      className={recipe || material ? "w-3/5 " : ""}
                       key={key}
                       type={value?.type}
                       placeholder={value?.placeholder}
@@ -114,7 +125,7 @@ const FormikForm = ({
                       errors={errors}
                       touched={touched}
                       value={elementValue}
-                       _label={(recipe || material ) ? "" : value?.label}
+                      _label={recipe || material ? "" : value?.label}
                       options={value?.options}
                       readOnly={value?.readOnly ?? false}
                       disabled={disabled}
@@ -122,6 +133,8 @@ const FormikForm = ({
                       max={value?.max}
                       product_id={values?.product_id ?? -1}
                       products={value?.products ?? []}
+                      attributes={values?.attributes ?? []}
+                      orders={value?.orders}
                     />
                   </div>
                 );

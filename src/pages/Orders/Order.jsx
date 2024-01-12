@@ -18,7 +18,7 @@ const Order = ({ order }) => {
   const user = useUser();
   const expenses = useExpenses();
   const exchangeRates = useExchangeRates();
-   console.log(exchangeRates)
+  console.log(exchangeRates);
 
   const { t } = useTranslation();
 
@@ -51,7 +51,6 @@ const Order = ({ order }) => {
       return total + (product.quantity || 0);
     }, 0);
   }, [order]);
-
 
   return (
     <Col variant="full">
@@ -158,7 +157,11 @@ const Order = ({ order }) => {
                     </span>
                     {!excludedCosts.includes(user.usertype) && (
                       <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                        {formatDigits(product.unitCost)} {order?.currency_code}
+                        {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
+                        {formatDigits(
+                          (product.totalCost * 0.4444) / product.quantity
+                        )}{" "}
+                        {/* {formatDigits(product.unitCost)} {order?.currency_code} */}
                       </span>
                     )}
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
@@ -173,7 +176,7 @@ const Order = ({ order }) => {
                       {formatDigits(product.totalPrice)} {order?.currency_code}
                     </span>
                     {user.usertype === "stock_manager" ||
-                    user.usertype === "admin" ? (
+                    user.usertype === "boss" ? (
                       <span className="basis-[calc(12%_-_0.5rem)] mx-1 text-center">
                         <Modal
                           className=""
@@ -246,7 +249,7 @@ const Order = ({ order }) => {
                     {set.totalPrice} {order?.currency_code}
                   </span>
                   {user.usertype === "stock_manager" ||
-                  user.usertype === "admin" ? (
+                  user.usertype === "boss" ? (
                     <Modal
                       className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 min-h-[1rem]"
                       text={
@@ -307,10 +310,12 @@ const Order = ({ order }) => {
               <span className="text-right px-4">
                 {t("totalCost")}:
                 {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
-                {(
-                  (Number(order.total_cost)!==0 ? (hourlyExpenseCost * 0.6 * totalProductQuantity) : 0) +
-                 Number(order.total_cost) 
-                ).toFixed(2)}{" "}
+                {formatDigits(
+                  Number(order.total_cost) !== 0
+                    ? hourlyExpenseCost * 0.6 * totalProductQuantity +
+                        Number(order.total_cost)
+                    : "0"
+                )}{" "}
                 {order.currency_code}
               </span>
             )}

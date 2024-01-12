@@ -11,7 +11,7 @@ const Stocks = () => {
   const rawMaterialStocks = useRawMaterials();
 
   return (
-    <div className='flex flex-col w-full m-6 '>
+    <div className="flex flex-col w-full min-w-[450px] grow-0 m-6 ">
       <Header stocks={rawMaterialStocks} />
       <Row align="center">
         <Products

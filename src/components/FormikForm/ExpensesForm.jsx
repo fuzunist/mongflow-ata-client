@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import FormError from "./FormError";
 import { useMemo } from "react";
@@ -7,6 +7,9 @@ import FormElements from "./FormElements";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
 import { Collapse } from "antd";
+import EditExpenseFrequency from "@/modals/EditExpenseFrequency";
+import Modal from "@/components/Modal";
+import { transformToFloat } from "@/utils/helpers";
 
 const ExpensesForm = ({
   title,
@@ -20,6 +23,7 @@ const ExpensesForm = ({
   variant = "normal",
   classes,
 }) => {
+  const refModal = useRef();
   const { t } = useTranslation();
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -31,7 +35,7 @@ const ExpensesForm = ({
   const _initialValues = useMemo(() => {
     const newValues = {};
     Object.entries(initialValues).forEach(([key, value]) => {
-      newValues[key] = value.value;
+      newValues[key] = value.value==="NaN" ? "0.00" : value.value ;
     });
     return newValues;
   }, [initialValues]);
@@ -39,7 +43,6 @@ const ExpensesForm = ({
   return (
     <Formik
       initialValues={_initialValues}
-      validate={validate}
       onSubmit={onSubmit}
     >
       {({
@@ -63,10 +66,7 @@ const ExpensesForm = ({
             variant={message?.variant ?? "danger"}
           />
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit(e);
-            }}
+            onSubmit={handleSubmit}
             className="flex flex-col items-center justify-center"
           >
             <div className={"flex flex-col gap-y-4 w-[60%]"}>
@@ -114,12 +114,28 @@ const ExpensesForm = ({
                                     max={value?.max}
                                     step="any"
                                   />
-                                  <div className="w-1/6 mt-1 ml-2 text-xs font-light">
-                                    {value.frequency === 1
-                                      ? "(monthly)"
-                                      : value.frequency === 12
-                                      ? "(yearly)"
-                                      : `1/${value.frequency}`}
+                                  <div className="w-1/6 mt-1 ml-2 text-xs font-light" ref={refModal}>
+                                    <Modal
+                                    
+                                      className="rounded-full py-2 px-4 flex justify-center items-center gap-2"
+                                      text={
+                                        <>
+                                          {value.frequency === 1
+                                            ? "(monthly)"
+                                            : value.frequency === 12
+                                            ? "(yearly)"
+                                            : `1/${value.frequency}`}
+                                        </>
+                                      }
+                                    >
+                                      {({ close }) => (
+                                        <EditExpenseFrequency
+                                          closeModal={close}
+                                          expenseItemId={value.id}
+                                          ref={refModal}
+                                        />
+                                      )}
+                                    </Modal>
                                   </div>
                                 </div>
                               );

@@ -6,13 +6,13 @@ export const addRawMaterialToDB = async (access_token, params) => {
     const { data } = await axios.post(
       `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials`,
       {
-        material
+        material,
       },
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
-      } 
+      }
     );
 
     return data;
@@ -60,19 +60,11 @@ export const editRawMaterialToDB = async (access_token, params, id) => {
   }
 };
 
-
 export const addRawMaterialLogToDB = async (access_token, params) => {
   try {
-    const { item_id, date, price, quantity, last_edited_by } = params;
     const { data } = await axios.post(
       `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs`,
-      {
-        item_id,
-        date,
-        price,
-        quantity,
-        last_edited_by,
-      },
+      params,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,

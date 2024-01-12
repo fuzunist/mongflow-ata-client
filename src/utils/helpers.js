@@ -175,12 +175,21 @@ export const filterOlderThan10Days = (obj, currentDate) => {
   }
 };
 
+
+
 export const formatDigits = (number) => {
-  return number?.toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  if (typeof number === 'number' || typeof number === 'bigint') {
+    const formattedNumber = number.toFixed(2); // Ensure two decimal places
+    return formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  } else if (typeof number === 'string' && !isNaN(Number(number))) {
+    const parsedNumber = Number(number).toFixed(2); // Ensure two decimal places
+    return parsedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  } else {
+    return ''; // Return empty string for non-numeric values or unsupported types
+  }
 };
+
+
 
 export const formatFloat = (number) => {
   return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -193,6 +202,6 @@ export const transformToFloat = (numberString) => {
   } else if (typeof numberString === 'number') {
     return numberString.toFixed(2);
   }
-  return null; 
+  return 0; 
 
 };

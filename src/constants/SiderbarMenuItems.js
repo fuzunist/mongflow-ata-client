@@ -117,24 +117,24 @@ export default [
       value: ["admin", "stock_manager", "boss"],
     },
   },
-  {
-    key: "apps-materials",
-    icon: CircleDollarSign,
-    url: "/apps/materials",
-    authenticate: {
-      type: "usertype",
-      value: [
-        "admin",
-        "boss",
-        "domestic_market_manager",
-        "foreign_market_manager",
-        "domestic_market_marketing",
-        "foreign_market_marketing",
-        "stock_manager",
-        "production_manager",
-      ],
-    },
-  },
+  // {
+  //   key: "apps-materials",
+  //   icon: CircleDollarSign,
+  //   url: "/apps/materials",
+  //   authenticate: {
+  //     type: "usertype",
+  //     value: [
+  //       "admin",
+  //       "boss",
+  //       "domestic_market_manager",
+  //       "foreign_market_manager",
+  //       "domestic_market_marketing",
+  //       "foreign_market_marketing",
+  //       "stock_manager",
+  //       "production_manager",
+  //     ],
+  //   },
+  // },
   {
     key: "apps-expenses",
     icon: Factory,

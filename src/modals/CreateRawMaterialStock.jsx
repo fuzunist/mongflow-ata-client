@@ -2,14 +2,18 @@ import FormikForm from "@/components/FormikForm";
 import {
   addRawMaterialLogToDB,
   editRawMaterialLogToDB,
-  editRawMaterialToDB
+  editRawMaterialToDB,
 } from "@/services/rawmaterial";
 import { useUser } from "@/store/hooks/user";
 import { dateToIsoFormatWithTimezoneOffset } from "@/utils/helpers";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRawMaterials } from "@/store/hooks/apps";
-import { addRawMaterialLog, editRawMaterialLog, editRawMaterial } from "@/store/actions/apps";
+import {
+  addRawMaterialLog,
+  editRawMaterialLog,
+  editRawMaterial,
+} from "@/store/actions/apps";
 
 const CreateRawMaterialStock = ({ closeModal, editing = false, selected }) => {
   const user = useUser();
@@ -58,6 +62,20 @@ const CreateRawMaterialStock = ({ closeModal, editing = false, selected }) => {
       value: editing ? selected.price : 0,
       min: 0,
     },
+    supplier: {
+      tag: "input",
+      type: "text",
+      placeholder: t("supplier"),
+      label: t("supplier"),
+      value: "",
+    },
+    waybill: {
+      tag: "input",
+      type: "text",
+      placeholder: t("waybill"),
+      label: t("waybill"),
+      value: "",
+    },
     date: {
       tag: "input",
       type: "date",
@@ -75,6 +93,8 @@ const CreateRawMaterialStock = ({ closeModal, editing = false, selected }) => {
     if (!values.item_id) errors.product_id = "Required";
     if (!values.quantity) errors.stock = "Required";
     if (!values.price) errors.cost = "Required";
+    if (!values.supplier) errors.supplier = "Required";
+    if (!values.waybill) errors.waybill = "Required";
 
     return errors;
   };
@@ -99,10 +119,11 @@ const CreateRawMaterialStock = ({ closeModal, editing = false, selected }) => {
 
     const stockdata = {
       stock: currentStock.stock + values.quantity,
-      cost:
-        ((currentStock.cost * currentStock.stock +
+      cost: (
+        (currentStock.cost * currentStock.stock +
           values.price * values.quantity) /
-        (values.quantity + currentStock.stock)).toFixed(2),
+        (values.quantity + currentStock.stock)
+      ).toFixed(2),
     };
 
     const editRawStockPromise = editRawMaterialToDB(

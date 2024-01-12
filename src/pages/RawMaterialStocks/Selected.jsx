@@ -31,41 +31,49 @@ const Selected = ({ selected }) => {
     <Col variant="full">
       <Card>
         <Card.Body>
-          <div className="flex flex-col justify-start items-center">
+          <div className="flex flex-col items-center">
             <h2 className="text-2xl font-semibold text-text-dark-light dark:text-text-dark-dark mb-6">
-              {rawMaterialStocks.find((item) => item.id === selected).material} {t("buyinghistory")}
+              {rawMaterialStocks.find((item) => item.id === selected).material}{" "}
+              {t("buyinghistory")}
             </h2>
 
-            <div className="flex flex-col w-full gap-4 min-h-[225px] max-h-[225px] overflow-y-auto scroller">
+            <div className="flex flex-col w-full min-h-[225px] max-h-[225px] overflow-y-auto scroller ">
               {Object.entries(filteredStocks).map(([key, stocks], index) => {
                 return (
                   <div
-                    className="flex flex-col gap-2 bg-border-light dark:bg-border-dark rounded-md p-4 select-none"
+                    className="flex flex-col gap-2 bg-border-light dark:bg-border-dark rounded-md p-4 select-none min-w-[500px] overflow-x-scroll"
                     key={index}
                   >
-                    <div className="flex justify-between items-center">
-                      <span>{key}</span>
-                      <span>
-                        {/* {t("total_stock")}: {stocks[key].quantity} */}
-                      </span>
-                    </div>
-                    <hr className="border-body-fg-dark dark:border-body-fg-light w-full" />
-                    <div className="flex flex-col max-h-[160px] gap-2 overflow-y-auto scroller">
+                   
+                    <hr className="border-body-fg-dark dark:border-body-fg-light" />
+                    <div className="flex max-h-[160px] overflow-y-auto scroller">
                       {stocks.map((stock, _indx) => {
                         return (
                           <Modal
+                     
                             key={_indx}
                             text={
-                              <>
-                                <span>
+                              <div  className="grid grid-cols-5 gap-x-4 " >
+                                <span className="justify-self-start grid-cols-5">
                                   {t("price")}: {stock.price}
                                 </span>
-                                <span>
+                                <span className="justify-self-start grid-cols-5">
                                   {t("stock")}: {stock.quantity}
                                 </span>
-                              </>
+                                <span className="justify-self-start grid-cols-5">
+                                  {t("totalPrice")}:{" "}
+                                  {stock.quantity * stock.price}
+                                  {" $"}
+                                </span>
+                                <span className="justify-self-start grid-cols-5">
+                                  {t("supplier")}: {stock.supplier}
+                                </span>
+                                <span className="justify-self-start grid-cols-5">
+                                  {t("waybill")}: {stock.waybill}
+                                </span>
+                              </div>
                             }
-                            className="flex justify-between items-center p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer"
+                            className="grid w-full p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer"
                           >
                             {({ close }) => (
                               <CreateRawMaterialStock

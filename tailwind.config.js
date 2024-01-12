@@ -107,6 +107,8 @@ export default {
             lg: "960px",
             xl: "1400px",
           },
+          
     },
+    
     plugins: []
 }

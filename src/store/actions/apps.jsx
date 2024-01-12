@@ -3,6 +3,7 @@ import {
   _addCustomer,
   _addProduct,
   _addRecipe,
+  _addSpecialRecipe,
   _addRecipeMaterial,
   _editRecipeMaterial,
   _addRawMaterial,
@@ -21,6 +22,7 @@ import {
   _editRecipe,
   _delProduct,
   _delRecipe,
+  _delSpecialRecipe,
   _addStock,
   _editStock,
   _delStock,
@@ -50,6 +52,7 @@ import {
   _setSorter,
   _addExpenseItem,
   _editExpenses,
+  _editExpenseItemFreq,
   _addRecipeMaterialLog,
   _editRecipeMaterialLog,
 } from "../reducers/apps";
@@ -76,6 +79,10 @@ export const delProduct = (product_id) =>
 export const addRecipe = (recipe) => store.dispatch(_addRecipe(recipe));
 export const editRecipe = (recipe) => store.dispatch(_editRecipe(recipe));
 export const delRecipe = (recipeId) => store.dispatch(_delRecipe(recipeId));
+export const addSpecialRecipe = (recipe) =>
+  store.dispatch(_addSpecialRecipe(recipe));
+export const delSpecialRecipe = (recipeId) =>
+  store.dispatch(_delSpecialRecipe(recipeId));
 
 export const addRecipeMaterial = (recipeMaterial) =>
   store.dispatch(_addRecipeMaterial(recipeMaterial));
@@ -94,7 +101,7 @@ export const addRawMaterial = (rawMaterial) =>
 export const editRawMaterial = (rawMaterial) =>
   store.dispatch(_editRawMaterial(rawMaterial));
 
-  export const addRawMaterialLog = (rawMaterialLog) =>
+export const addRawMaterialLog = (rawMaterialLog) =>
   store.dispatch(_addRawMaterialLog(rawMaterialLog));
 
 export const editRawMaterialLog = (rawMaterialLog) =>
@@ -183,3 +190,6 @@ export const changeUserType = (userid, usertype) =>
 export const addExpenseItem = (item) => store.dispatch(_addExpenseItem(item));
 export const editExpenses = (expenses) =>
   store.dispatch(_editExpenses(expenses));
+
+export const editExpenseItemFreq = (expenseFreq) =>
+  store.dispatch(_editExpenseItemFreq(expenseFreq));

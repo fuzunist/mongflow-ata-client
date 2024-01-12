@@ -4,6 +4,8 @@ import FormInput from './FormInput'
 import FormOrderStatus from './FormOrderStatus'
 import FormSelect from './FormSelect'
 import FormText from './FormText'
+import FormOrders from './FormOrders'
+
 
 export default {
     input: FormInput,
@@ -11,5 +13,6 @@ export default {
     attributes: FormAttribute,
     text: FormText,
     orderStatus: FormOrderStatus,
-    stock: FormAttributes
+    stock: FormAttributes,
+    orders: FormOrders
 }

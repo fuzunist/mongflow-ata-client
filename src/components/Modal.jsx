@@ -59,7 +59,7 @@ const Modal = ({
               >
                 <Dialog.Panel
                   className={classNames(
-                    "w-full transform overflow-hidden rounded-md bg-card-bg-light dark:bg-card-bg-dark text-text-dark-light dark:text-text-dark-dark shadow-box p-6 text-left align-middle transition-all",
+                    "w-full transform overflow-hidden rounded-md bg-card-bg-light dark:bg-card-bg-dark text-text-dark-light dark:text-text-dark-dark shadow-box p-6 text-left align-middle transition-all min-w-[400px]",
                     {
                       "max-w-md": width === "md",
                       "max-w-lg": width === "lg",
@@ -68,6 +68,7 @@ const Modal = ({
                       "max-w-3xl": width === "3xl",
                       "max-w-4xl": width === "4xl",
                       "max-w-5xl": width === "5xl",
+                      "max-w-[50%]": width==="40"
                     }
                   )}
                 >

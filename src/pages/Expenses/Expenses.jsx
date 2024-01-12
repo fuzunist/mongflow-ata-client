@@ -6,7 +6,7 @@ import {
 } from "@/store/hooks/apps";
 import { useUser } from "@/store/hooks/user";
 import { useTranslation } from "react-i18next";
-
+import * as Yup from 'yup';
 import { editExpenses, addExpenseItem } from "@/store/actions/apps";
 import ExpensesForm from "@/components/FormikForm/ExpensesForm";
 import { updateExpensesToDB } from "@/services/expenses";
@@ -21,9 +21,12 @@ const Expenses = () => {
   const expensesClasses = useExpensesClasses();
   const expensesItems = useExpensesItems();
   const expenses = useExpenses();
+  console.log("expenses", expenses);
+  console.log("expensesItems", expensesItems);
 
   const initialValues = useMemo(() => {
     const newInitialValues = {};
+    console.log("expensesItems from memo", expensesItems);
     expensesItems?.forEach((row) => {
       newInitialValues[String(row.id)] = {
         id: row.id,
@@ -35,23 +38,27 @@ const Expenses = () => {
         type: "decimal",
         placeholder: "Harcama Girin TL",
         value:
-          transformToFloat(
-            expenses[0]?.monthly_expenses[row.id] * row.frequency || 0
-          ) || 0,
+          transformToFloat(expenses[0]?.monthly_expenses[row.id]),
         min: 0,
       };
     });
     return newInitialValues;
-  }, [expensesItems, expenses]);
+  }, [expensesItems]);
+ 
+  console.log("expenses out expenses", expenses )
 
-  const onSubmit = async (values, { setSubmitting }) => {
+  const onSubmitExpense = async (values, { setSubmitting }) => {
     try {
       setSubmitting(true);
       setError("");
 
       const monthly_expenses = { ...expenses.monthly_expenses, ...values };
-
-      const data = calculateExpenses(monthly_expenses, expenses[0]?.id);
+      console.log("expenses in expenses", expenses )
+      const data = calculateExpenses(
+        monthly_expenses,
+        expenses[0]?.id,
+        expensesItems
+      );
 
       const response = await updateExpensesToDB(user.tokens.access_token, data);
       if (response?.error) {
@@ -59,6 +66,7 @@ const Expenses = () => {
         setError(response?.error);
         return;
       }
+      console.log("response of expenses", response);
       editExpenses(response);
       setSuccessMessage(t("expenses_added_successfully"));
       setTimeout(() => {
@@ -67,23 +75,22 @@ const Expenses = () => {
 
       setSubmitting(false);
     } catch (err) {
-      setSubmitting(false);
       console.log(err);
       setError(err);
     }
   };
 
+
   return (
     <div className="mb-4 w-full min-w-[700px]">
       <ExpensesForm
         className={"flex flex-row"}
-        onSubmit={onSubmit}
-        //   validate={validate}
+        onSubmit={onSubmitExpense}
         initialValues={initialValues}
         error={error}
         title={"Harcamaları Güncelle"}
         classes={expensesClasses}
-        expensesItems={expensesItems}
+
       />
       {successMessage && (
         <p className="flex mt-4 text-green-500 mb-4 self-center items-center justify-center">

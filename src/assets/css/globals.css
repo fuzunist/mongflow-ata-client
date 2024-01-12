@@ -51,3 +51,7 @@ body.dark .scroller {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.ant-switch-checked{
+    background:#5b69bc !important;
+ }

@@ -17,7 +17,7 @@ const Products = () => {
     const user = useUser()
     const [page, setPage] = useState('products')
 
-    const authenticate = useMemo(() => ['admin', 'stock_manager'].includes(user.usertype), [user])
+    const authenticate = useMemo(() => ['boss', 'stock_manager'].includes(user.usertype), [user])
 
     const closeModal = () => setProduct(null)
 

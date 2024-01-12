@@ -59,6 +59,20 @@ const CreateMaterialStock = ({ closeModal, editing = false, selected }) => {
       value: editing ? selected.price : 0,
       min: 0,
     },
+    supplier: {
+      tag: "input",
+      type: "text",
+      placeholder: t("supplier"),
+      label: t("supplier"),
+      value:  "",
+    },
+    waybill: {
+      tag: "input",
+      type: "text",
+      placeholder: t("waybill"),
+      label: t("waybill"),
+      value:  "",
+    },
     date: {
       tag: "input",
       type: "date",
@@ -76,6 +90,8 @@ const CreateMaterialStock = ({ closeModal, editing = false, selected }) => {
     if (!values.item_id) errors.product_id = "Required";
     if (!values.quantity) errors.stock = "Required";
     if (!values.price) errors.cost = "Required";
+    if (!values.supplier) errors.supplier = "Required";
+    if (!values.waybill) errors.waybill = "Required";
 
     return errors;
   };
@@ -84,7 +100,7 @@ const CreateMaterialStock = ({ closeModal, editing = false, selected }) => {
     setError("");
     setSubmitting(true);
     values.last_edited_by = user.userid;
-
+ console.log("vallus of logs mater", values)
     const addRecipeMaterialLogPromise = addRecipeMaterialLogToDB(
       user.tokens.access_token,
       values

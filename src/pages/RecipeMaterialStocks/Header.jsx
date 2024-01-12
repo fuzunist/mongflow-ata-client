@@ -41,6 +41,7 @@ const Header = ({ stocks }) => {
         <button
           className="bg-purple hover:bg-purple-hover text-white rounded-full py-2 px-4"
           onClick={() => materialStocksToExcel(products, stocks, zeros)}
+          disabled={true}
         >
           {t("saveAsExcel")}
         </button>

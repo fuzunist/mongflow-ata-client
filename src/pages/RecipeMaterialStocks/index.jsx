@@ -14,7 +14,7 @@ const Stocks = () => {
     const RecipeMaterialLogs= useRecipeMaterialLogs()
 
     return (
-        <div className='flex flex-col w-full m-6 '>
+        <div className='flex flex-col w-full min-w-[450px] grow-0 m-6 '>
             <Header stocks={recipeMaterialStocks} />
             <Row align='center'>
                 <Products

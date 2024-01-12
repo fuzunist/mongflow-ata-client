@@ -15,14 +15,22 @@ const PendingOrders = () => {
   const user = useUser();
 
   const filteredOrders = useMemo(() => {
-    if (user.usertype === "admin" || user.usertype === "boss" || user.usertype === "stock_manager")
-      return orders.filter((order) => order.status === 5); // patron sadece 1leri görecek onaylayınca sıfır olacak
+    if (
+      user.usertype === "admin" ||
+      user.usertype === "boss" ||
+      user.usertype === "stock_manager"
+    )
+      return orders.filter((order) => order.status.length === 3);
     if (user.usertype === "domestic_market_manager")
-      return orders.filter((order) => order.status === 2); // üretim müdürü 2 ve 3 leri görecek, onaylayınca 1 olacak
+      return orders.filter(
+        (order) => order.status.includes("5") || order.status.includes("6")
+      );
     if (user.usertype === "foreign_market_manager")
-      return orders.filter((order) => order.status === 3);
-      if (user.usertype === "production_manager")
-      return orders.filter((order) => order.status !== (5 || 0));
+      return orders.filter(
+        (order) => order.status.includes("7") || order.status.includes("8")
+      );
+    if (user.usertype === "production_manager")
+      return orders.filter((order) => order.status.length === 2);
   }, [orders, user]);
 
   const searchedOrders = useMemo(() => {

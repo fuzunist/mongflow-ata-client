@@ -7,6 +7,8 @@ export const useUsers = () => useSelector((state) => state.apps.users);
 export const useProducts = () => useSelector((state) => state.apps.products);
 
 export const useRecipes = () => useSelector((state) => state.apps.recipes);
+export const useSpecialRecipes = () => useSelector((state) => state.apps.specialRecipes);
+
 export const useRecipeMaterials = () =>
   useSelector((state) => state.apps.recipeMaterials);
 

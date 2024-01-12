@@ -14,42 +14,50 @@ const Products = ({ stocks, selected, setSelected }) => {
     <Col variant="full">
       <Card>
         <Card.Body>
-          <div className="flex flex-col gap-4 max-h-[300px] h-[300px] overflow-y-auto scroller">
-            {stocks.map((stock, index) => (
-              <div
-                key={index}
-                className="flex justify-between items-center bg-border-light dark:bg-border-dark rounded-md p-4 select-none cursor-pointer"
-                onClick={() =>
-                  setSelected(selected !== stock.id ? stock.id : null)
-                }
-              >
-                <h5 className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1">
-                  {stock.material}
-                </h5>
-                <div className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1 flex justify-center items-center gap-4">
-                  <span>{t("totalstock")}{" (kg)"}:</span>
-                  <span>{stock.stock}</span>
-                </div>
-                <div className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1 flex justify-center items-center gap-4">
-                  <span>{t("unitCost")}{" ($)"}:</span>
-             
-                  <span>{stock.cost}</span>
+          <div className="flex flex-col items-center">
+            <div className="flex flex-col gap-4 max-h-[300px] h-[300px] overflow-y-auto w-full  scroller">
+              <div className="min-w-[600px] overflow-x-scroll ">
+                {stocks.map((stock, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between gap-5 items-center bg-border-light dark:bg-border-dark rounded-md p-4 select-none  cursor-pointer"
+                    onClick={() =>
+                      setSelected(selected !== stock.id ? stock.id : null)
+                    }
+                  >
+                    <h5 className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1">
+                      {stock.material}
+                    </h5>
+                    <div className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1 flex justify-center items-center gap-4">
+                      <span>
+                        {t("totalstock")}
+                        {" (kg)"}:
+                      </span>
+                      <span>{stock.stock}</span>
+                    </div>
+                    <div className="text-text-dark-light dark:text-text-dark-dark font-medium flex-1 flex justify-center items-center gap-4">
+                      <span>
+                        {t("unitCost")}
+                        {" ($)"}:
+                      </span>
 
-                </div>
-                <div className="flex-1 flex justify-end items-center gap-4">
-                 
-                  <button
-                                        className='bg-yellow-600 hover:bg-purple-hover text-white rounded-full py-2 px-4'
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            console.log("işle buton clicked")
-                                        }}
-                                    >
-                                        {t('processit')}
-                                    </button>
-                </div>
+                      <span>{stock.cost}</span>
+                    </div>
+                    <div className="flex-1 flex justify-end items-center gap-4">
+                      <button
+                        className="bg-yellow-600 hover:bg-purple-hover text-white rounded-full py-2 px-4"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          console.log("işle buton clicked");
+                        }}
+                      >
+                        {t("processit")}
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </Card.Body>
       </Card>

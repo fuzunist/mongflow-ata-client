@@ -16,7 +16,7 @@
   "dontHaveAnAccount": "Hesabın yok mu?",
   "alreadyHaveAccount": "Zaten bir hesabın var mı?",
   "admin": "Admin",
-  "boss": "Patron",
+  "boss": "Reis",
   "domestic_market_manager": "Üretim Müdürü",
   "foreign_market_manager": "Dış Piyasa Müdürü",
   "domestic_market_marketing": "İç Piyasa Satış Sorumlusu",
@@ -198,7 +198,31 @@
   "itemclassname": "Kategori",
   "expenseitemname":"Harcama Gider Kalemi",
   "frequency": "Sıklık (ay)",
-  "errorexistingitem": "Girdiğiniz gider ismi zaten mevcut!"
+  "errorexistingitem": "Girdiğiniz gider ismi zaten mevcut!",
+  "editexpensefrequency": "Gider Sıklığını Güncelle",
+  "supplier": "Tedarikçi",
+  "waybill": "İrsaliye No",
+  "wastage_percentage": "Fire Miktarı (%)",
+  "wastage_kg": "Fire Miktarı (kg)",
+  "total_bunker": "Gereken Toplam Bunker",
+  "recipeName": "Reçete İsmi Girin",
+  "saveRecipe": "Reçeteyi Kaydet",
+  "recipeNameError":"Reçete ismi girilmesi gerkiyor!",
+  "registeredRecipes": "Kayıtlı Reçeteler",
+  "exceedsStockError": "Stok Hatası! Stok değerlerini kontrol edin!",
+  "exceedStockValue": "Mevcut Stok Miktarı ",
+  "totalRecipeKGError": "1 bunker için gereken hammadde 2250 ile 2350 kg arasında olmalıdır.",
+  "totalRecipeInputKG": "Toplam Girilen Miktar ",
+  "Error processing details": "Yeterli stok mevcut değil, Reçeteyi üretim müdürüne Gönderin. ",
+  "canceled-orders": "İptal Edilen Siparişlerim",
+  "pending-boss-approval": "Patron Onayı Bekleyen Siparişler",
+  "totalBunkerCost": "Toplam Bunker Maliyeti",
+  "bunkerCost": "Birim Bunker Maliyeti",
+  "shiftname": "Vardiya",
+  "selectOrder": "Sipariş Seçiniz",
+  "order": "Sipariş"
+
+
 
 
 }

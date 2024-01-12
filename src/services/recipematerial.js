@@ -6,7 +6,7 @@ export const addRecipeMaterialToDB = async (access_token, params) => {
     const { data } = await axios.post(
       `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials`,
       {
-        material
+        material,
       },
       {
         headers: {
@@ -60,18 +60,35 @@ export const editRecipeMaterialToDB = async (access_token, params, id) => {
   }
 };
 
+export const updateRecipeMaterialStocksToDB = async (
+  access_token,
+  order_id
+) => {
+  try {
+    const { data } = await axios.put(
+      `${
+        import.meta.env.VITE_API_ENDPOINT
+      }/recipe/materials/stocks/${order_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("Successfully updated recipeMaterials Stocks:", data);
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    return e.response.data;
+  }
+};
+
 export const addRecipeMaterialLogToDB = async (access_token, params) => {
   try {
-    const { item_id, date, price, quantity, last_edited_by } = params;
     const { data } = await axios.post(
       `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs`,
-      {
-        item_id,
-        date,
-        price,
-        quantity,
-        last_edited_by,
-      },
+      params,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,

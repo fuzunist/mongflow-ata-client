@@ -1,12 +1,11 @@
 import axios from "axios";
 
 const today = new Date();
-const formattedDate = `01/${(today.getMonth() + 1).toString().padStart(2, '0')}/${today.getFullYear()}`;
+const formattedDate = `01/${(today.getMonth() + 1)
+  .toString()
+  .padStart(2, "0")}/${today.getFullYear()}`;
 
-export const getExpensesFromDB = async (
-  access_token,
-  date = formattedDate
-) => {
+export const getExpensesFromDB = async (access_token, date = formattedDate) => {
   try {
     const { data } = await axios.get(
       `${import.meta.env.VITE_API_ENDPOINT}/expenses?date=${date}`,
@@ -113,6 +112,26 @@ export const updateExpensesToDB = async (access_token, params) => {
     );
 
     console.log("updateExpensesToDB: ", data);
+
+    return data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
+
+export const updateExpenseItemFreqToDB = async (access_token, params) => {
+  try {
+    const { data } = await axios.patch(
+      `${import.meta.env.VITE_API_ENDPOINT}/expenses/item`,
+      params,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    console.log("updateExpenseItemFrequecyToDB: ", data);
 
     return data;
   } catch (e) {

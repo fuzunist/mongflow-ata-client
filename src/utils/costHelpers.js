@@ -7,11 +7,14 @@ export const recipeCost = (values, recipeMaterials) => {
       const material = recipeMaterials.find((mat) => mat.id === parseInt(id));
 
       if (material) {
-        const cost = material.cost * quantity;
+        const cost = material.cost * quantity; // bunker cinsi için *0.44
         totalCost += cost;
       }
     }
   }
 
-  return totalCost;
+  // 1 ton 0.4444 bunker
+  // 1 bunker 2.25 ton
+
+  return parseFloat(totalCost);
 };

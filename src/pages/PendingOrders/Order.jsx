@@ -2,7 +2,7 @@ import Card from "@/components/Card";
 import Col from "@/components/Col";
 import { useUser } from "@/store/hooks/user";
 import { useTranslation } from "react-i18next";
-import { editOrder } from "@/store/actions/apps";
+import { editOrder, editRecipeMaterial } from "@/store/actions/apps";
 import { updateStatusInDB } from "@/services/order";
 import { useRecipes } from "@/store/hooks/apps";
 import Modal from "@/components/Modal";
@@ -11,30 +11,89 @@ import { useEffect, useState, useMemo } from "react";
 import { formatDigits } from "@/utils/helpers";
 import OrderRecipeDetails from "@/modals/OrderRecipeDetails";
 import { useExpenses, useExchangeRates } from "@/store/hooks/apps";
+import { updateRecipeMaterialStocksToDB } from "@/services/recipematerial";
+import getProductionTime from "@/utils/getProductionTime";
 
 const Order = ({ order }) => {
   const exchangeRates = useExchangeRates();
   const [isDisabled, setIsDisabled] = useState(true);
+  const [error, setError] = useState("");
+
   const user = useUser();
   const { t } = useTranslation();
   const recipes = useRecipes();
   const expenses = useExpenses();
-  console.log(exchangeRates);
+  const prodtime = getProductionTime();
+  console.log("prodtime::::", prodtime);
 
-  const onClick = async () => {
+  const sendToApprove = async () => {
     let status;
+    let currentStatus = order.status;
 
     if (user.usertype === "production_manager") {
-      status = 5;
+      status = currentStatus.concat(currentStatus[0]);
     } else if (user.usertype === "boss" || user.usertype === "stock_manager") {
-      status = 0;
+      // burada stoktan düşme işlemi yapılacak
+      const response = await updateRecipeMaterialStocksToDB(
+        user.tokens.access_token,
+        order.order_id
+      );
+      console.log("response of updateRecipeMaterialStocksToDB::", response);
+      if (response?.error) {
+        console.log(response.error);
+        return setError(t(response.error));
+      }
+    }
+    status = currentStatus.concat(currentStatus[0]);
+    const response = await updateStatusInDB(
+      user.tokens.access_token,
+      order.order_id,
+      status
+    );
+    if (response?.error) {
+      console.log(response.error);
+      return setError(response.error);
+    }
+    editOrder(response);
+  };
+
+  const handleDenyRecipe = async () => {
+    console.log("cancelApprove");
+    let status;
+    let currentStatus = order.status;
+
+    if (user.usertype === "boss" || user.usertype === "stock_manager") {
+      status = currentStatus.slice(0, -1);
     }
     const response = await updateStatusInDB(
       user.tokens.access_token,
       order.order_id,
       status
     );
-    if (response?.error) console.log(response.error);
+    if (response?.error) {
+      console.log(response.error);
+      return setError(response.error);
+    }
+    editOrder(response);
+  };
+
+  const handleDenyOrder = async () => {
+    console.log("handleDenyOrder");
+    let status;
+    let currentStatus = order.status;
+
+    if (user.usertype === "boss" || user.usertype === "stock_manager") {
+      status = currentStatus.slice(0, -2);
+    }
+    const response = await updateStatusInDB(
+      user.tokens.access_token,
+      order.order_id,
+      status
+    );
+    if (response?.error) {
+      console.log(response.error);
+      return setError(response.error);
+    }
     editOrder(response);
   };
 
@@ -83,16 +142,38 @@ const Order = ({ order }) => {
                 </h4>
                 <h5>({order.order_number})</h5>
               </div>
+              <div className="text-red-700">{error}</div>
 
               {user.usertype === "boss" ||
               user.usertype === "production_manager" ? (
-                <button
-                  className="py-2 px-4 transition-all outline-none bg-green-600 hover:bg-green-500 text-white rounded disabled:bg-gray-400"
-                  onClick={onClick}
-                  disabled={isDisabled}
-                >
-                  {user.usertype === "boss" ? t("approve") : t("approvetoboss")}
-                </button>
+                <div>
+                  <button
+                    className="py-2 px-4 ml-2 transition-all outline-none bg-green-600 hover:bg-green-500 text-white rounded disabled:bg-gray-400"
+                    onClick={sendToApprove}
+                    disabled={user.usertype === "boss" ? false : isDisabled}
+                  >
+                    {user.usertype === "boss"
+                      ? t("approve")
+                      : t("approvetoboss")}
+                  </button>
+
+                  {user.usertype === "boss" && (
+                    <>
+                      <button
+                        className="py-2 px-4 ml-2 transition-all outline-none bg-red-600 hover:bg-red-500 text-white rounded disabled:bg-gray-400"
+                        onClick={handleDenyOrder}
+                      >
+                        Siparişi Reddet
+                      </button>
+                      <button
+                        className="py-2 px-4 ml-2 transition-all outline-none bg-red-600 hover:bg-red-500 text-white rounded disabled:bg-gray-400"
+                        onClick={handleDenyRecipe}
+                      >
+                        Reçeteyi Reddet
+                      </button>
+                    </>
+                  )}
+                </div>
               ) : (
                 "Reçete bekleniyor"
               )}
@@ -118,12 +199,14 @@ const Order = ({ order }) => {
                 {user.usertype !== "production_manager" && (
                   <>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                      {/* {t("bunkerCost")} */}
                       {t("recipeCost")}
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1">
                       {t("unitPrice")}
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1">
+                      {/* {t("totalBunkerCost")} */}
                       {t("totalRecipeCost")}
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1">
@@ -140,7 +223,7 @@ const Order = ({ order }) => {
               </div>
               <hr className="border-border-light dark:border-border-dark" />
               {order?.products?.map((product, index) => {
-                let isFilled = recipes.find(
+                let recipe = recipes.find(
                   (recipe) => recipe.id === product.recipe_id
                 );
 
@@ -162,12 +245,14 @@ const Order = ({ order }) => {
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                       {product.quantity} ton
+                      {/* {"( "}{recipe.total_bunker} bunker {" )"} */}
                     </span>
                     {user.usertype !== "production_manager" && (
                       <>
                         {" "}
                         <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                          {formatDigits(product.unitCost)}{" "}
+                          {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
+                          {formatDigits((product.totalCost * 0.4444)/product.quantity)}{" "}
                           {order?.currency_code}
                         </span>
                         <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
@@ -176,7 +261,11 @@ const Order = ({ order }) => {
                         </span>
                         {user.usertype !== "production_manager" && (
                           <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                            {formatDigits(product.totalCost)}{" "}
+                            {/* {formatDigits(product.totalCost)}{" "} */}
+                            {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
+                            {formatDigits(
+                              product.totalCost
+                            )}{" "}
                             {order?.currency_code}
                           </span>
                         )}
@@ -191,13 +280,13 @@ const Order = ({ order }) => {
                       {product?.orderStatus ? (
                         product.orderStatus.map((status, index) => (
                           <span key={index}>
-                            {status.quantity} {t("pieces").toLowerCase()},{" "}
+                            {status.quantity} {t("ton").toLowerCase()},{" "}
                             {status.type}.
                           </span>
                         ))
                       ) : (
                         <span>
-                          {product.quantity} {t("pieces").toLowerCase()},{" "}
+                          {product.quantity} {t("ton").toLowerCase()},{" "}
                           {OrderStatus[0]}.
                         </span>
                       )}
@@ -208,13 +297,11 @@ const Order = ({ order }) => {
                         {user.usertype === "production_manager" ? (
                           <Modal
                             className={`text-white text-xs md:text-sm rounded-full py-2 px-2 flex justify-center items-center gap-2 ${
-                              isFilled
+                              recipe
                                 ? "bg-yellow-500 hover:bg-yellow-700"
                                 : "bg-red-600 hover:bg-red-700"
                             } `}
-                            text={
-                              isFilled ? "Reçete Düzenle" : " Reçete Oluştur"
-                            }
+                            text={recipe ? "Reçete Düzenle" : " Reçete Oluştur"}
                           >
                             {({ close }) => (
                               <CreateRecipe
@@ -222,20 +309,23 @@ const Order = ({ order }) => {
                                 recipe_id={product.recipe_id}
                                 product={product}
                                 closeModal={close}
-                                isFilled={isFilled}
+                                isFilled={recipe}
                               />
                             )}
                           </Modal>
                         ) : (
-                          <Modal
-                            className={`text-white text-xs md:text-sm rounded-full py-2 px-2 flex justify-center items-center gap-2 bg-purple `}
-                            text={"Reçete Detayları"}
-                          >
-                            <OrderRecipeDetails
-                              order_id={order.order_id}
-                              recipe_id={product.recipe_id}
-                            />
-                          </Modal>
+                          user.usertype === "boss" && (
+                            <Modal
+                              className={`text-white max-w-5xl 5xl text-xs md:text-sm rounded-full py-2 px-2 flex justify-center items-center gap-2 bg-purple `}
+                              text={"Reçete Detayları"}
+                              width="40"
+                            >
+                              <OrderRecipeDetails
+                                order_id={order.order_id}
+                                recipe_id={product.recipe_id}
+                              />
+                            </Modal>
+                          )
                         )}
                       </span>
                     </div>
@@ -286,28 +376,25 @@ const Order = ({ order }) => {
                 </div>
               ))}
             </div>
-
             {user.usertype === "boss" && (
               <>
                 {" "}
                 <span className="text-right px-4">
                   {t("totalRecipeCost")}:{" "}
-                  {formatDigits(parseFloat(order.total_cost))}{" "}
+                  {formatDigits(order.total_cost)}{" "}
                   {order.currency_code}
                 </span>
                 <span className="text-right px-4">
                   {t("totalCost")}:
                   {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
-                  {(
+                  {formatDigits(
                     (Number(order.total_cost) !== 0
-                      ? hourlyExpenseCost * 0.6 * totalProductQuantity
-                      : 0) + Number(order.total_cost)
-                  ).toFixed(2)}{" "}
+                      ? ((hourlyExpenseCost * 0.6 * totalProductQuantity) + Number(order.total_cost)) : "0")
+                  )}{" "}
                   {order.currency_code}
                 </span>
-                
                 <span className="text-right px-4">
-                  {t("taxed_total")}: {order?.total_with_tax?.toLocaleString()}{" "}
+                  {t("taxed_total")}: {formatDigits(order?.total_with_tax)}{" "}
                   {order?.currency_code}
                 </span>
                 {order.currency_code !== "USD" && (

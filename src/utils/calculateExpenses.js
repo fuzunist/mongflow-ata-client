@@ -1,19 +1,34 @@
-export const calculateExpenses = (monthly_expenses, id) => {
-  const monthly_cost = Object.values(monthly_expenses)
-    .map(parseFloat)
-    .reduce((acc, val) => acc + val, 0);
+import getWorkingDaysInMonth from "./getWorkingDays";
+export const calculateExpenses = (monthly_expenses, id, expenseItems) => {
+  console.log("monthly_expenses incalc", monthly_expenses);
+  const monthly_cost = expenseItems.reduce((acc, item) => {
+    const id = item.id;
+    const expense = monthly_expenses[id.toString()];
 
+    if (
+      expense !== undefined &&
+      item.frequency !== 0 &&
+      !isNaN(parseFloat(expense))
+    ) {
+      acc += parseFloat(expense) / item.frequency;
+    }
+
+    return acc;
+  }, 0);
+
+  const workingDays = getWorkingDaysInMonth();
+  // bu costlar monthly_cost üzerinden o ay çalışılan gün sayısına bölünüp hesaplanıyor.
   const daily_expenses = {};
-  const daily_cost = monthly_cost / 30;
+  const daily_cost = monthly_cost / workingDays;
 
   const hourly_expenses = {};
-  const hourly_cost = monthly_cost / 720;
+  const hourly_cost = daily_cost / 24;
 
   for (const key in monthly_expenses) {
-    const expense = parseFloat(monthly_expenses[key]);
+    const expense = monthly_expenses[key];
 
-    daily_expenses[key] = (expense / 30).toFixed(2);
-    hourly_expenses[key] = (expense / 720).toFixed(2);
+    daily_expenses[key] = (parseFloat(expense) / 30).toFixed(2);
+    hourly_expenses[key] = (parseFloat(expense) / 720).toFixed(2);
   }
 
   const data = {
