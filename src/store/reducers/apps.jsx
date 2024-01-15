@@ -60,6 +60,7 @@ export const _promiseAll = createAsyncThunk(
       getExpensesItemsFromDB(access_token),
       getExpensesClassesFromDB(access_token),
       getExpensesFromDB(access_token),
+      getUsersFromDB(access_token),
       usertype === "admin" ? getUsersFromDB(access_token) : [],
       getTodayExchangeRates(),
     ]);
@@ -68,6 +69,11 @@ export const _promiseAll = createAsyncThunk(
       return rejectWithValue({
         type: "getProductsFromDB",
         error: products.error,
+      });
+      else if (users?.error)
+      return rejectWithValue({
+        type: "getUsersFromDB",
+        error: users.error,
       });
     else if (recipeMaterials?.error)
       return rejectWithValue({

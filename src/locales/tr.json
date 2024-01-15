@@ -150,7 +150,9 @@
   "constituent": "Oluşturan",
   "order_updated_successfully": "Sipariş Başarıyla Güncellendi.",
   "order_added_successfully": "Sipariş Başarıyla Eklendi.",
-  "pendingOrderNumber": "Şu an {{number}} adet siparişiniz onay beklemektedir.",
+  "recipePendingOrderNumber": "Şu an {{number}} adet siparişiniz reçete onayı beklemektedir.",
+  "bossPendingOrderNumber": "Şu an {{number}} adet siparişiniz patron onayı beklemektedir.",
+  "productionPendingOrderNumber": "Şu an {{number}} adet siparişiniz üretim aşamasındadır.",
   "myOrders": "Siparişlerim",
   "allOrders": "Tüm Siparişler",
   "approver": "Onaylayan",
@@ -196,7 +198,7 @@
   "totalRecipeCost": "Toplam Reçete Maliyeti",
   "addExpenseItem": "Gider Kalemi Ekle",
   "itemclassname": "Kategori",
-  "expenseitemname":"Harcama Gider Kalemi",
+  "expenseitemname": "Harcama Gider Kalemi",
   "frequency": "Sıklık (ay)",
   "errorexistingitem": "Girdiğiniz gider ismi zaten mevcut!",
   "editexpensefrequency": "Gider Sıklığını Güncelle",
@@ -207,7 +209,7 @@
   "total_bunker": "Gereken Toplam Bunker",
   "recipeName": "Reçete İsmi Girin",
   "saveRecipe": "Reçeteyi Kaydet",
-  "recipeNameError":"Reçete ismi girilmesi gerkiyor!",
+  "recipeNameError": "Reçete ismi girilmesi gerkiyor!",
   "registeredRecipes": "Kayıtlı Reçeteler",
   "exceedsStockError": "Stok Hatası! Stok değerlerini kontrol edin!",
   "exceedStockValue": "Mevcut Stok Miktarı ",
@@ -220,9 +222,11 @@
   "bunkerCost": "Birim Bunker Maliyeti",
   "shiftname": "Vardiya",
   "selectOrder": "Sipariş Seçiniz",
-  "order": "Sipariş"
-
-
-
+  "order": "Sipariş",
+  "salesGraph": "Yıllık Satış Grafiği",
+  "salesQuantity": "Satış Miktarı",
+  "recipematerialstocks": "Hammadde Stokları",
+  "stockquantity": "Stok Miktarı",
+  "rawmaterialstocks": "İşlenecek Hammadde Stokları"
 
 }

@@ -44,7 +44,7 @@ const Select = ({ options = [], value = '', className = 'relative', onChange }) 
                     leaveTo='opacity-0'
                 >
                     <Listbox.Options className='absolute w-full top-full z-[999] max-h-60 overflow-y-auto scroller rounded-md rounded-tl-none rounded-tr-none bg-input-bg-light dark:bg-input-bg-dark border border-t-0 border-input-border-light dark:border-input-border-dark py-1 shadow-lg outline-none'>
-                        {options.map((option, index) => (
+                        {options?.map((option, index) => (
                             <Listbox.Option
                                 key={index}
                                 value={option?.key ?? option}

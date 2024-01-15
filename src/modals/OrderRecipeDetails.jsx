@@ -9,7 +9,7 @@ const OrderRecipeDetails = ({ order_id, recipe_id }) => {
   const foundRecipe = recipes?.find((recipe) => recipe.id === recipe_id);
 
   useEffect(() => {
-    if (foundRecipe && recipes) {
+    if (foundRecipe) {
       let recipeDetails = Object.entries(foundRecipe?.details)
         ?.map(([key, value]) => {
           if (value === "") return;
@@ -29,8 +29,9 @@ const OrderRecipeDetails = ({ order_id, recipe_id }) => {
         .filter(Boolean);
       setRecipeDetails(recipeDetails);
     }
-  }, [foundRecipe, recipes]);
+  }, [foundRecipe, recipes, recipe_id]);
   return (
+    foundRecipe &&
     <div className="flex flex-col  justify-center items-center max-w-5xl 5xl">
       <h2 className="font-semibold mb-2 text-lg">
         Reçete Detayı{" "}

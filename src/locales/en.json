@@ -153,7 +153,9 @@
   "constituent": "Constituent",
   "order_updated_successfully": "Order Updated Successfully.",
   "order_added_successfully": "Order Added Successfully.",
-  "pendingOrderNumber": "Your {{number}} order is currently awaiting approval.",
+  "recipePendingOrderNumber": "Your {{number}} order is currently awaiting recipe approval.",
+  "bossPendingOrderNumber": "Your {{number}} order is currently awaiting boss approval.",
+  "productionPendingOrderNumber": "Your {{number}} order is currently in production.",
   "myOrders": "My Orders",
   "allOrders": "All Orders",
   "approver": "Approver",
@@ -209,7 +211,7 @@
   "total_bunker": "Total Bunker Quantity",
   "recipeName": "Enter Recipe Name",
   "saveRecipe": "Save Recipe",
-  "recipeNameError":"Recipe name cannot be empty!",
+  "recipeNameError": "Recipe name cannot be empty!",
   "registeredRecipes": "Registered Recipes",
   "exceedStockValue": "Existed Stocks  ",
   "totalRecipeInputKG": "Total Input KG ",
@@ -220,13 +222,10 @@
   "bunkerCost": "Unit Bunker Cost",
   "shiftname": "Shift",
   "selectOrder": "Select Order",
-  "order": "Order"
-
-
-
-
-
-
-
-
+  "order": "Order",
+  "salesGraph": "Anual Sales Graph",
+  "salesQuantity": "Sales Quantity",
+  "recipematerialstocks": "Recipe Materials Stocks",
+  "stockquantity": "Stock Quantity"
+  
 }

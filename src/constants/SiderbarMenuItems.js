@@ -33,7 +33,7 @@ export default [
     url: "/users",
     authenticate: {
       type: "usertype",
-      value: ["admin", "boss"],
+      value: ["admin"],
     },
   },
   {
