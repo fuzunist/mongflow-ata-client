@@ -42,7 +42,7 @@ const PendingOrderNumbers = () => {
   return (
     <div className="mt-4 -mb-4 flex flex-col justify-center items-center">
       <div className="flex flex-col justify-start text-alert-danger-fg-light dark:text-alert-danger-fg-dark text-sm font-semibold text-center px-4">
-        {myRecipePendingOrders.length && (
+        {myRecipePendingOrders.length!==0 && (
           <span>
             {t("recipePendingOrderNumber", {
               number: myRecipePendingOrders.length,
@@ -50,7 +50,7 @@ const PendingOrderNumbers = () => {
           </span>
         )}
 
-        {myBossPendingOrders.length && (
+        {myBossPendingOrders.length!==0 && (
           <span>
             {" "}
             {t("bossPendingOrderNumber", {
@@ -58,7 +58,7 @@ const PendingOrderNumbers = () => {
             })}
           </span>
         )}
-        {myProductionPendingOrders.length && (
+        {myProductionPendingOrders.length!==0 && (
           <span>
             {t("productionPendingOrderNumber", {
               number: myProductionPendingOrders.length,
