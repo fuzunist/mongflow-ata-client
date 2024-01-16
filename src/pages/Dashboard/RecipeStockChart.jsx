@@ -11,7 +11,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
+import Col from "@/components/Col";
+import ChartGPTCard from "@/components/ChartGPTCard";
+
+import { useWindowSize } from "react-use";
+import { useRecipeMaterials } from "@/store/hooks/apps";
 
 
 ChartJS.register(
@@ -24,27 +29,24 @@ ChartJS.register(
   Legend
 );
 const BarChart = () => {
-  // const labels = Utils.months({ count: 7 });
-  const { t } = useTranslation()
+  const { width } = useWindowSize();
+  const { t } = useTranslation();
+
+  const recipeMaterialStocks= useRecipeMaterials()
+
+  const stockNames= Object.entries(recipeMaterialStocks).map(([key,val])=>val.material);
+  const stockDatas= Object.entries(recipeMaterialStocks).map(([key,val])=>val.stock);
 
 
   // chart data
   const barChartData = {
-    labels: [
-      "Beyaz Granül",
-      "Beyaz takoz",
-      "Beyaz Plaka",
-      "Şeffaf Pet",
-      "Sarı Optik",
-      "Beyaz Boya",
-
-    ],
+    labels: stockNames,
     datasets: [
       {
         label: t("stockquantity"),
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: "rgba(113,182,249,0.2)",
-        borderColor: "#71b6f9",
+        data: stockDatas,
+        backgroundColor: "#8CC0DE",
+        borderColor:"#8CC0DE",
         borderWidth: 1,
       },
     ],
@@ -81,9 +83,10 @@ const BarChart = () => {
   };
 
   return (
-    <Card>
-      <Card.Body>
-        {/* <Dropdown className="float-end" align="end">
+    <Col variant={width > 600 ? "1/2" : "full"}>
+      <Card>
+        <Card.Body>
+          {/* <Dropdown className="float-end" align="end">
                     <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
                         <i className="mdi mdi-dots-vertical"></i>
                     </Dropdown.Toggle>
@@ -94,12 +97,14 @@ const BarChart = () => {
                         <Dropdown.Item>Separated link</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown> */}
-        <h4 className="header-title">{t("recipematerialstocks")}</h4>
-        <div style={{ height: "350px" }} className="mt-4 chartjs-chart">
-          <Bar data={barChartData} options={barChartOpts} />
-        </div>
-      </Card.Body>
-    </Card>
+          <h4 className="header-title">{t("recipematerialstocks")}</h4>
+          <ChartGPTCard />
+          <div style={{ height: "350px" }} className="chartjs-chart">
+            <Bar data={barChartData} options={barChartOpts} />
+          </div>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 };
 

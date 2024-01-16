@@ -41,14 +41,30 @@ const PendingOrderNumbers = () => {
 
   return (
     <div className="mt-4 -mb-4 flex flex-col justify-center items-center">
-      <div className= "flex flex-col justify-start text-alert-danger-fg-light dark:text-alert-danger-fg-dark text-sm font-semibold text-center px-4">
-        <span>{t("recipePendingOrderNumber", {
-          number: myRecipePendingOrders.length,
-        })}</span>
-       <span> {t("bossPendingOrderNumber", { number: myBossPendingOrders.length })}</span>
-        <span>{t("productionPendingOrderNumber", {
-          number: myBossPendingOrders.length,
-        })}</span>
+      <div className="flex flex-col justify-start text-alert-danger-fg-light dark:text-alert-danger-fg-dark text-sm font-semibold text-center px-4">
+        {myRecipePendingOrders.length && (
+          <span>
+            {t("recipePendingOrderNumber", {
+              number: myRecipePendingOrders.length,
+            })}
+          </span>
+        )}
+
+        {myBossPendingOrders.length && (
+          <span>
+            {" "}
+            {t("bossPendingOrderNumber", {
+              number: myBossPendingOrders.length,
+            })}
+          </span>
+        )}
+        {myProductionPendingOrders.length && (
+          <span>
+            {t("productionPendingOrderNumber", {
+              number: myProductionPendingOrders.length,
+            })}
+          </span>
+        )}
       </div>
     </div>
   );

@@ -9,7 +9,12 @@ import SalesChart from "./SalesChart";
 import RecipeStockChart from "./RecipeStockChart";
 import RawStockChart from "./RawStockChart";
 import ExpensesChart from "./ExpensesChart";
-
+import IncomeExpenseChart from "./IncomeExpenseChart";
+import OrderStatusChart from "./OrderStatusChart";
+import TargetSales from "./TargetSales";
+import CompanyOrderChart from "./CompanyOrderChart";
+import CostPerOrderChart from "./CostPerOrderChart";
+import Warnings from "./Warnings";
 
 const Dasboard = () => {
   const { t } = useTranslation();
@@ -18,23 +23,27 @@ const Dasboard = () => {
 
   return (
     <Row>
+      {/* <Warnings /> */}
       <Orders />
-    
-      {/* <Row>
-        <RecipeStockChart />
-        <RawStockChart />
-        <SalesChart />
-        <ExpensesChart />
+   
 
-      </Row> */}
+      <RecipeStockChart />
+      <RawStockChart />
+      <SalesChart />
+      <ExpensesChart />
+      {/* <IncomeExpenseChart /> */}
+      {/* <OrderStatusChart /> */}
+      {/* <CompanyOrderChart /> */}
 
+      {/* <TargetSales /> */}
+      {/* <CostPerOrderChart /> */}
 
-      <StockChart title={t("stocks")} stocks={stocks} t={t} />
+      {/* <StockChart title={t("stocks")} stocks={stocks} t={t} />
       <ProductionChart
         title={t("productions")}
         productions={productions}
         t={t}
-      />
+      /> */}
     </Row>
   );
 };

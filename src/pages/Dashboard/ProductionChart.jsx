@@ -34,6 +34,10 @@ const ProductionChart = ({ title, productions, t }) => {
         ]
     }, [selected, productions])
 
+
+     console.log("datas of barchart productions::", datas)
+     console.log("categories of barchart productions::", categories)
+
     return (
         <Col variant={width > 600 ? '1/2' : 'full'}>
             <Card>

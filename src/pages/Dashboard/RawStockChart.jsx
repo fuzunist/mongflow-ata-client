@@ -11,8 +11,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from "react-i18next";
+import Col from "@/components/Col";
+import ChartGPTCard from "@/components/ChartGPTCard";
 
+import { useRawMaterials } from "@/store/hooks/apps";
 
 ChartJS.register(
   CategoryScale,
@@ -23,24 +26,28 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+import { useWindowSize } from "react-use";
+
 const BarChart = () => {
   // const labels = Utils.months({ count: 7 });
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const { width } = useWindowSize();
 
+  const rawmaterialstocks = useRawMaterials();
 
-  // chart data
+  const stockNames = Object.entries(rawmaterialstocks).map(
+    ([key, val]) => val.material
+  );
+  const stockDatas = Object.entries(rawmaterialstocks).map(
+    ([key, val]) => val.stock
+  );
+
   const barChartData = {
-    labels: [
-      "Kırılacak takoz",
-      "Kırılacak Plaka",
-      "İşlenecek Pet",
-      "kırılacak Şeffaf Takoz"
-
-    ],
+    labels: stockNames,
     datasets: [
       {
         label: t("stockquantity"),
-        data: [65, 59, 80, 112],
+        data: stockDatas,
         backgroundColor: "#fff0d1",
         borderColor: "#ffc64d",
         borderWidth: 1,
@@ -79,9 +86,10 @@ const BarChart = () => {
   };
 
   return (
-    <Card>
-      <Card.Body>
-        {/* <Dropdown className="float-end" align="end">
+    <Col variant={width > 600 ? "1/2" : "full"}>
+      <Card>
+        <Card.Body>
+          {/* <Dropdown className="float-end" align="end">
                     <Dropdown.Toggle as="a" className="cursor-pointer card-drop">
                         <i className="mdi mdi-dots-vertical"></i>
                     </Dropdown.Toggle>
@@ -92,12 +100,14 @@ const BarChart = () => {
                         <Dropdown.Item>Separated link</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown> */}
-        <h4 className="header-title">{t("rawmaterialstocks")}</h4>
-        <div style={{ height: "350px" }} className="mt-4 chartjs-chart">
-          <Bar data={barChartData} options={barChartOpts} />
-        </div>
-      </Card.Body>
-    </Card>
+          <h4 className="header-title">{t("rawmaterialstocks")}</h4>
+          <div style={{ height: "350px" }} className="chartjs-chart">
+            <ChartGPTCard />
+            <Bar data={barChartData} options={barChartOpts} />
+          </div>
+        </Card.Body>
+      </Card>
+    </Col>
   );
 };
 
