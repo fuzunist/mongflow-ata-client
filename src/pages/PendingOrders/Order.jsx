@@ -24,7 +24,6 @@ const Order = ({ order }) => {
   const recipes = useRecipes();
   const expenses = useExpenses();
   const prodtime = getProductionTime();
-  console.log("prodtime::::", prodtime);
 
   const sendToApprove = async () => {
     let status;
@@ -78,7 +77,6 @@ const Order = ({ order }) => {
   };
 
   const handleDenyOrder = async () => {
-    console.log("handleDenyOrder");
     let status;
     let currentStatus = order.status;
 
@@ -125,8 +123,6 @@ const Order = ({ order }) => {
 
   const hourlyExpenseCost = expenses[0]?.hourly_cost / TLtoUSD;
 
-   console.log("hourlyexpense", expenses[0], expenses[0]?.hourly_cost, TLtoUSD,exchangeRates?.find((exchangeRate) => exchangeRate.currency_code === "USD"))
-    console.log( "exchange rate", exchangeRates, )
   const excludedCosts = [
     "domestic_market_marketing",
     "foreign_market_marketing",
@@ -254,7 +250,9 @@ const Order = ({ order }) => {
                         {" "}
                         <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                           {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
-                          {formatDigits((product.totalCost * 0.4444)/product.quantity)}{" "}
+                          {formatDigits(
+                            (product.totalCost * 0.4444) / product.quantity
+                          )}{" "}
                           {order?.currency_code}
                         </span>
                         <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
@@ -265,9 +263,7 @@ const Order = ({ order }) => {
                           <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                             {/* {formatDigits(product.totalCost)}{" "} */}
                             {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
-                            {formatDigits(
-                              product.totalCost
-                            )}{" "}
+                            {formatDigits(product.totalCost)}{" "}
                             {order?.currency_code}
                           </span>
                         )}
@@ -382,18 +378,17 @@ const Order = ({ order }) => {
               <>
                 {" "}
                 <span className="text-right px-4">
-                  {t("totalRecipeCost")}:{" "}
-                  {formatDigits(order.total_cost)}{" "}
+                  {t("totalRecipeCost")}: {formatDigits(order.total_cost)}{" "}
                   {order.currency_code}
                 </span>
                 <span className="text-right px-4">
                   {t("totalCost")}:
-                  {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */
-                   console.log("calcc:",hourlyExpenseCost, totalProductQuantity, order.total_cost )
-                  }
+                  {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
                   {formatDigits(
-                    (Number(order.total_cost) !== 0
-                      ? ((hourlyExpenseCost * 0.6 * totalProductQuantity) + Number(order.total_cost)) : "0")
+                    Number(order.total_cost) !== 0
+                      ? hourlyExpenseCost * 0.6 * totalProductQuantity +
+                          Number(order.total_cost)
+                      : "0"
                   )}{" "}
                   {order.currency_code}
                 </span>

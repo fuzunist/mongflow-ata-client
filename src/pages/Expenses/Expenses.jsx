@@ -52,14 +52,18 @@ const Expenses = () => {
       setSubmitting(true);
       setError("");
 
-      const monthly_expenses = { ...expenses.monthly_expenses, ...values };
+       console.log("values of expense form::", values)
+      // const monthly_expenses = { ...expenses.monthly_expenses, ...values };
+      const saved_expenses = { ...expenses.saved_expenses, ...values };
+
       console.log("expenses in expenses", expenses )
       const data = calculateExpenses(
-        monthly_expenses,
+        saved_expenses,
         expenses[0]?.id,
         expensesItems
       );
 
+       console.log("data to send expense update db::", data)
       const response = await updateExpensesToDB(user.tokens.access_token, data);
       if (response?.error) {
         console.log(response?.error);

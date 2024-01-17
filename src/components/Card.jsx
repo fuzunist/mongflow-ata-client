@@ -1,3 +1,5 @@
+import classNames from "classnames";
+
 const Body = ({ children, ...props }) => {
   return (
     <div
@@ -9,9 +11,14 @@ const Body = ({ children, ...props }) => {
   );
 };
 
-const Card = ({ children }) => {
+const Card = ({ variant = "base", children }) => {
   return (
-    <div className="mb-6 relative flex-1 w-full flex flex-col break-words bg-card-bg-light dark:bg-card-bg-dark rounded shadow-box-sm justify-center ">
+    <div className={classNames("mb-6 relative flex-1 w-full flex flex-col break-words bg-card-bg-light dark:bg-card-bg-dark rounded shadow-box-sm justify-center ",
+    {
+      "overflow-auto": variant === "overflow",
+      " ": variant === "base",
+
+    })}>
       {children}
     </div>
   );

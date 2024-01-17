@@ -1,4 +1,4 @@
-export default function limitFloat(number, precision) {
+export default function limitFloat(number, precision=2) {
 
     if (typeof number === 'string') {
         number = parseFloat(number);

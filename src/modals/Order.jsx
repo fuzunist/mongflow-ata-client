@@ -7,9 +7,9 @@ const Order = ({ closeModal, order }) => {
   const { t } = useTranslation();
   return (
     <Col variant="full">
-      <Card>
+      <Card variant="overflow">
         <Card.Body>
-          <div className="flex flex-col gap-4 mb-4 overflow-x-scroll ">
+          <div className="flex flex-col gap-4 mb-4  min-w-[600px] overflow-x-scroll ">
             <input className="w-0 h-0 absolute top-0 left-0" />
             <div className="flex justify-between">
               <div className="flex-1 flex flex-col gap-2">
@@ -53,7 +53,7 @@ const Order = ({ closeModal, order }) => {
             </div>
             <hr className="w-full border-border-light dark:border-border-dark" />
             <div className="flex flex-wrap text-center font-semibold">
-              <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
+              <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
                 {t("product")}
               </span>
               <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
@@ -68,10 +68,10 @@ const Order = ({ closeModal, order }) => {
               <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
                 {t("unitPrice")}
               </span>
-              <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
+              <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
                 {t("totalCost")}
               </span>
-              <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
+              <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
                 {t("total")}
               </span>
             </div>
@@ -82,7 +82,7 @@ const Order = ({ closeModal, order }) => {
                   className="flex flex-wrap text-center items-center"
                   key={index}
                 >
-                  <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
+                  <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
                     {product.product_name}
                   </span>
                   <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2 flex flex-col text-sm">
@@ -98,41 +98,42 @@ const Order = ({ closeModal, order }) => {
                     {product.quantity} {t(product.productType)}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
-                    {formatDigits(product.unitCost)}
+                    ${formatDigits(product.unitCost)}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
-                    {formatDigits(product.unitPrice)}
-                  </span>
-                  <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2">
-                    {formatDigits(product.totalCost)}
+                    ${formatDigits(product.unitPrice)}
                   </span>
                   <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
-                    {formatDigits(product.totalPrice)}
+                    ${formatDigits(product.totalCost)}
+                  </span>
+                  <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
+                    ${formatDigits(product.totalPrice)}
                   </span>
                 </div>
               ))}
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-wrap justify-end text-center">
-                <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+              <div className="flex flex-wrap justify-end text-start">
+                <div className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
                   <span>
                     <span className="font-semibold">{t("amount")}:</span>{" "}
-                    {order.subtotal}
+                    {order.subtotal}$
                   </span>
                 </div>
               </div>
-              <div className="flex flex-wrap justify-end text-center">
-                <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
+              <div className="flex flex-wrap justify-end text-start">
+                <div className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
                   <span>
-                    <span className="font-semibold">{t("vat")}:</span> %20
+                    <span className="font-semibold">{t("vat")}:</span>{" "}
+                    {order.tax_rate * 100}%
                   </span>
                 </div>
               </div>
             </div>
             <hr className="w-full border-border-light dark:border-border-dark" />
-            <div className="flex flex-wrap justify-end text-center">
-              <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
-                <span className="font-semibold text-2xl">
+            <div className="flex flex-wrap justify-end text-start">
+              <div className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
+                <span className="font-semibold text-xl">
                   {order.currency_code} {formatDigits(order.total_with_tax)}
                 </span>
               </div>
@@ -140,9 +141,9 @@ const Order = ({ closeModal, order }) => {
             {order.currency_code !== "TL" && (
               <div className="flex flex-wrap justify-end text-center">
                 <div className="basis-[calc(24%_-_0.5rem)] mx-1 px-2">
-                  <span className="font-semibold text-lg leading-none">
+                  {/* <span className="font-semibold text-lg leading-none">
                     {t("exchange_rate")}: {order.exchange_rate}
-                  </span>
+                  </span> */}
                 </div>
               </div>
             )}

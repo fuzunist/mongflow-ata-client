@@ -8,25 +8,27 @@ import {
   useExpenses,
   useExpensesClasses,
   useExpensesItems,
-  useOrders
+  useOrders,
 } from "@/store/hooks/apps";
 import { useEffect, useState } from "react";
-
+import limitFloat from "@/utils/limitFloat";
+import { formatDigits } from "@/utils/helpers";
 
 // stacked bar chart
 const CostPerOrderChart = () => {
   const { width } = useWindowSize();
 
-  const orders= useOrders()
+  const orders = useOrders();
   const expenses = useExpenses();
   const expensesClasses = useExpensesClasses();
   const expensesItems = useExpensesItems();
-  const [expenseGroups, setExpenseGroups] = useState({});
+  const [hourlyExpenseGroups, setHourlyExpenseGroups] = useState({});
 
-  const accumulatedExpenses = {};
+  const hourlyAccumulatedExpenses = {};
   let expenseAmount;
 
   useEffect(() => {
+    console.log("expenses::", expenses[0].hourly_expenses);
     if (expenses.length !== 0) {
       Object.values(expensesItems).forEach((item) => {
         const class_id = item.class_id;
@@ -37,40 +39,79 @@ const CostPerOrderChart = () => {
           if (expenses.length !== 0) {
             const itemId = String(item.id);
             const expenseAmount =
-              parseFloat(expenses[0].monthly_expenses[itemId]) || 0;
+              parseFloat(expenses[0]?.hourly_expenses[itemId]) || 0;
 
-            if (!accumulatedExpenses[classname]) {
-              accumulatedExpenses[classname] = 0;
+            if (!hourlyAccumulatedExpenses[classname]) {
+              hourlyAccumulatedExpenses[classname] = 0;
             }
-            accumulatedExpenses[classname] += expenseAmount;
+            hourlyAccumulatedExpenses[classname] += expenseAmount;
           } else {
             console.log(
-              `No monthly expenses found for item with id ${item.id} and class ${classname}`
+              `No hourly expenses found for item with id ${item.id} and class ${classname}`
             );
           }
         }
       });
     }
-    setExpenseGroups(accumulatedExpenses);
+    console.log("hourlyAccumulatedExpenses", hourlyAccumulatedExpenses);
+    setHourlyExpenseGroups(hourlyAccumulatedExpenses);
   }, [expenses, expensesClasses, expensesItems]);
 
+  // hourlyExpenseCost * 0.6 * totalProductQuantity
+  console.log("expenseGroups::", hourlyExpenseGroups);
+  let orderNumbers = [];
+  let recipeCosts = [];
+  let energyCosts = [];
+  let usakCosts = [];
+  let consumablesCosts = [];
+  let vehicleCosts = [];
+  let otherCompanyCosts = [];
 
-  let recipeCosts={}
-  let energyCosts={}
-  let usakCosts={}
-  let consumablesCosts={}
-  let vehicleCosts={}
-  let otherCompanyCosts={}
+  let recipeCostsObj = {};
+  let energyCostsObj = {};
+  let usakCostsObj = {};
+  let consumablesCostsObj = {};
+  let vehicleCostsObj = {};
+  let otherCompanyCostsObj = {};
 
+  orders.forEach((order) => {
+    if (orders.length !== 0) {
+      let quantity = order.products.reduce(
+        (acc, product) => acc + product.quantity,
+        0
+      );
+      console.log(quantity);
+      orderNumbers.push(order.order_number);
+      recipeCosts.push(limitFloat(order.total_cost));
+      energyCosts.push(
+        limitFloat(hourlyExpenseGroups["energy"] * 0.6 * quantity)
+      );
+      usakCosts.push(limitFloat(hourlyExpenseGroups["uşak"] * 0.6 * quantity));
+      consumablesCosts.push(
+        limitFloat(hourlyExpenseGroups["consumables"] * 0.6 * quantity)
+      );
+      vehicleCosts.push(
+        limitFloat(hourlyExpenseGroups["vehicle"] * 0.6 * quantity)
+      );
+      const excludedKeys = ["vehicle", "energy", "uşak", "consumables"];
 
-  orders.forEach((order)=>{
-    if(orders.length!==0){
-      let quantity= order.products.reduce((acc,product)=> acc+ product.quantity,0);
+      const otherExpensesSum = Object.entries(hourlyExpenseGroups)
+        .filter(([key]) => !excludedKeys.includes(key))
+        .reduce((acc, [, value]) => acc + value, 0);
 
-    
+      otherCompanyCosts.push(limitFloat(otherExpensesSum * 0.6 * quantity));
     }
+  });
 
-  })
+
+  recipeCostsObj["reçete"] = recipeCosts;
+  energyCostsObj["energy"] = energyCosts;
+  usakCostsObj["uşak"] = usakCosts;
+  consumablesCostsObj["consumables"] = consumablesCosts;
+  vehicleCostsObj["vehicle"] = vehicleCosts;
+  otherCompanyCostsObj["diğer"] = otherCompanyCosts;
+
+  console.log(recipeCostsObj, energyCostsObj);
   // default options
   const apexBarChartStackedOpts = {
     chart: {
@@ -84,16 +125,20 @@ const CostPerOrderChart = () => {
     plotOptions: {
       bar: {
         horizontal: true,
+        barHeight: 30
+      
       },
     },
     stroke: {
-      show: false,
+      width: 2
+
     },
     xaxis: {
-      categories: ["Sipariş 1", "Sipariş 2", "Sipariş 3", "Sipariş 4"],
+      categories: orderNumbers,
+      
       labels: {
         formatter: (val) => {
-          return val + "$";
+          return val + "TL";
         },
       },
       // max: 100,
@@ -103,11 +148,11 @@ const CostPerOrderChart = () => {
         text: undefined,
       },
     },
-    colors: ["#959abd", "#98a6ad", "#8bb0b0", "#b59aaa", "#dadbcc"],
+    colors: ["#0C356A", "#279EFF","#33BBC5", "#40F8FF", "#ADC4CE", "#D5FFD0"],
     tooltip: {
       y: {
         formatter: (val) => {
-          return val + "$";
+          return formatDigits(val) + "₺";
         },
       },
     },
@@ -130,24 +175,27 @@ const CostPerOrderChart = () => {
     },
   };
 
-
   // chart data
   const apexBarChartStackedData = [
     {
-      name: "Genel Giderler",
-      data: [1200, 1500, 1700, 1300],
+      name: Object.keys(recipeCostsObj)[0],
+      data: Object.values(recipeCostsObj)[0],
     },
     {
-      name: "Hammadde Giderleri",
-      data: [5000, 6000, 7000, 4500],
+      name: Object.keys(energyCostsObj)[0],
+      data: Object.values(energyCostsObj)[0],
     },
     {
-      name: "Enerji Giderleri",
-      data: [2500, 3500, 2750, 1020],
+      name: Object.keys(usakCostsObj)[0],
+      data: Object.values(usakCostsObj)[0],
     },
     {
-      name: "Filtre Giderleri",
-      data: [800, 2000, 1400, 7500],
+      name: Object.keys(consumablesCostsObj)[0],
+      data: Object.values(consumablesCostsObj)[0],
+    },
+    {
+      name: Object.keys(vehicleCostsObj)[0],
+      data: Object.values(vehicleCostsObj)[0],
     },
   ];
 
@@ -174,6 +222,8 @@ const CostPerOrderChart = () => {
             type="bar"
             className="apex-charts"
           />
+        <span>* Değerler TL cinsindedir.</span>
+
         </Card.Body>
       </Card>
     </Col>

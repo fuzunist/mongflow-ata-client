@@ -36,7 +36,7 @@ const Dasboard = () => {
       {/* <CompanyOrderChart /> */}
 
       {/* <TargetSales /> */}
-      {/* <CostPerOrderChart /> */}
+      <CostPerOrderChart />
 
       {/* <StockChart title={t("stocks")} stocks={stocks} t={t} />
       <ProductionChart
