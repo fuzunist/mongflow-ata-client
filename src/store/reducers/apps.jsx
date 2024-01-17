@@ -42,8 +42,8 @@ export const _promiseAll = createAsyncThunk(
       expensesItems,
       expensesClasses,
       expenses,
-      users,
       exchangeRates,
+      users,
     ] = await Promise.all([
       getProductsFromDB(access_token),
       getRecipesFromDB(access_token),
@@ -60,9 +60,8 @@ export const _promiseAll = createAsyncThunk(
       getExpensesItemsFromDB(access_token),
       getExpensesClassesFromDB(access_token),
       getExpensesFromDB(access_token),
-      getUsersFromDB(access_token),
-      usertype === "admin" ? getUsersFromDB(access_token) : [],
       getTodayExchangeRates(),
+      usertype === "admin" ? getUsersFromDB(access_token) : [],
     ]);
 
     if (products?.error)
@@ -155,7 +154,6 @@ export const _promiseAll = createAsyncThunk(
       expensesItems,
       expensesClasses,
       expenses,
-      users,
       exchangeRates: exchangeRates.children?.map?.((child) => ({
         currency_code: child.attributes.CurrencyCode,
         forex_buying: child.children[3].value,
@@ -163,6 +161,7 @@ export const _promiseAll = createAsyncThunk(
         banknote_buying: child.children[5].value,
         banknote_selling: child.children[6].value,
       })),
+      users
     };
   }
 );

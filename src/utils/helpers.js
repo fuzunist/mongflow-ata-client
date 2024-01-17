@@ -52,7 +52,7 @@ export const generateRandomOrderNumber = () => {
     suffix = "C";
   }
 
-  return `${formattedDate}-MG-${counterValue
+  return `${formattedDate}-ATA-${counterValue
     .toString()
     .padStart(3, "0")}-${suffix}`;
 };

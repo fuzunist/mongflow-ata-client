@@ -125,6 +125,8 @@ const Order = ({ order }) => {
 
   const hourlyExpenseCost = expenses[0]?.hourly_cost / TLtoUSD;
 
+   console.log("hourlyexpense", expenses[0], expenses[0]?.hourly_cost, TLtoUSD,exchangeRates?.find((exchangeRate) => exchangeRate.currency_code === "USD"))
+    console.log( "exchange rate", exchangeRates, )
   const excludedCosts = [
     "domestic_market_marketing",
     "foreign_market_marketing",
@@ -386,7 +388,9 @@ const Order = ({ order }) => {
                 </span>
                 <span className="text-right px-4">
                   {t("totalCost")}:
-                  {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
+                  {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */
+                   console.log("calcc:",hourlyExpenseCost, totalProductQuantity, order.total_cost )
+                  }
                   {formatDigits(
                     (Number(order.total_cost) !== 0
                       ? ((hourlyExpenseCost * 0.6 * totalProductQuantity) + Number(order.total_cost)) : "0")
