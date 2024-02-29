@@ -25,6 +25,7 @@ const Order = ({ order }) => {
   const expenses = useExpenses();
   const prodtime = getProductionTime();
 
+  console.log("recipes in pending order", recipes);
   const sendToApprove = async () => {
     let status;
     let currentStatus = order.status;
@@ -33,16 +34,17 @@ const Order = ({ order }) => {
       status = currentStatus.concat(currentStatus[0]);
     } else if (user.usertype === "boss" || user.usertype === "stock_manager") {
       // burada stoktan düşme işlemi yapılacak
-      const response = await updateRecipeMaterialStocksToDB(
-        user.tokens.access_token,
-        order.order_id
-      );
-      console.log("response of updateRecipeMaterialStocksToDB::", response);
-      if (response?.error) {
-        console.log(response.error);
-        return setError(t(response.error));
-      }
+      //   const response = await updateRecipeMaterialStocksToDB(
+      //     user.tokens.access_token,
+      //     order.order_id
+      //   );
+      //   console.log("response of updateRecipeMaterialStocksToDB::", response);
+      //   if (response?.error) {
+      //     console.log(response.error);
+      //     return setError(t(response.error));
+      //   }
     }
+
     status = currentStatus.concat(currentStatus[0]);
     const response = await updateStatusInDB(
       user.tokens.access_token,
@@ -136,7 +138,7 @@ const Order = ({ order }) => {
             <div className="flex justify-between items-center">
               <div className="flex-1 flex flex-col gap-1 text-black dark:text-white">
                 <h4 className="text-2xl font-bold max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                  {order.customer.companyname}
+                  {order?.customer?.companyname}
                 </h4>
                 <h5>({order.order_number})</h5>
               </div>
@@ -242,7 +244,7 @@ const Order = ({ order }) => {
                       </span>
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                      {product.quantity} ton
+                      {product.quantity} {product.productType}
                       {/* {"( "}{recipe.total_bunker} bunker {" )"} */}
                     </span>
                     {user.usertype !== "production_manager" && (
@@ -251,7 +253,8 @@ const Order = ({ order }) => {
                         <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                           {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
                           {formatDigits(
-                            (product.totalCost * 0.4444) / product.quantity
+                            (product.totalCost * 0.4444) /
+                              (product.quantity / 1000) // product.quantity kg -> ton cinsine çevirdim
                           )}{" "}
                           {order?.currency_code}
                         </span>
@@ -263,7 +266,8 @@ const Order = ({ order }) => {
                           <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                             {/* {formatDigits(product.totalCost)}{" "} */}
                             {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
-                            {formatDigits(product.totalCost)}{" "}
+                            {/* //ton cinsinden maliyet -- bunker to ton */}
+                            {formatDigits(product.totalCost * 0.4444)}{" "}
                             {order?.currency_code}
                           </span>
                         )}
@@ -276,15 +280,15 @@ const Order = ({ order }) => {
 
                     <div className="basis-[calc(10%_-_0.5rem)] mx-1 flex flex-col justify-center items-center gap-0.5 text-sm min-h-[1rem]">
                       {product?.orderStatus ? (
-                        product.orderStatus.map((status, index) => (
+                        product?.orderStatus.map((status, index) => (
                           <span key={index}>
-                            {status.quantity} {t("ton").toLowerCase()},{" "}
-                            {status.type}.
+                            {status?.quantity} {product?.productType}{" "}
+                            {status?.type}.
                           </span>
                         ))
                       ) : (
                         <span>
-                          {product.quantity} {t("ton").toLowerCase()},{" "}
+                          {product?.quantity} {product?.productType},{" "}
                           {OrderStatus[0]}.
                         </span>
                       )}
@@ -358,15 +362,15 @@ const Order = ({ order }) => {
                   </span>
                   <div className="basis-[calc(31%_-_0.5rem)] mx-1 flex flex-col justify-center items-center gap-0.5 text-sm min-h-[1rem]">
                     {set?.orderStatus ? (
-                      set.orderStatus.map((status, index) => (
+                      set?.orderStatus.map((status, index) => (
                         <span key={index}>
-                          {status.quantity} {t("pieces").toLowerCase()},{" "}
-                          {t(status.type)}.
+                          {status?.quantity} {t("pieces").toLowerCase()},{" "}
+                          {t(status?.type)}.
                         </span>
                       ))
                     ) : (
                       <span>
-                        {set.quantity} {t("pieces").toLowerCase()},{" "}
+                        {set?.quantity} {t("pieces").toLowerCase()},{" "}
                         {t(OrderStatus[0])}.
                       </span>
                     )}
@@ -386,7 +390,9 @@ const Order = ({ order }) => {
                   {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
                   {formatDigits(
                     Number(order.total_cost) !== 0
-                      ? hourlyExpenseCost * 0.6 * totalProductQuantity +
+                      ? hourlyExpenseCost *
+                          0.6 *
+                          (totalProductQuantity / 1000) + // totalProductQuantity kg -> ton cinsine çevirdim
                           Number(order.total_cost)
                       : "0"
                   )}{" "}

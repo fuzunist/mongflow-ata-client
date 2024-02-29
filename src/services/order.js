@@ -156,7 +156,7 @@ export const addOrderToDB = async (
 
 export const updateSomeOrderInDB = async (access_token, order_id, params) => {
   try {
-    console.log("order şd in services", order_id);
+     console.log("order şd in services", order_id)
     const { data } = await axios.patch(
       `${import.meta.env.VITE_API_ENDPOINT}/order/patch/${order_id}`,
       params,

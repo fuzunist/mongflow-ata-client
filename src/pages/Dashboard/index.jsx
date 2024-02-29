@@ -15,17 +15,18 @@ import TargetSales from "./TargetSales";
 import CompanyOrderChart from "./CompanyOrderChart";
 import CostPerOrderChart from "./CostPerOrderChart";
 import Warnings from "./Warnings";
+import { useUser } from "@/store/hooks/user";
 
 const Dasboard = () => {
   const { t } = useTranslation();
   const stocks = useStocks();
   const productions = useProductions();
+  const user = useUser();
 
   return (
     <Row>
       {/* <Warnings /> */}
-      <Orders />
-   
+      {user.usertype === "boss" && <Orders />}
 
       <RecipeStockChart />
       <RawStockChart />

@@ -8,6 +8,14 @@ const PendingOrderNumbers = () => {
   const orders = useOrders();
   const { t } = useTranslation();
 
+  const allRecipePendingOrders = useMemo(() => {
+    if (!user.userid) return [];
+    if (!orders.length) return [];
+    return orders.filter(
+      (order) => order.status.length === 2
+    );
+  }, [user, orders]);
+
   const myRecipePendingOrders = useMemo(() => {
     if (!user.userid) return [];
     if (!orders.length) return [];
@@ -28,14 +36,15 @@ const PendingOrderNumbers = () => {
     if (!user.userid) return [];
     if (!orders.length) return [];
     return orders.filter(
-      (order) => order.userid === user.userid && order.status.length === 5
+      (order) => order.userid === user.userid &&  order.status.length === 5
     );
   }, [user, orders]);
 
   if (
     myRecipePendingOrders.length === 0 &&
     myBossPendingOrders.length === 0 &&
-    myProductionPendingOrders.length === 0
+    myProductionPendingOrders.length === 0 &&
+    allRecipePendingOrders.length === 0
   )
     return null;
 
@@ -62,6 +71,14 @@ const PendingOrderNumbers = () => {
           <span>
             {t("productionPendingOrderNumber", {
               number: myProductionPendingOrders.length,
+            })}
+          </span>
+        )} 
+        
+         {allRecipePendingOrders.length!==0 && user.usertype==="production_manager" && (
+          <span>
+     {t("allRecipePendingOrders", {
+              number: allRecipePendingOrders.length,
             })}
           </span>
         )}

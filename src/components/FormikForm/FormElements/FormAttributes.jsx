@@ -20,7 +20,12 @@ const FormAttributes = ({
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   console.log("products", products);
+  
+  console.log("value", value);
   const attrValueChange = (attrValue, attr) => {
+     console.log( "attr", attr)
+     console.log( "attrVal", attrValue)
+
     const newValue = [...value].map((val) => {
       if (val.id === attr.id) {
         val.value = parseInt(attrValue);
@@ -35,9 +40,13 @@ const FormAttributes = ({
     onBlur({ target: { name, value: newValue } });
   };
 
+   console.log("product_id", product_id)
+
   useEffect(() => {
     setLoading(true);
     if (parseInt(product_id) === -1) {
+      console.log("product_id in formatrr useEffect", product_id)
+
       onChange({ target: { name, value: [] } });
       onBlur({ target: { name, value: [] } });
       setProduct(null);
@@ -45,6 +54,7 @@ const FormAttributes = ({
       const _product = products.find(
         (prod) => prod.id === parseInt(product_id)
       );
+       console.log("_product in formattr useEffect",_product)
       if (!readOnly) {
         if (_product) {
           onChange({
@@ -74,22 +84,24 @@ const FormAttributes = ({
     }
   }, [product_id]);
 
+   console.log("product",product)
   useEffect(() => {
     product && value && value.length > 0 && setLoading(false);
   }, [value, product]);
 
+   console.log("product.attributes",product?.attributes)
   return (
     <div className="flex flex-col gap-2">
       <span className="text-base font-semibold">{_label}</span>
       <div className="flex-1 max-h-[300px] overflow-y-auto flex flex-col gap-2 p-2 border border-input-focusborder-light dark:border-input-focusborder-dark rounded">
         {!loading && product ? (
-          product.attributes.map((attr, attrIndex) => (
+          product?.attributes.map((attr, attrIndex) => (
             <label
               key={attrIndex}
               className="flex justify-between items-center gap-2"
             >
               <span className="font-medium mb-2 w-1/2 overflow-hidden text-ellipsis whitespace-nowrap">
-                {attr.name}
+                {attr?.name}
               </span>
               <select
                 value={value.find((val) => val.id === attr.id).value}

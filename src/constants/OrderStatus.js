@@ -1,1 +1,1 @@
-export default ['Alındı', 'Sevk Edildi', "Üretildi"]
+export default ['Alındı',  "Üretiliyor", "Üretildi", 'Sevk Edildi',]

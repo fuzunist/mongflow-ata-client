@@ -1,31 +1,31 @@
-import Row from "@/components/Row";
 import Header from "./Header";
-import Products from "./Products";
-import { useProductions } from "@/store/hooks/apps";
 import { useState } from "react";
-import Selected from "./Selected";
+import AllOrders from "./AllOrders";
+import UpComingProductions from "./UpComingProductions";
+import CurrentlyProducings from "./CurrentlyProducings";
+import CompletedProductions from "./CompletedProductions";
+import ShippedOrders from "./ShippedOrders";
 
-const Productions = () => {
-  const productions = useProductions();
-  const [selected, setSelected] = useState(null);
+const MaterialStocks = () => {
+  const [page, setPage] = useState("allOrders");
 
   return (
     <>
-      {/* <Header /> */}
-      <Row align="center">
-        <h1>Bu bölüm hala geliştirme aşamasındadır.</h1>
-        {/* <Products
-                    productions={productions}
-                    selected={selected}
-                    setSelected={setSelected}
-                />
-                <Selected
-                    selected={selected}
-                    productions={productions}
-                /> */}
-      </Row>
+      <Header page={page} setPage={setPage} />
+
+      {page === "allOrders" ? (
+        <AllOrders page={page} setPage={setPage} />
+      ) : page === "upcomingProductions" ? (
+        <UpComingProductions page={page} setPage={setPage} />
+      ) : page === "currentlyProducings" ? (
+        <CurrentlyProducings page={page} setPage={setPage} />
+      ) : page === "completedProductions" ? (
+        <CompletedProductions page={page} setPage={setPage} />
+      ) : (
+        <ShippedOrders />
+      )}
     </>
   );
 };
 
-export default Productions;
+export default MaterialStocks;

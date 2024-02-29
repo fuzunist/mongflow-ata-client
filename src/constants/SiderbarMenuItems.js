@@ -11,6 +11,11 @@ import {
   Factory,
   Layers,
   Contact2,
+
+  DollarSign,
+  
+  BookOpenCheck,
+  Headphones
 } from "lucide-react";
 
 export default [
@@ -77,6 +82,11 @@ export default [
     url: "/apps/customers",
   },
   {
+    key:  "apps-contacts-daily",
+    icon: Headphones,
+    url: "/apps/contacts/daily",
+  },
+  {
     key: "apps-products",
     icon: TableProperties,
     url: "/apps/products",
@@ -109,12 +119,30 @@ export default [
     },
   },
   {
+    key: "apps-rawmaterials-stocks",
+    icon: Layers,
+    url: "/apps/rawmaterials-stocks",
+    authenticate: {
+      type: "usertype",
+      value: [
+        "admin",
+        "boss",
+        "domestic_market_manager",
+        "foreign_market_manager",
+        "domestic_market_marketing",
+        "foreign_market_marketing",
+        "stock_manager",
+      ],
+    },
+  },
+
+  {
     key: "apps-productions",
     icon: Factory,
     url: "/apps/productions",
     authenticate: {
       type: "usertype",
-      value: ["admin", "stock_manager", "boss"],
+      value: ["admin", "stock_manager", "boss", "production_manager"],
     },
   },
   // {
@@ -137,7 +165,7 @@ export default [
   // },
   {
     key: "apps-expenses",
-    icon: Factory,
+    icon: DollarSign,
     url: "/apps/expenses",
     authenticate: {
       type: "usertype",
@@ -153,20 +181,12 @@ export default [
     },
   },
   {
-    key: "apps-rawmaterials-stocks",
-    icon: Layers,
-    url: "/apps/rawmaterials-stocks",
+    key: "apps-shifts-daily",
+    icon: BookOpenCheck,
+    url: "/apps/productions/daily",
     authenticate: {
       type: "usertype",
-      value: [
-        "admin",
-        "boss",
-        "domestic_market_manager",
-        "foreign_market_manager",
-        "domestic_market_marketing",
-        "foreign_market_marketing",
-        "stock_manager",
-      ],
+      value: ["admin", "stock_manager", "boss", "production_manager"],
     },
   },
 ];

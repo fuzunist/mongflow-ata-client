@@ -18,7 +18,9 @@ import Sets from "@/pages/Sets";
 import Customers from "@/pages/Customers";
 import Orders from "@/pages/Orders";
 import Stocks from "@/pages/Stocks";
+import DailyProductions from "@/pages/DailyProductions";
 import Productions from "@/pages/Productions";
+
 
 //auth
 import Login from "@/pages/Login";
@@ -31,6 +33,7 @@ import Expenses from "@/pages/Expenses";
 import RecipeMaterialStocks from "@/pages/RecipeMaterialStocks";
 import RawMaterialStocks from "@/pages/RawMaterialStocks";
 import MaterialStocks from "@/pages/MaterialStocks";
+import DailyContacts from "@/pages/DailyContacts";
 
 
 const routes = createBrowserRouter([
@@ -84,6 +87,12 @@ const routes = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
+        path: "apps/contacts/daily",
+        element: <DailyContacts />,
+        errorElement: <NotFound />,
+      },
+     
+      {
         path: "apps/products",
         element: <Products />,
         errorElement: <NotFound />,
@@ -111,6 +120,11 @@ const routes = createBrowserRouter([
       {
         path: "apps/stocks",
         element: <Stocks />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/productions/daily",
+        element: <DailyProductions />,
         errorElement: <NotFound />,
       },
       {

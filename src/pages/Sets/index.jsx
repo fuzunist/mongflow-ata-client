@@ -30,7 +30,7 @@ const Sets = () => {
     addSelectSet("create", attributes, quantity, productType);
     setProduct(null);
     setQuantity(1);
-    setProductType("ton");
+    setProductType("kg");
     closeModal();
   };
 

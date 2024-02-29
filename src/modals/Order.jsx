@@ -19,7 +19,7 @@ const Order = ({ closeModal, order }) => {
                 </span>
                 <span>
                   <span className="font-semibold">{t("companyname")}:</span>{" "}
-                  {order.customer.companyname}
+                  {order?.customer?.companyname}
                 </span>
                 <span>
                   <span className="font-semibold">{t("phone")}:</span>{" "}
@@ -104,7 +104,8 @@ const Order = ({ closeModal, order }) => {
                     ${formatDigits(product.unitPrice)}
                   </span>
                   <span className="basis-[calc(20%_-_0.5rem)] mx-1 px-2">
-                    ${formatDigits(product.totalCost)}
+                    {/* //ton cinsinden maliyet -- bunker to ton */}
+                    {formatDigits(product.totalCost * 0.4444)}{" "}
                   </span>
                   <span className="basis-[calc(10%_-_0.5rem)] mx-1 px-2">
                     ${formatDigits(product.totalPrice)}

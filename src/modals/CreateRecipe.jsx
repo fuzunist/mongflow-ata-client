@@ -96,7 +96,7 @@ const CreateRecipe = ({
     }
 
     const total_recipe_kg = getTotalRecipeKG(values);
-    if (total_recipe_kg < 2250 || total_recipe_kg > 2350) {
+    if (total_recipe_kg < 1500 || total_recipe_kg > 2400) {
       return setError(
         t("totalRecipeKGError") +
           t("totalRecipeInputKG") +
@@ -205,11 +205,7 @@ const CreateRecipe = ({
     setError("");
     setExceededStocks(null);
     setSubmitting(true);
-    console.log(
-      "otherInputs.total_bunker:::",
-      otherInputs.total_bunker,
-      typeof otherInputs.total_bunker
-    );
+   
     const exceededStockValue = getExceededStock(
       values,
       recipeMaterials,
@@ -226,7 +222,7 @@ const CreateRecipe = ({
     }
 
     const total_recipe_kg = getTotalRecipeKG(values);
-    if (total_recipe_kg < 2250 || total_recipe_kg > 2350) {
+    if (total_recipe_kg < 1500 || total_recipe_kg > 2400) {
       return setError(
         t("totalRecipeKGError") +
           t("totalRecipeInputKG") +
@@ -283,7 +279,6 @@ const CreateRecipe = ({
       });
 
     const selectedOrder = orders.find((order) => order.order_id === order_id);
-    console.log("selectedOrder", selectedOrder);
     const orderProducts = JSON.parse(JSON.stringify(selectedOrder.products));
     let allCost = 0;
     for (const key in orderProducts) {
@@ -297,7 +292,6 @@ const CreateRecipe = ({
       }
       allCost += parseFloat(orderProducts[key].totalCost);
     }
-    console.log("type of order id", typeof order_id);
     const updateOrderPromise = updateSomeOrderInDB(
       user.tokens.access_token,
       order_id,
@@ -319,6 +313,7 @@ const CreateRecipe = ({
           saveRecipePromise,
         ]);
       editRecipe(updateRecipeResponse);
+       console.log("updateRecipeResponse", updateRecipeResponse)
       editOrder(updateOrderResponse);
       if (saveRecipe) {
         addSpecialRecipe(saveRecipeResponse);

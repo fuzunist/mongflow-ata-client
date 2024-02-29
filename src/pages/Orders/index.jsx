@@ -26,10 +26,10 @@ const Orders = () => {
     if (!orders.length) return [[], []];
     return [
       orders.filter(
-        (order) => order.userid === user.userid && order.status.length==4
+        (order) => order.userid === user.userid && order.status.length>=4
       ),
       orders.filter(
-        (order) => order.userid !== user.userid && order.status.length==4
+        (order) => order.userid !== user.userid && order.status.length>=4
       ),
     ];
   }, [user, orders]);
@@ -69,7 +69,7 @@ const Orders = () => {
               .startsWith(search.toLocaleLowerCase("tr"))
           ) ||
           order.order_number.startsWith(search) ||
-          order.customer.companyname
+          order?.customer?.companyname
             .toLocaleLowerCase("tr")
             .startsWith(search.toLocaleLowerCase("tr"))
       ),
@@ -81,7 +81,7 @@ const Orders = () => {
               .startsWith(search.toLocaleLowerCase("tr"))
           ) ||
           order.order_number.startsWith(search) ||
-          order.customer.companyname
+          order?.customer?.companyname
             .toLocaleLowerCase("tr")
             .startsWith(search.toLocaleLowerCase("tr"))
       ),

@@ -13,7 +13,7 @@ const Products = ({ productions, selected, setSelected }) => {
         <Col variant='full'>
             <Card>
                 <Card.Body>
-                    <div className='flex flex-col gap-4 max-h-[300px] h-[300px] overflow-y-auto scroller'>
+                   {true ? "Henüz Vardiya Eklenmedi" : <div className='flex flex-col gap-4 max-h-[300px] h-[300px] overflow-y-auto scroller'>
                         {products.map((product, index) => (
                             <div
                                 key={index}
@@ -38,7 +38,7 @@ const Products = ({ productions, selected, setSelected }) => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div>}
                 </Card.Body>
             </Card>
         </Col>

@@ -84,6 +84,31 @@ export const updateRecipeMaterialStocksToDB = async (
   }
 };
 
+
+export const updateRecipeMaterialStocksInProductionToDB = async (
+  access_token,
+  recipe_id
+) => {
+  try {
+    const { data } = await axios.put(
+      `${
+        import.meta.env.VITE_API_ENDPOINT
+      }/recipe/materials/stocks/production/${recipe_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("Successfully updated updateRecipeMaterialStocksInProductionToDB Stocks:", data);
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    return e.response.data;
+  }
+};
+
 export const addRecipeMaterialLogToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(

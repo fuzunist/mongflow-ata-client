@@ -17,7 +17,7 @@ const SelectProductFromList = ({
   const productId = selectedProduct?.product_id;
   const customerId = selectedCustomer?.customerid;
   const [quantity, setQuantity] = useState(1);
-  const [productType, setProductType] = useState("ton");
+  const [productType, setProductType] = useState("kg");
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -71,11 +71,11 @@ const SelectProductFromList = ({
   useEffect(() => {
     setQuantity(1);
     setIsOpen(false);
-    setProductType("ton");
+    setProductType("kg");
     return () => {
       setQuantity(1);
       setIsOpen(false);
-      setProductType("ton");
+      setProductType("kg");
     };
   }, []);
 

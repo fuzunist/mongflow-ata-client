@@ -28,7 +28,7 @@ const CostPerOrderChart = () => {
   let expenseAmount;
 
   useEffect(() => {
-    console.log("expenses::", expenses[0].hourly_expenses);
+    // console.log("expenses::", expenses[0].hourly_expenses);
     if (expenses.length !== 0) {
       Object.values(expensesItems).forEach((item) => {
         const class_id = item.class_id;
@@ -58,7 +58,7 @@ const CostPerOrderChart = () => {
   }, [expenses, expensesClasses, expensesItems]);
 
   // hourlyExpenseCost * 0.6 * totalProductQuantity
-  console.log("expenseGroups::", hourlyExpenseGroups);
+  // console.log("expenseGroups::", hourlyExpenseGroups);
   let orderNumbers = [];
   let recipeCosts = [];
   let energyCosts = [];

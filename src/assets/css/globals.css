@@ -59,3 +59,33 @@ body.dark .scroller {
  .ant-input-search-button{
     background:#5b69bc !important;
  }
+
+
+ .ant-switch-checked{
+    background:#5b69bc !important;
+ }
+
+ .ant-input-search-button{
+    background:#5b69bc !important;
+    color: "white"
+
+ }
+
+ .ant-btn{
+    background:#f0f1f6 !important;
+
+ }
+
+ .ant-btn-primary{
+    background:#5b69bc !important;
+    color: "white"!important;
+    
+
+
+ }
+
+ .ant-table-row-level-0 { 
+    border-spacing: 0 15px;
+    margin-bottom: 18px;
+    /* background-color: blue; */
+}

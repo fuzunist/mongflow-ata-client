@@ -38,7 +38,7 @@ const PendingOrders = () => {
     return filteredOrders.filter(
       (order) =>
         order.order_number.startsWith(search) ||
-        order.customer.companyname
+        order?.customer?.companyname
           .toLocaleLowerCase("tr")
           .startsWith(search.toLocaleLowerCase("tr"))
     );

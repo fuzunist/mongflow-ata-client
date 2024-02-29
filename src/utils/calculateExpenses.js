@@ -1,7 +1,5 @@
 import getWorkingDaysInMonth from "./getWorkingDays";
 export const calculateExpenses = (saved_expenses, id, expenseItems) => {
-  
-
   const monthly_expenses = {};
   const monthly_cost = expenseItems.reduce((acc, item) => {
     const id = item.id;

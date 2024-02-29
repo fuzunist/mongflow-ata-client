@@ -18,10 +18,46 @@ export const addRecipeToDB = async (access_token, params) => {
   }
 };
 
+export const addProductionRecipeToDB = async (access_token, params) => {
+  try {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/production`,
+      params,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+    return data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
+
 export const getRecipesFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
       `${import.meta.env.VITE_API_ENDPOINT}/recipe`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    console.log("Successfully fetched recipes:", data); // Log the fetched data
+
+    return data;
+  } catch (e) {
+    console.log(e);
+    return e.response.data;
+  }
+};
+export const getProductionRecipesFromDB = async (access_token) => {
+  try {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_ENDPOINT}/recipe/production`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -70,8 +106,6 @@ export const delRecipeFromDB = async (access_token, recipeId) => {
   }
 };
 
-
-
 export const addSpecialRecipeToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(
@@ -108,8 +142,6 @@ export const getSpecialRecipesFromDB = async (access_token) => {
     return e.response.data;
   }
 };
-
-
 
 export const delSpecialRecipeFromDB = async (access_token, recipeId) => {
   try {

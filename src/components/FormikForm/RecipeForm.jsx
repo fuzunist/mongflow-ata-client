@@ -86,7 +86,7 @@ const RecipeForm = ({
                     .map(([key, value]) => `${key}: ${value}`)
                     .join(", ")}
                 </span>
-                <span className="font-bold">{product.quantity} ton</span>
+                <span className="font-bold">{product.quantity} {product.productType}</span>
               </div>
               <span className="w-full p-2 bg-slate-50 lg:w-full my-4">
                 <div className="flex gap-1 justify-between items-center p-2">
@@ -142,7 +142,7 @@ const RecipeForm = ({
                 />
               </div>
               <div className="mt-2 -mb-4 text-lg font-medium">
-                1 bunker için gerekli miktar {"(2250 kg)"}:
+                1 bunker için gerekli miktar {"(1500-2400 kg)"}:
               </div>
             </div>
           )}

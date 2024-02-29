@@ -1,32 +1,19 @@
-import Modal from '@/components/Modal'
-import CreateProduction from '@/modals/CreateProduction'
+import Navigation from "./Navigation";
+import Sorter from "@/components/Sorter";
+import Search from "@/components/Search";
 
-import { PlusIcon } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
+const Header = ({ page, setPage }) => {
+  return (
+    <div className="flex flex-col gap-y-4">
+      <div className="flex max-[576px]:flex-col justify-between gap-y-4 mb-6 min-[576px]:items-center">
+        <Search />
+        <Sorter />
+      </div>
+      <div className="mt-4">
+        <Navigation page={page} setPage={setPage} />
+      </div>
+    </div>
+  );
+};
 
-const Header = () => {
-    const { t } = useTranslation()
-
-    return (
-        <div className='flex-1 flex max-[576px]:flex-col'>
-            <div className='min-[576px]:flex-[1_3_auto]'>
-                <Modal
-                    className='bg-purple hover:bg-purple-hover text-white rounded-full py-2 px-4 mb-6 flex justify-center items-center gap-2'
-                    text={
-                        <>
-                            <PlusIcon
-                                size={14}
-                                strokeWidth={2}
-                            />{' '}
-                            {t('addProduction')}
-                        </>
-                    }
-                >
-                    {({ close }) => <CreateProduction closeModal={close} />}
-                </Modal>
-            </div>
-        </div>
-    )
-}
-
-export default Header
+export default Header;

@@ -1,8 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getCustomersFromDB } from "@/services/customer";
+import { getContactsFromDB, getCustomersFromDB } from "@/services/customer";
 import { getOrdersFromDB } from "@/services/order";
 import { getProductsFromDB } from "@/services/product";
-import { getRecipesFromDB, getSpecialRecipesFromDB } from "@/services/recipe";
+import {
+  getRecipesFromDB,
+  getSpecialRecipesFromDB,
+  getProductionRecipesFromDB,
+} from "@/services/recipe";
 import {
   getRecipeMaterialsFromDB,
   getRecipeMaterialLogsFromDB,
@@ -22,6 +26,11 @@ import {
   getExpensesFromDB,
 } from "@/services/expenses";
 import { v4 as uuidv4 } from "uuid";
+import dayjs from "dayjs";
+
+const todayDate = dayjs().format("YYYY-MM-DD");
+const threeDaysAgo = dayjs().subtract(3, "day").format("YYYY-MM-DD");
+const lastMonthDate = dayjs().subtract(30, "day").format("YYYY-MM-DD");
 
 export const _promiseAll = createAsyncThunk(
   "apps/promiseAll",
@@ -29,6 +38,7 @@ export const _promiseAll = createAsyncThunk(
     let [
       products,
       recipes,
+      productionRecipes,
       specialRecipes,
       recipeMaterialLogs,
       recipeMaterials,
@@ -36,6 +46,7 @@ export const _promiseAll = createAsyncThunk(
       rawMaterials,
       sets,
       customers,
+      contacts,
       orders,
       stocks,
       productions,
@@ -47,6 +58,7 @@ export const _promiseAll = createAsyncThunk(
     ] = await Promise.all([
       getProductsFromDB(access_token),
       getRecipesFromDB(access_token),
+      getProductionRecipesFromDB(access_token),
       getSpecialRecipesFromDB(access_token),
       getRecipeMaterialLogsFromDB(access_token),
       getRecipeMaterialsFromDB(access_token),
@@ -54,6 +66,10 @@ export const _promiseAll = createAsyncThunk(
       getRawMaterialsFromDB(access_token),
       getSetsFromDB(access_token),
       getCustomersFromDB(access_token),
+      getContactsFromDB(access_token, {
+        startDate: threeDaysAgo,
+        endDate: todayDate,
+      }),
       getOrdersFromDB(access_token),
       getStocksFromDB(access_token),
       getProductionsFromDB(access_token),
@@ -69,7 +85,7 @@ export const _promiseAll = createAsyncThunk(
         type: "getProductsFromDB",
         error: products.error,
       });
-      else if (users?.error)
+    else if (users?.error)
       return rejectWithValue({
         type: "getUsersFromDB",
         error: users.error,
@@ -137,10 +153,20 @@ export const _promiseAll = createAsyncThunk(
         type: "getExpensesClassesFromDB",
         error: expensesClasses.error,
       });
-
+    if (productionRecipes?.error)
+      return rejectWithValue({
+        type: "productionRecipesFromDB",
+        error: productionRecipes.error,
+      });
+      if (contacts?.error)
+      return rejectWithValue({
+        type: "getContactsFromDB",
+        error: contacts.error,
+      });
     return {
       products,
       recipes,
+      productionRecipes,
       specialRecipes,
       recipeMaterialLogs,
       recipeMaterials,
@@ -148,6 +174,7 @@ export const _promiseAll = createAsyncThunk(
       rawMaterials,
       sets,
       customers,
+      contacts,
       orders,
       stocks,
       productions,
@@ -161,7 +188,7 @@ export const _promiseAll = createAsyncThunk(
         banknote_buying: child.children[5].value,
         banknote_selling: child.children[6].value,
       })),
-      users
+      users,
     };
   }
 );
@@ -169,8 +196,10 @@ export const _promiseAll = createAsyncThunk(
 const initialState = {
   loading: true,
   customers: [],
+  contacts:[],
   products: [],
   recipes: [],
+  productionRecipes: [],
   specialRecipes: [],
   recipeMaterials: [],
   recipeMaterialLogs: [],
@@ -251,6 +280,34 @@ const apps = createSlice({
         (customer) => customer.customerid !== action.payload
       );
     },
+    _addRangeContacts: (state, action) => {
+      state.contacts = [...action.payload];
+    },
+
+    _addContact: (state, action) => {
+      state.contacts = [action.payload, ...state.contacts];
+    },
+    _editContact: (state, action) => {
+      state.contacts = state.contacts.map((contact) => {
+        if (contact.id === action.payload.id) contact = action.payload;
+        return contact;
+      });
+    },
+    _delContact: (state, action) => {
+      state.contacts = state.contacts.filter(
+        (contact) => contact.id !== action.payload
+      );
+    },
+    _setContact: (state, action) => {
+      if (action.payload === null) {
+        state.selected.contact = null;
+        return;
+      }
+      const contact = state.contacts.find(
+        (contact) => contact.id === action.payload
+      );
+      state.selected.contact = contact || null;
+    },
     _addProduct: (state, action) => {
       state.products = [...state.products, action.payload];
     },
@@ -272,7 +329,11 @@ const apps = createSlice({
     _addRecipe: (state, action) => {
       state.recipes = [...state.recipes, action.payload];
     },
+    _addProductionRecipe: (state, action) => {
+      state.productionRecipes = [...state.productionRecipes, action.payload];
+    },
     _editRecipe: (state, action) => {
+       console.log("_editRecipe action.payload", action.payload)
       state.recipes = state.recipes.map((recipe) => {
         if (recipe.id === action.payload.id)
           recipe = {
@@ -296,6 +357,7 @@ const apps = createSlice({
       );
     },
     _addRecipeMaterial: (state, action) => {
+       console.log("_addRecipeMaterial action.payload in apps_____", action.payload)
       state.recipeMaterials = [...state.recipeMaterials, action.payload];
     },
     _addRecipeMaterialLog: (state, action) => {
@@ -314,6 +376,8 @@ const apps = createSlice({
       );
     },
     _editRecipeMaterial: (state, action) => {
+      console.log("_editRecipeMaterial action.payload in apps_____", action.payload)
+
       state.recipeMaterials = state.recipeMaterials.map((recipeMaterial) => {
         if (recipeMaterial.id === action.payload.id)
           recipeMaterial = {
@@ -454,11 +518,11 @@ const apps = createSlice({
       state.selected.products.push({
         ...state.selected.product,
         attributes: action.payload.attributes,
-        quantity: action.payload.quantity,
+        quantity: action.payload.quantity * 1000, // ton olarak alıp kg olarak kaydediyoruz
         productType: action.payload.productType,
         orderStatus: [
           {
-            quantity: action.payload.quantity,
+            quantity: action.payload.quantity * 1000, // ton olarak alıp kg olarak kaydediyoruz
             type: action.payload.orderStatus,
           },
         ],
@@ -578,6 +642,7 @@ const apps = createSlice({
     builder.addCase(_promiseAll.pending, (state) => {
       state.products = [];
       state.recipes = [];
+      state.productionRecipes = [];
       state.specialRecipes = [];
       state.recipeMaterialLogs = [];
       state.recipeMaterials = [];
@@ -585,6 +650,7 @@ const apps = createSlice({
       state.sets = [];
       state.orders = [];
       state.customers = [];
+      state.contacts = [];
       state.stocks = [];
       state.productions = [];
       state.users = [];
@@ -609,6 +675,7 @@ const apps = createSlice({
     builder.addCase(_promiseAll.fulfilled, (state, action) => {
       state.products = action.payload.products;
       state.recipes = action.payload.recipes;
+      state.productionRecipes = action.payload.productionRecipes;
       state.specialRecipes = action.payload.specialRecipes;
       state.recipeMaterialLogs = action.payload.recipeMaterialLogs;
       state.recipeMaterials = action.payload.recipeMaterials;
@@ -617,6 +684,7 @@ const apps = createSlice({
       state.sets = action.payload.sets;
       state.orders = action.payload.orders;
       state.customers = action.payload.customers;
+      state.contacts = action.payload.contacts;
       state.stocks = action.payload.stocks;
       state.productions = action.payload.productions;
       state.users = action.payload.users;
@@ -643,6 +711,11 @@ export const {
   _addCustomer,
   _editCustomer,
   _delCustomer,
+  _addRangeContacts,
+  _addContact,
+  _editContact,
+  _delContact,
+  _setContact,
   _addOrder,
   _editOrder,
   _delOrder,
@@ -652,6 +725,7 @@ export const {
   _editProduct,
   _delProduct,
   _addRecipe,
+  _addProductionRecipe,
   _addSpecialRecipe,
   _editRecipeMaterial,
   _addRecipeMaterialLog,

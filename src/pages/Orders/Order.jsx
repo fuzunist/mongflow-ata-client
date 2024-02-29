@@ -74,7 +74,7 @@ const Order = ({ order }) => {
             <div className="flex flex-col gap-1 text-black dark:text-white">
               <h4 className="text-2xl font-bold">
                 <span className="max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
-                  {order.customer.companyname}
+                  {order?.customer?.companyname}
                 </span>{" "}
                 -{" "}
                 <span
@@ -153,13 +153,14 @@ const Order = ({ order }) => {
                       </span>
                     </span>
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                      {product.quantity} ton
+                      {product.quantity} {product.productType}
                     </span>
                     {!excludedCosts.includes(user.usertype) && (
                       <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                         {/* bunker cinsinde ton cinsine çevrildi şimdilik */}
                         {formatDigits(
-                          (product.totalCost * 0.4444) / product.quantity
+                          (product.totalCost * 0.4444) /
+                            (product.quantity / 1000) // product.quantity kg -> ton cinsine çevirdim
                         )}{" "}
                         {/* {formatDigits(product.unitCost)} {order?.currency_code} */}
                       </span>
@@ -169,57 +170,40 @@ const Order = ({ order }) => {
                     </span>
                     {!excludedCosts.includes(user.usertype) && (
                       <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
-                        {formatDigits(product.totalCost)} {order?.currency_code}
+                        {/* //ton cinsinden maliyet -- bunker to ton */}
+                        {formatDigits(product.totalCost * 0.4444)}{" "}
+                        {order?.currency_code}
                       </span>
                     )}
                     <span className="basis-[calc(10%_-_0.5rem)] mx-1 text-center">
                       {formatDigits(product.totalPrice)} {order?.currency_code}
                     </span>
-                    {user.usertype === "stock_manager" ||
-                    user.usertype === "boss" ? (
-                      <span className="basis-[calc(12%_-_0.5rem)] mx-1 text-center">
-                        <Modal
-                          className=""
-                          text={
-                            product?.orderStatus ? (
-                              product.orderStatus.map((status, index) => (
-                                <span key={index + 100}>
-                                  {status.quantity} ton {t(status.type)}.
-                                </span>
-                              ))
-                            ) : (
-                              <span>
-                                {product.quantity} ton {t(OrderStatus[0])}.
+
+                    <div className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
+                      {product?.orderStatus ? (
+                        product?.orderStatus?.map((status, index) => {
+                          console.log(status?.quantity);
+                          if (
+                            status?.quantity !== 0 &&
+                            status?.quantity !== undefined
+                          ) {
+                            return (
+                              <span key={index + 100}>
+                                {status?.quantity} {product?.productType}{" "}
+                                {t(status?.type)}.
                               </span>
-                            )
+                            );
+                          } else {
+                            return "";
                           }
-                        >
-                          {({ close }) => (
-                            <ChangeOrderStatus
-                              closeModal={close}
-                              order={order}
-                              product={product}
-                              index={index}
-                              access_token={user.tokens.access_token}
-                            />
-                          )}
-                        </Modal>
-                      </span>
-                    ) : (
-                      <div className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 text-sm min-h-[1rem] justify-center items-center">
-                        {product?.orderStatus ? (
-                          product.orderStatus.map((status, index) => (
-                            <span key={index + 300}>
-                              {status.quantity} ton {t(status.type)}.
-                            </span>
-                          ))
-                        ) : (
-                          <span>
-                            {product.quantity} ton {t(OrderStatus[0])}.
-                          </span>
-                        )}
-                      </div>
-                    )}
+                        })
+                      ) : (
+                        <span>
+                          {product?.quantity} {product?.productType}{" "}
+                          {t(OrderStatus[0])}.
+                        </span>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -254,15 +238,15 @@ const Order = ({ order }) => {
                       className="basis-[calc(12%_-_0.5rem)] mx-1 flex flex-col gap-0.5 min-h-[1rem]"
                       text={
                         set?.orderStatus ? (
-                          set.orderStatus.map((status, index) => (
+                          set?.orderStatus?.map((status, index) => (
                             <span key={index + 500}>
-                              {status.quantity} {t("pieces").toLowerCase()},{" "}
+                              {status?.quantity} {t("pieces").toLowerCase()},{" "}
                               {t(status.type)}.
                             </span>
                           ))
                         ) : (
                           <span>
-                            {set.quantity} {t("pieces").toLowerCase()},{" "}
+                            {set?.quantity} {t("pieces").toLowerCase()},{" "}
                             {t(OrderStatus[0])}.
                           </span>
                         )
@@ -281,15 +265,15 @@ const Order = ({ order }) => {
                   ) : (
                     <div className="basis-[calc(31%_-_0.5rem)] mx-1 flex flex-col gap-0.5  min-h-[1rem] justify-center items-center">
                       {set?.orderStatus ? (
-                        set.orderStatus.map((status, index) => (
+                        set?.orderStatus?.map((status, index) => (
                           <span key={index + 600}>
-                            {status.quantity} {t("pieces").toLowerCase()},{" "}
-                            {t(status.type)}.
+                            {status?.quantity} {t("pieces").toLowerCase()},{" "}
+                            {t(status?.type)}.
                           </span>
                         ))
                       ) : (
                         <span>
-                          {set.quantity} {t("pieces").toLowerCase()},{" "}
+                          {set?.quantity} {t("pieces").toLowerCase()},{" "}
                           {t(OrderStatus[0])}.
                         </span>
                       )}
@@ -312,7 +296,7 @@ const Order = ({ order }) => {
                 {/* 0.6 sabit 1 ton ürün için harcanan süre, order.totalCost top reçete maliyeti */}
                 {formatDigits(
                   Number(order.total_cost) !== 0
-                    ? hourlyExpenseCost * 0.6 * totalProductQuantity +
+                    ? hourlyExpenseCost * 0.6 * (totalProductQuantity / 1000) + // totalProductQuantity kg -> ton cinsine çevirdim
                         Number(order.total_cost)
                     : "0"
                 )}{" "}
