@@ -22,7 +22,7 @@ const Header = ({ authenticate, page, setPage, type }) => {
                                     size={14}
                                     strokeWidth={2}
                                 />{' '}
-                                {t(page === 'products' ? 'addProduct' : 'addOtherProduct')}
+                                {t(page === 'products' ? "addProduct" : page==="rawMaterialProducts" ? "addRawMaterial" : "addMaterial")}
                             </>
                         }
                     >
@@ -36,7 +36,7 @@ const Header = ({ authenticate, page, setPage, type }) => {
                 ) : (
                     <div className='block' />
                 )}
-                {authenticate && (
+                {/* {authenticate && (
                     <button
                         onClick={() => navigate('create-set')}
                         className='bg-purple hover:bg-purple-hover text-white rounded-full py-2 px-4 flex justify-center items-center gap-2'
@@ -47,7 +47,7 @@ const Header = ({ authenticate, page, setPage, type }) => {
                         />{' '}
                         {t('addSet')}
                     </button>
-                )}
+                )} */}
                 <Search />
             </div>
             <Navigation

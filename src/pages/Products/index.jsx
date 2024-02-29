@@ -22,7 +22,9 @@ const Products = () => {
     const closeModal = () => setProduct(null)
 
     const filteredProducts = useMemo(() => {
-        const normal_products = products.filter((product) => product.product_type === (page === 'products' ? 0 : 1))
+    
+
+        const normal_products = products.filter((product) => product.product_type === (page === 'products' ? 0 : page==="recipeMaterialProducts" ? 1 : 2))
 
         if (!searchValue) return normal_products
 
@@ -41,7 +43,7 @@ const Products = () => {
                 authenticate={authenticate}
                 page={page}
                 setPage={setPage}
-                type={page === 'otherProducts' ? 1 : 0}
+                type={page === 'products' ? 0 : page==="recipeMaterialProducts" ? 1 : 2}
             />
 
             <Row>
@@ -67,7 +69,8 @@ const Products = () => {
                 <CreateProduct
                     closeModal={closeModal}
                     selectedProduct={selectedProduct}
-                    type={page === 'otherProducts' ? 1 : 0}
+                    type={page === 'products' ? 0 : page==="recipeMaterialProducts" ? 1 : 2}
+
                 />
             </Modal>
         </>
