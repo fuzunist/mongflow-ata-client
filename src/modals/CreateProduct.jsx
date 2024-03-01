@@ -45,7 +45,7 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
       type: "text",
       placeholder: "Ürün Özelliği Girin",
       value: selectedProduct?.attributes
-        ? mergeDeep([], [...selectedProduct.attributes])
+        ? mergeDeep([], [...selectedProduct?.attributes])
         : [],
     },
   };
@@ -55,14 +55,14 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
     if (!values.productName) errors.productName = "Required";
     // if (!values.defaultPrice) errors.defaultPrice = 'Required'
     // if (!values.defaultCurrency) errors.defaultCurrency = 'Required'
-    if (values.attributes.length === 0)
-      errors.attributes = "Add at least one feature. 1";
-    if (values.attributes.some((attr) => !attr.attribute_name))
-      errors.attributes = "Add at least one feature. 2";
-    if (values.attributes.some((attr) => attr.values.length === 0))
-      errors.attributes = "Add at least one feature. 3";
-    if (values.attributes.some((attr) => attr.values.some((val) => !val)))
-      errors.attributes = "Add at least one feature. 4";
+    // if (values.attributes.length === 0)
+    //   errors.attributes = "Add at least one feature. 1";
+    // if (values.attributes.some((attr) => !attr.attribute_name))
+    //   errors.attributes = "Add at least one feature. 2";
+    // if (values.attributes.some((attr) => attr.values.length === 0))
+    //   errors.attributes = "Add at least one feature. 3";
+    // if (values.attributes.some((attr) => attr.values.some((val) => !val)))
+    //   errors.attributes = "Add at least one feature. 4";
     return errors;
   };
 

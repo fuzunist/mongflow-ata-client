@@ -60,7 +60,7 @@ const FormAttributes = ({
           onChange({
             target: {
               name,
-              value: _product.attributes.map((attr) => ({
+              value: _product?.attributes.map((attr) => ({
                 id: attr.id,
                 value: 0,
               })),
@@ -69,7 +69,7 @@ const FormAttributes = ({
           onBlur({
             target: {
               name,
-              value: _product.attributes.map((attr) => ({
+              value: _product?.attributes.map((attr) => ({
                 id: attr.id,
                 value: 0,
               })),

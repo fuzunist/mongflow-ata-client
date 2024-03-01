@@ -127,7 +127,7 @@ const Customers = () => {
       key: "products",
       render: (tags) => (
         <span>
-          {tags.map((tag) => {
+          {tags?.map((tag) => {
             let color = tag.length > 5 ? "geekblue" : "green";
 
             return (

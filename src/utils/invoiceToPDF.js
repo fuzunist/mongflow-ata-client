@@ -2635,7 +2635,7 @@ const invoiceToPDF = async (
         (product) =>
           `${product.product_name} x${product.quantity} (${
             product.productType
-          })\r\n${Object.entries(product.attributes)
+          })\r\n${Object.entries(product?.attributes)
             .map(([key, value]) => `${key}: ${value}`)
             .join(", ")}`
       )

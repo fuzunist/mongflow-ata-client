@@ -30,7 +30,7 @@ const SelectProductFromList = ({
 
   const groupedAttributes = useMemo(() => {
     if (selectedProduct)
-      return groupAttributesByName(selectedProduct.attributes);
+      return groupAttributesByName(selectedProduct?.attributes);
     return {};
   }, [selectedProduct]);
 

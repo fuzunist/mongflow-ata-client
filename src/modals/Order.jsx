@@ -86,7 +86,7 @@ const Order = ({ closeModal, order }) => {
                     {product.product_name}
                   </span>
                   <span className="basis-[calc(15%_-_0.5rem)] mx-1 px-2 flex flex-col text-sm">
-                    {Object.entries(product.attributes).map(
+                    {Object.entries(product?.attributes).map(
                       ([attrName, attrValue], index) => (
                         <span key={index}>
                           {attrName}: {attrValue}

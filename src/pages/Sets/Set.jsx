@@ -24,7 +24,7 @@ const Set = ({ editingSet }) => {
             product_type: product.product_type,
             quantity: product.quantity,
             productType: product.productType,
-            attributes: product.attributes
+            attributes: product?.attributes
         }))
     }, [selectedSets])
 

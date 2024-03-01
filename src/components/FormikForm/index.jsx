@@ -64,7 +64,7 @@ const FormikForm = ({
               <div className="flex justify-center items-center mx-1 gap-1">
                 <span className="font-semibold">{product.product_name}</span>
                 <span className="text-sm font-light">
-                  {Object.entries(product.attributes)
+                  {Object.entries(product?.attributes)
                     .map(([key, value]) => `${key}: ${value}`)
                     .join(", ")}
                 </span>

@@ -38,12 +38,14 @@ const customerTypes = [{id:1, name: "Müşteri"}, {id:2, name: "Tedarikçi"}, {i
   };
 
   const options = [
-    "Galvanized Wire",
-    "Wire Mesh",
-    "Special Wire Mesh",
-    "Steel Stirrup",
-    "Steel Tie Spacer",
-    "Rod Galvanized",
+    "Polyester",
+    "Granül",
+    "Boya",
+    "Takoz",
+    "Plaka",
+    "Melanj",
+    "Deşe",
+    "Tow"
   ];
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);

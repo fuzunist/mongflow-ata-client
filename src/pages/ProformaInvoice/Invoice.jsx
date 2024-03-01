@@ -415,7 +415,7 @@ const Invoice = ({ selectedCustomer, editingOrder }) => {
                           {product.productType})
                         </span>
                         <div className="flex flex-col">
-                          {Object.entries(product.attributes).map(
+                          {Object.entries(product?.attributes).map(
                             ([attrName, attrValue], index) => (
                               <span key={index}>
                                 {attrName}: {attrValue}

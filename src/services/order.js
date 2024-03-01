@@ -16,6 +16,7 @@ export const getOrdersFromDB = async (access_token) => {
     console.log("Successfully fetched orders:", data); // Log the fetched data
     return data;
   } catch (e) {
+     console.log(e)
     return e.response.data;
   }
 };

@@ -84,7 +84,7 @@ const Orders = () => {
                                                                         {product.product_name}{' '}
                                                                         <span className='text-sm italic'>
                                                                             (
-                                                                            {Object.entries(product.attributes)
+                                                                            {Object.entries(product?.attributes)
                                                                                 .map(([key, value]) => `${key}: ${value}`)
                                                                                 .join(', ')}
                                                                             )
@@ -163,7 +163,7 @@ const Orders = () => {
                                                             {product.product_name}{' '}
                                                             <span className='text-sm italic'>
                                                                 (
-                                                                {Object.entries(product.attributes)
+                                                                {Object.entries(product?.attributes)
                                                                     .map(([key, value]) => `${key}: ${value}`)
                                                                     .join(', ')}
                                                                 )

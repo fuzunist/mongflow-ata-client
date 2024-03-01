@@ -22,7 +22,7 @@ const Selected = ({ selected, stocks }) => {
     const attributes = useMemo(() => {
         const _attributes = {}
         products.forEach((product) => {
-            product.attributes.forEach((attr) => {
+            product?.attributes.forEach((attr) => {
                 _attributes[attr.attribute_id] = attr.attribute_name
             })
         })

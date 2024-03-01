@@ -21,8 +21,9 @@ const Selected = ({ selected, productions }) => {
 
     const attributes = useMemo(() => {
         const _attributes = {}
-        products.forEach((product) => {
-            product.attributes.forEach((attr) => {
+        products?.forEach((product) => {
+            product?.attributes?.forEach((attr) => {
+              
                 _attributes[attr.attribute_id] = attr.attribute_name
             })
         })
@@ -32,9 +33,9 @@ const Selected = ({ selected, productions }) => {
     const values = useMemo(() => {
         const _values = {}
         products.forEach((product) => {
-            product.attributes.forEach((attr) => {
-                attr.values.forEach((val) => {
-                    _values[val.value_id] = val.value
+            product?.attributes?.forEach((attr) => {
+                attr?.values?.forEach((val) => {
+                    _values[val?.value_id] = val?.value
                 })
             })
         })
@@ -80,7 +81,7 @@ const Selected = ({ selected, productions }) => {
                                                 text={
                                                     <>
                                                         <span className='flex-1 overflow-x-auto scroller whitespace-nowrap text-left'>
-                                                            {production.attributes
+                                                            {production?.attributes
                                                                 .split(',')
                                                                 .map(
                                                                     (attr) =>

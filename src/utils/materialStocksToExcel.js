@@ -63,9 +63,9 @@ const materialStocksToExcel = async (products, stocks, zeros) => {
         const productName = product.product_name
         const productId = product.product_id
 
-        const attributesList = product.attributes.map((attribute) => {
+        const attributesList = product?.attributes.map((attribute) => {
             const attributeName = attribute.attribute_name
-            return attribute.values.map((value) => [`${attributeName}: ${value.value}`, `${attribute.attribute_id}-${value.value_id}`])
+            return attribute?.values.map((value) => [`${attributeName}: ${value.value}`, `${attribute.attribute_id}-${value.value_id}`])
         })
 
         const attributeCombinations = combineAttributes(attributesList)

@@ -227,7 +227,7 @@ const Order = ({ order }) => {
                         <div key={productIndex}>
                           {product.product_name} x{product.quantity} (
                           {product.productType}){" ==> "}
-                          {Object.entries(product.attributes)
+                          {Object.entries(product?.attributes)
                             .map(([key, value]) => `${key}: ${value}`)
                             .join(", ")}
                         </div>

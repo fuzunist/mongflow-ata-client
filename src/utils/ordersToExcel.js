@@ -195,7 +195,7 @@ const ordersToExcel = async (orders) => {
           : units[2];
       worksheet.getCell(`E${index * last * 3 + 5 + indx * 3}`).value = `${
         product.product_name
-      } \r\n ${Object.entries(product.attributes)
+      } \r\n ${Object.entries(product?.attributes)
         .map(([key, value]) => `${key}: ${value}`)
         .join(", ")} \r\n ${product.quantity} ${i18n.t(
         product.productType

@@ -98,7 +98,7 @@ const ChangeOrderStatus = ({
     );
     const attributes = Object.entries(product.attributes)
       .map(([attr, value]) => {
-        const _attr = _product.attributes.find(
+        const _attr = _product?.attributes?.find(
           (a) => a.attribute_name === attr
         );
         const _value = _attr.values.find((v) => v.value === value);
@@ -157,7 +157,7 @@ const ChangeOrderStatus = ({
       const productInStore = products.find(
         (p) => p.product_id === product.product_id
       );
-      return Object.entries(product.attributes)
+      return Object.entries(product?.attributes)
         .map(([attr, value]) => {
           const attributeInStore = productInStore.attributes.find(
             (a) => a.attribute_name === attr

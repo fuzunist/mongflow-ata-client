@@ -128,7 +128,7 @@ const Order = ({ order, checkedRecipes, setCheckedRecipes }) => {
                     >
                       <span>{product.product_name}</span>
                       <span className="text-sm">
-                        {Object.entries(product.attributes)
+                        {Object.entries(product?.attributes)
                           .map(([key, value]) => `${key}: ${value}`)
                           .join(", ")}
                       </span>

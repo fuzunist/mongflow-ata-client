@@ -2230,7 +2230,7 @@ const invoiceToPDF_Eng = async (values, products, sets, user, customer, totalPri
 
     products.forEach((product, index) => {
         if (index > 7) return
-        worksheet.getCell(`C${20 + index}`).value = `${product.product_name}\r\n${Object.entries(product.attributes)
+        worksheet.getCell(`C${20 + index}`).value = `${product.product_name}\r\n${Object.entries(product?.attributes)
             .map(([key, value]) => `${key}: ${value}`)
             .join('\r\n')}`
         worksheet.getCell(`H${20 + index}`).value = product.quantity
@@ -2244,7 +2244,7 @@ const invoiceToPDF_Eng = async (values, products, sets, user, customer, totalPri
         worksheet.getCell(`C${20 + index + products.length}`).value = `${set.set_name}\r\n${set.products
             .map(
                 (product) =>
-                    `${product.product_name} x${product.quantity} (${product.productType})\r\n${Object.entries(product.attributes)
+                    `${product.product_name} x${product.quantity} (${product.productType})\r\n${Object.entries(product?.attributes)
                         .map(([key, value]) => `${key}: ${value}`)
                         .join(', ')}`
             )
