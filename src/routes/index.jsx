@@ -10,7 +10,7 @@ import ContentLayout from "@/layouts/ContentLayout";
 import Dasboard from "@/pages/Dashboard";
 import Users from "@/pages/Users";
 import PendingOrders from "@/pages/PendingOrders";
-
+import DailyContacts from "@/pages/DailyContacts";
 //apps
 import ProformaInvoice from "@/pages/ProformaInvoice";
 import Products from "@/pages/Products";
@@ -22,19 +22,16 @@ import DailyProductions from "@/pages/DailyProductions";
 import Productions from "@/pages/Productions";
 
 
-//auth
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import LogOut from "@/pages/LogOut";
-import ForgetPassword from "@/pages/ForgetPassword";
-import Profile from "@/pages/Profile";
-import Materials from "@/pages/Materials";
-import Expenses from "@/pages/Expenses";
 
-import MaterialStocks from "@/pages/MaterialStocks";
-import DailyContacts from "@/pages/DailyContacts";
-import AllStocks from "@/pages/AllStocks";
+//auth
+// import Login from "@/pages/Login";
+// import Register from "@/pages/Register";
+import LogOut from "@/pages/LogOut";
+import Profile from "@/pages/Profile";
+// import Materials from "@/pages/Materials";
+import Expenses from "@/pages/Expenses";
 import AllStockLogs from "@/pages/AllStockLogs";
+import AllStocks from "@/pages/AllStocks";
 import Shipments from "@/pages/Shipments";
 
 
@@ -84,16 +81,15 @@ const routes = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "apps/customers",
-        element: <Customers />,
-        errorElement: <NotFound />,
-      },
-      {
         path: "apps/contacts/daily",
         element: <DailyContacts />,
         errorElement: <NotFound />,
       },
-     
+      {
+        path: "apps/customers",
+        element: <Customers />,
+        errorElement: <NotFound />,
+      },
       {
         path: "apps/products",
         element: <Products />,
@@ -119,14 +115,14 @@ const routes = createBrowserRouter([
         element: <ProformaInvoice />,
         errorElement: <NotFound />,
       },
+      // {
+      //   path: "apps/stocks",
+      //   element: <Stocks />,
+      //   errorElement: <NotFound />,
+      // },
       {
-        path: "apps/stocksx",
-        element: <Stocks />,
-        errorElement: <NotFound />,
-      },
-      {
-        path: "apps/productions/daily",
-        element: <DailyProductions />,
+        path: "apps/productions-daily",
+        element:  <DailyProductions />,
         errorElement: <NotFound />,
       },
       {
@@ -134,19 +130,14 @@ const routes = createBrowserRouter([
         element: <Productions />,
         errorElement: <NotFound />,
       },
-      {
-        path: "apps/materials",
-        element: <Materials />,
-        errorElement: <NotFound />,
-      },
+      // {
+      //   path: "apps/materials",
+      //   element: <Materials />,
+      //   errorElement: <NotFound />,
+      // },
       {
         path: "apps/expenses",
         element: <Expenses />,
-        errorElement: <NotFound />,
-      },
-      {
-        path: "apps/rawmaterials-stocks",
-        element: <MaterialStocks />,
         errorElement: <NotFound />,
       },
       {

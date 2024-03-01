@@ -11,13 +11,11 @@ import {
   Factory,
   Layers,
   Contact2,
-
   DollarSign,
-  
   BookOpenCheck,
-  Headphones,
-  ShoppingBasket,
-  Truck
+Headphones,
+ShoppingBasket,
+Truck
 } from "lucide-react";
 
 export default [
@@ -88,6 +86,7 @@ export default [
     icon: Headphones,
     url: "/apps/contacts/daily",
   },
+ 
   {
     key: "apps-products",
     icon: TableProperties,
@@ -111,23 +110,23 @@ export default [
       ],
     },
   },
-  // {
-  //   key: "apps-stocks",
-  //   icon: Layers,
-  //   url: "/apps/stocks",
-  //   authenticate: {
-  //     type: "usertype",
-  //     value: [
-  //       "admin",
-  //       "boss",
-  //       "domestic_market_manager",
-  //       "foreign_market_manager",
-  //       "domestic_market_marketing",
-  //       "foreign_market_marketing",
-  //       "stock_manager"
-  //     ],
-  //   },
-  // },
+  {
+    key: "apps-stocks",
+    icon: Layers,
+    url: "/apps/stocks",
+    authenticate: {
+      type: "usertype",
+      value: [
+        "admin",
+        "boss",
+        "domestic_market_manager",
+        "foreign_market_manager",
+        "domestic_market_marketing",
+        "foreign_market_marketing",
+        "stock_manager"
+      ],
+    },
+  },
   {
     key: "apps-stocks-logs",
     icon: ShoppingBasket,
@@ -145,49 +144,6 @@ export default [
       ],
     },
   },
-  {
-    key: "apps-stocks",
-    icon: Layers,
-    url: "/apps/stocks",
-    authenticate: {
-      type: "usertype",
-      value: ["admin", "stock_manager", "boss"],
-    },
-  },
-  {
-    key: "apps-shipments",
-    icon: Truck,
-    url: "/apps/shipments",
-    authenticate: {
-      type: "usertype",
-      value: [
-        "admin",
-        "boss",
-        "domestic_market_manager",
-        "foreign_market_manager",
-        "domestic_market_marketing",
-        "foreign_market_marketing",
-        "stock_manager",
-      ],
-    },
-    },
-  // {
-  //   key: "apps-rawmaterials-stocks",
-  //   icon: Layers,
-  //   url: "/apps/rawmaterials-stocks",
-  //   authenticate: {
-  //     type: "usertype",
-  //     value: [
-  //       "admin",
-  //       "boss",
-  //       "domestic_market_manager",
-  //       "foreign_market_manager",
-  //       "domestic_market_marketing",
-  //       "foreign_market_marketing",
-  //       "stock_manager",
-  //     ],
-  //   },
-  // },
 
   {
     key: "apps-productions",
@@ -197,6 +153,23 @@ export default [
       type: "usertype",
       value: ["admin", "stock_manager", "boss", "production_manager"],
     },
+  },
+  {
+  key: "apps-shipments",
+  icon: Truck,
+  url: "/apps/shipments",
+  authenticate: {
+    type: "usertype",
+    value: [
+      "admin",
+      "boss",
+      "domestic_market_manager",
+      "foreign_market_manager",
+      "domestic_market_marketing",
+      "foreign_market_marketing",
+      "stock_manager",
+    ],
+  },
   },
   // {
   //   key: "apps-materials",
@@ -236,7 +209,7 @@ export default [
   {
     key: "apps-shifts-daily",
     icon: BookOpenCheck,
-    url: "/apps/productions/daily",
+    url: "/apps/productions-daily",
     authenticate: {
       type: "usertype",
       value: ["admin", "stock_manager", "boss", "production_manager"],
