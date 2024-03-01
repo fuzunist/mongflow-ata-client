@@ -35,6 +35,7 @@ import MaterialStocks from "@/pages/MaterialStocks";
 import DailyContacts from "@/pages/DailyContacts";
 import AllStocks from "@/pages/AllStocks";
 import AllStockLogs from "@/pages/AllStockLogs";
+import Shipments from "@/pages/Shipments";
 
 
 const routes = createBrowserRouter([
@@ -156,6 +157,11 @@ const routes = createBrowserRouter([
       {
         path: "apps/stocks",
         element: <AllStocks/>,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/shipments",
+        element: <Shipments/>,
         errorElement: <NotFound />,
       },
       {

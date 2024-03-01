@@ -16,7 +16,8 @@ import {
   
   BookOpenCheck,
   Headphones,
-  ShoppingBasket
+  ShoppingBasket,
+  Truck
 } from "lucide-react";
 
 export default [
@@ -153,6 +154,23 @@ export default [
       value: ["admin", "stock_manager", "boss"],
     },
   },
+  {
+    key: "apps-shipments",
+    icon: Truck,
+    url: "/apps/shipments",
+    authenticate: {
+      type: "usertype",
+      value: [
+        "admin",
+        "boss",
+        "domestic_market_manager",
+        "foreign_market_manager",
+        "domestic_market_marketing",
+        "foreign_market_marketing",
+        "stock_manager",
+      ],
+    },
+    },
   // {
   //   key: "apps-rawmaterials-stocks",
   //   icon: Layers,
