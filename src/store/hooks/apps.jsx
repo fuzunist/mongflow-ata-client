@@ -17,26 +17,34 @@ export const useRecipeMaterials = () =>
   useSelector((state) => state.apps.recipeMaterials);
 
 export const useRecipeMaterialLogs = () =>
-  useSelector((state) => state.apps.recipeMaterialLogs);
+  useSelector((state) => state.apps.recipeMaterialStockLogs);
 
 export const useRawMaterialLogs = () =>
-  useSelector((state) => state.apps.rawMaterialLogs);
+  useSelector((state) => state.apps.rawMaterialStockLogs);
 
 export const useRawMaterials = () =>
   useSelector((state) => state.apps.rawMaterials);
 
 export const useSets = () => useSelector((state) => state.apps.sets);
 export const useCustomers = () => useSelector((state) => state.apps.customers);
-export const useOrders = () => useSelector((state) => state.apps.orders);
-export const useStocks = () => useSelector((state) => state.apps.stocks);
-export const useProductions = () =>
-  useSelector((state) => state.apps.productions);
 export const useContacts = () => useSelector((state) => state.apps.contacts);
 
-export const useContact = () =>
-  useSelector((state) => state.apps.selected.contact);
+export const useOrders = () => useSelector((state) => state.apps.orders);
+export const useStocks = () => useSelector((state) => state.apps.stocks);
+export const useLastProductStocks = () => useSelector((state) => state.apps.lastProductStocks);
+// export const useLastProductStockWarehouse = () => useSelector((state) => state.apps.lastProductStockWarehouse);
+export const useLastProductStockLogs= () => useSelector((state) => state.apps.lastProductStockLogs);
+
+export const useRawMaterialStocks = () => useSelector((state) => state.apps.rawMaterialStocks);
+export const useRecipeMaterialStocks = () => useSelector((state) => state.apps.recipeMaterialStocks);
+
+export const useProductions = () =>
+  useSelector((state) => state.apps.productions);
+
 export const useCustomer = () =>
   useSelector((state) => state.apps.selected.customer);
+  export const useContact = () =>
+  useSelector((state) => state.apps.selected.contact);
 export const useProduct = () =>
   useSelector((state) => state.apps.selected.product);
 export const useSet = () => useSelector((state) => state.apps.selected.set);

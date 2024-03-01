@@ -4,28 +4,20 @@ import { useTranslation } from "react-i18next";
 import { useOrders, useSpecialRecipes } from "@/store/hooks/apps";
 import { useUser } from "@/store/hooks/user";
 import {
-  addRecipeToDB,
-  editRecipeToDB,
   addSpecialRecipeToDB,
   addProductionRecipeToDB,
 } from "@/services/recipe";
 import { calculateAverageType } from "@/utils/apps";
 import { v4 as uuidv4 } from "uuid";
-import { updateRecipeMaterialStocksInProductionToDB } from "@/services/recipematerial";
+import { updateRecipeMaterialStocksInProductionToDB } from "@/services/recipematerialstocks";
 import {
   addProductionRecipe,
-  addRecipe,
-  addRecipeMaterial,
   addSpecialRecipe,
   editOrder,
-  editRecipe,
-  editRecipeMaterial,
 } from "@/store/actions/apps";
-import { useRecipeMaterials, useRecipes } from "@/store/hooks/apps";
+import { useRecipeMaterialStocks, useRecipes } from "@/store/hooks/apps";
 import { recipeCost } from "@/utils/costHelpers";
 import { updateSomeOrderInDB } from "@/services/order";
-import RecipeForm from "@/components/FormikForm/RecipeForm";
-import useExceededStocks from "@/hooks/useExceededStocks";
 import getExceededStock from "@/utils/exceededStocks";
 import getTotalRecipeKG from "@/utils/getTotalRecipeKG";
 import SendToProductionForm from "@/components/FormikForm/SendToProductionForm";
@@ -38,7 +30,7 @@ const SendToProduction = ({
   checkedRecipes,
 }) => {
   const specialRecipes = useSpecialRecipes();
-  const recipeMaterials = useRecipeMaterials();
+  const recipeMaterials = useRecipeMaterialStocks();
   const recipes = useRecipes();
   const orders = useOrders();
   const user = useUser();
@@ -49,8 +41,7 @@ const SendToProduction = ({
   const [recipeName, setRecipeName] = useState("");
   const [selectedSpecialRecipe, setSelectedSpecialRecipe] = useState(null);
   const { t } = useTranslation();
-  const materialStocks = useRecipeMaterials();
-  console.log("materialStocks:::::", materialStocks);
+
 
   const selectedRecipe = recipes.find((recipe) => recipe.id === recipe_id);
   const [otherInputs, setOtherInputs] = useState({

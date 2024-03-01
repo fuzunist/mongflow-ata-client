@@ -14,7 +14,7 @@ import {
   editOrder,
   editRecipe,
 } from "@/store/actions/apps";
-import { useRecipeMaterials, useRecipes } from "@/store/hooks/apps";
+import { useRecipeMaterialStocks, useRecipes } from "@/store/hooks/apps";
 import { recipeCost } from "@/utils/costHelpers";
 import { updateSomeOrderInDB } from "@/services/order";
 import RecipeForm from "@/components/FormikForm/RecipeForm";
@@ -31,7 +31,7 @@ const SendToMergedProduction = ({
   checkedRecipes
 }) => {
   const specialRecipes = useSpecialRecipes();
-  const recipeMaterials = useRecipeMaterials();
+  const recipeMaterials = useRecipeMaterialStocks();
   const recipes = useRecipes();
   const orders = useOrders();
   const user = useUser();
@@ -42,7 +42,6 @@ const SendToMergedProduction = ({
   const [recipeName, setRecipeName] = useState("");
   const [selectedSpecialRecipe, setSelectedSpecialRecipe] = useState(null);
   const { t } = useTranslation();
-  const materialStocks = useRecipeMaterials();
 
 
 //   const [otherInputs, setOtherInputs] = useState({

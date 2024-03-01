@@ -1,8 +1,8 @@
 import React from "react";
-import { useRecipeMaterials, useRecipes } from "@/store/hooks/apps";
+import { useRecipeMaterialStocks } from "@/store/hooks/apps";
 
 const useExceededStocks = ({ values }) => {
-  const recipeMaterials = useRecipeMaterials();
+  const recipeMaterials = useRecipeMaterialStocks();
 
   const exceedsStock = {};
 

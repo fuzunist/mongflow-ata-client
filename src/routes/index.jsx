@@ -30,10 +30,11 @@ import ForgetPassword from "@/pages/ForgetPassword";
 import Profile from "@/pages/Profile";
 import Materials from "@/pages/Materials";
 import Expenses from "@/pages/Expenses";
-import RecipeMaterialStocks from "@/pages/RecipeMaterialStocks";
-import RawMaterialStocks from "@/pages/RawMaterialStocks";
+
 import MaterialStocks from "@/pages/MaterialStocks";
 import DailyContacts from "@/pages/DailyContacts";
+import AllStocks from "@/pages/AllStocks";
+import AllStockLogs from "@/pages/AllStockLogs";
 
 
 const routes = createBrowserRouter([
@@ -118,7 +119,7 @@ const routes = createBrowserRouter([
         errorElement: <NotFound />,
       },
       {
-        path: "apps/stocks",
+        path: "apps/stocksx",
         element: <Stocks />,
         errorElement: <NotFound />,
       },
@@ -145,6 +146,16 @@ const routes = createBrowserRouter([
       {
         path: "apps/rawmaterials-stocks",
         element: <MaterialStocks />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/stocks-logs",
+        element: <AllStockLogs />,
+        errorElement: <NotFound />,
+      },
+      {
+        path: "apps/stocks",
+        element: <AllStocks/>,
         errorElement: <NotFound />,
       },
       {

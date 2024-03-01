@@ -1,13 +1,11 @@
 import axios from "axios";
 
-export const addRawMaterialToDB = async (access_token, params) => {
+export const addRawStockLogToDB = async (access_token, params) => {
   try {
-    const { material, cost, preprocesscost, stock } = params;
+
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials`,
-      {
-        material,
-      },
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial`,
+      params,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -24,7 +22,7 @@ export const addRawMaterialToDB = async (access_token, params) => {
 export const getRawMaterialsFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -40,10 +38,12 @@ export const getRawMaterialsFromDB = async (access_token) => {
   }
 };
 
+
+
 export const editRawMaterialToDB = async (access_token, params, id) => {
   try {
     const { data } = await axios.put(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/${id}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/${id}`,
       params,
       {
         headers: {
@@ -63,7 +63,7 @@ export const editRawMaterialToDB = async (access_token, params, id) => {
 export const addRawMaterialLogToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/logs`,
       params,
       {
         headers: {
@@ -81,7 +81,7 @@ export const addRawMaterialLogToDB = async (access_token, params) => {
 export const getRawMaterialLogsFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/logs`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -97,10 +97,30 @@ export const getRawMaterialLogsFromDB = async (access_token) => {
   }
 };
 
+//tarih aralığı olacak son bir ay default olacak
+export const getRawMaterialStockLogsFromDB = async (access_token, params) => {
+  try {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/logs?startDate=${params.startDate}&endDate=${params.endDate}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+
+     console.log( "getRawMaterialStockLogsFromDB", data)
+    return data;
+  } catch (e) {
+     console.log(e)
+    return e.response.data;
+  }
+};
+
 export const editRawMaterialLogToDB = async (access_token, params, id) => {
   try {
     const { data } = await axios.patch(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/rawmaterials/logs/${id}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/logs/${id}`,
       params,
       {
         headers: {

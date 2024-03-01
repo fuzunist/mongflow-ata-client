@@ -16,7 +16,7 @@ import Col from "@/components/Col";
 import ChartGPTCard from "@/components/ChartGPTCard";
 
 import { useWindowSize } from "react-use";
-import { useRecipeMaterials } from "@/store/hooks/apps";
+import { useRecipeMaterialStocks } from "@/store/hooks/apps";
 
 
 ChartJS.register(
@@ -32,7 +32,7 @@ const BarChart = () => {
   const { width } = useWindowSize();
   const { t } = useTranslation();
 
-  const recipeMaterialStocks= useRecipeMaterials()
+  const recipeMaterialStocks= useRecipeMaterialStocks()
 
   const stockNames= Object.entries(recipeMaterialStocks).map(([key,val])=>val.material);
   const stockDatas= Object.entries(recipeMaterialStocks).map(([key,val])=>val.stock);

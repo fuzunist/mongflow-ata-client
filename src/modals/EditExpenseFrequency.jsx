@@ -1,20 +1,10 @@
 import FormikForm from "@/components/FormikForm";
-import {
-  addRawMaterialLogToDB,
-  editRawMaterialLogToDB,
-  editRawMaterialToDB,
-} from "@/services/rawmaterial";
+
 import { useUser } from "@/store/hooks/user";
 import { useState, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { useRawMaterials, useExpensesItems, useExpenses } from "@/store/hooks/apps";
-import {
-  addRawMaterialLog,
-  editRawMaterialLog,
-  editRawMaterial,
-  addExpenseItem,
-  editExpenseItemFreq,
-} from "@/store/actions/apps";
+import { useExpensesItems, useExpenses } from "@/store/hooks/apps";
+import { editExpenseItemFreq } from "@/store/actions/apps";
 import { updateExpenseItemFreqToDB } from "@/services/expenses";
 import { calculateExpenses } from "@/utils/calculateExpenses";
 
@@ -23,7 +13,7 @@ const EditExpenseFrequency = ({ closeModal, expenseItemId, ref }) => {
   const expensesItems = useExpensesItems();
   const expenses = useExpenses();
   console.log("expensesItems", expensesItems);
-   console.log("expenssss", expenses)
+  console.log("expenssss", expenses);
   const [error, setError] = useState("");
   const { t } = useTranslation();
   const initialValues = {
@@ -69,9 +59,9 @@ const EditExpenseFrequency = ({ closeModal, expenseItemId, ref }) => {
 
       editExpenseItemFreq(response);
       console.log("expensesItems after", expensesItems);
- console.log("response of freq edit", response)
+      console.log("response of freq edit", response);
       setSubmitting(false);
-      calculateExpenses(expenses.monthly_expenses,expenses.id, expensesItems)
+      calculateExpenses(expenses.monthly_expenses, expenses.id, expensesItems);
       closeModal();
     } catch (err) {
       setError(err);

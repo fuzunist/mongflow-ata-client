@@ -3,26 +3,24 @@ import {
   _addCustomer,
   _addRangeContacts,
   _addContact,
-  _editContact,
-  _delContact,
-  _setContact,
   _addProduct,
   _addRecipe,
   _addProductionRecipe,
   _addSpecialRecipe,
   _addRecipeMaterial,
   _editRecipeMaterial,
-  _addRawMaterial,
   _editRawMaterial,
-  _addRawMaterialLog,
   _editRawMaterialLog,
   _addOrder,
   _setCustomer,
+  _setContact,
   _setProduct,
   _setOrderStatus,
   _promiseAll,
   _delCustomer,
+  _delContact,
   _editCustomer,
+  _editContact,
   _setSearch,
   _editProduct,
   _editRecipe,
@@ -59,14 +57,77 @@ import {
   _addExpenseItem,
   _editExpenses,
   _editExpenseItemFreq,
-  _addRecipeMaterialLog,
-  _editRecipeMaterialLog,
+  _editSelectProductWeight,
+  _editSelectProductDelivery,
+  _addLastProductStockLog,
+  _addLastProductStock,
+  _addRawMaterialStockLog,
+  _addRawMaterialStock,
+  _addRecipeMaterialStock,
+  _addRecipeMaterialStockLog,
+  _editRecipeMaterialStockLog,
+  // _addLastProductStockWarehouse,
+  // _editLastProductStockWarehouse,
+  _addAllRangeProductStockLogs,
+  _addAllRangeRawMaterialStockLogs,
+  _addAllRangeRecipeMaterialStockLogs,
+  _delLastProductStockLog,
+  // _addAllProductStockWarehouse,
+  _addAllProductStocks
 } from "../reducers/apps";
 
 export const promiseAll = (access_token, usertype) =>
   store.dispatch(_promiseAll({ access_token, usertype }));
 
 export const addStock = (stock) => store.dispatch(_addStock(stock));
+
+export const addLastProductStock = (stock) =>
+  store.dispatch(_addLastProductStock(stock));
+
+  export const addLastProductStockLog = (log) =>
+  store.dispatch(_addLastProductStockLog(log));
+ 
+  export const addAllRangeProductStockLogs = (log) =>
+  store.dispatch(_addAllRangeProductStockLogs(log));
+  
+
+  export const addAllProductStocks = (stock) =>
+  store.dispatch(_addAllProductStocks(stock));
+  
+  // export const addAllProductStockWarehouse = (stock) =>
+  // store.dispatch(_addAllProductStockWarehouse(stock));
+  
+  export const addAllRangeRawMaterialStockLogs = (log) =>
+  store.dispatch(_addAllRangeRawMaterialStockLogs(log));
+
+  export const addAllRangeRecipeMaterialStockLogs = (log) =>
+  store.dispatch(_addAllRangeRecipeMaterialStockLogs(log));
+
+  // export const addLastProductStockWarehouse = (stock) =>
+  // store.dispatch(_addLastProductStockWarehouse(stock));
+
+  // export const editLastProductStockWarehouse = (stock) =>
+  // store.dispatch(_editLastProductStockWarehouse(stock));
+
+  export const delLastProductStockLog = (stock) =>
+  store.dispatch(_delLastProductStockLog(stock));
+
+export const addRawMaterialStock = (rawStock) =>
+  store.dispatch(_addRawMaterialStock(rawStock));
+
+export const addRawMaterialStockLog = (rawStockLog) =>
+  store.dispatch(_addRawMaterialStockLog(rawStockLog));
+
+  export const addRecipeMaterialStock = (recipeStock) =>
+  store.dispatch(_addRecipeMaterialStock(recipeStock));
+
+
+export const editRawMaterial = (rawMaterial) =>
+  store.dispatch(_editRawMaterial(rawMaterial));
+
+export const editRawMaterialLog = (rawMaterialLog) =>
+  store.dispatch(_editRawMaterialLog(rawMaterialLog));
+
 export const editStock = (stock) => store.dispatch(_editStock(stock));
 export const delSock = (stock_id) => store.dispatch(_delStock(stock_id));
 
@@ -96,25 +157,14 @@ export const delSpecialRecipe = (recipeId) =>
 export const addRecipeMaterial = (recipeMaterial) =>
   store.dispatch(_addRecipeMaterial(recipeMaterial));
 
-export const addRecipeMaterialLog = (recipeMaterialLog) =>
-  store.dispatch(_addRecipeMaterialLog(recipeMaterialLog));
+export const addRecipeMaterialStockLog = (recipeMaterialLog) =>
+  store.dispatch(_addRecipeMaterialStockLog(recipeMaterialLog));
 
-export const editRecipeMaterialLog = (recipeMaterialLog) =>
-  store.dispatch(_editRecipeMaterialLog(recipeMaterialLog));
+export const editRecipeMaterialStockLog = (recipeMaterialLog) =>
+  store.dispatch(_editRecipeMaterialStockLog(recipeMaterialLog));
 
 export const editRecipeMaterial = (recipeMaterial) =>
   store.dispatch(_editRecipeMaterial(recipeMaterial));
-
-export const addRawMaterial = (rawMaterial) =>
-  store.dispatch(_addRawMaterial(rawMaterial));
-export const editRawMaterial = (rawMaterial) =>
-  store.dispatch(_editRawMaterial(rawMaterial));
-
-export const addRawMaterialLog = (rawMaterialLog) =>
-  store.dispatch(_addRawMaterialLog(rawMaterialLog));
-
-export const editRawMaterialLog = (rawMaterialLog) =>
-  store.dispatch(_editRawMaterialLog(rawMaterialLog));
 
 export const addSet = (set) => store.dispatch(_addSet(set));
 export const editSet = (set) => store.dispatch(_editSet(set));
@@ -132,7 +182,6 @@ export const addRangeContacts = (contacts) =>
 
 export const editContact = (contact) => store.dispatch(_editContact(contact));
 export const delContact = (id) => store.dispatch(_delContact(id));
-export const setContact = (id) => store.dispatch(_setContact(id));
 
 export const addOrder = (order) => store.dispatch(_addOrder(order));
 export const editOrder = (order) => store.dispatch(_editOrder(order));
@@ -158,6 +207,7 @@ export const setOrderStatusSet = (
 
 export const setCustomer = (customerID) =>
   store.dispatch(_setCustomer(customerID));
+export const setContact = (id) => store.dispatch(_setContact(id));
 export const setProduct = (productID) => store.dispatch(_setProduct(productID));
 export const setSet = (setID) => store.dispatch(_setSet(setID));
 
@@ -167,15 +217,25 @@ export const addSelectProduct = (
   attributes,
   quantity,
   productType,
-  orderStatus
+  orderStatus,
+  weight,
+  delivery_date
 ) =>
   store.dispatch(
-    _addSelectProduct({ attributes, quantity, productType, orderStatus })
+    _addSelectProduct({ attributes, quantity, productType, orderStatus, weight, delivery_date })
   );
 export const editSelectProduct = (index, unitPrice) =>
   store.dispatch(_editSelectProduct({ index, unitPrice }));
+
+export const editSelectProductWeight = (index, weight) =>
+  store.dispatch(_editSelectProductWeight({ index, weight }));
+
+export const editSelectProductDelivery = (index, date) =>
+  store.dispatch(_editSelectProductDelivery({ index, date }));
+
 export const delSelectProduct = (index) =>
   store.dispatch(_delSelectProduct(index));
+
 export const clearSelectProducts = () => store.dispatch(_clearSelectProducts());
 
 export const setSelectSets = (products) =>

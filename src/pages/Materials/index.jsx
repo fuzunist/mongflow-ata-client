@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useRecipeMaterials, useRecipes } from "@/store/hooks/apps";
+import { useRecipeMaterialStocks, useRecipes } from "@/store/hooks/apps";
 import FormikForm from "@/components/FormikForm";
 import { useUser } from "@/store/hooks/user";
-import { editRecipeMaterialToDB } from "@/services/recipematerial";
+import { editRecipeMaterialToDB } from "@/services/recipematerialstocks";
 import { editRecipeMaterial } from "@/store/actions/apps";
 import { useTranslation } from "react-i18next";
 
@@ -11,7 +11,7 @@ const index = () => {
   const [initVals, setInitVals] = useState({});
   const [successMessage, setSuccessMessage] = useState("");
   const user = useUser();
-  const recipeMaterials = useRecipeMaterials();
+  const recipeMaterials = useRecipeMaterialStocks();
   const { t, i18n } = useTranslation();
 
   useEffect(() => {

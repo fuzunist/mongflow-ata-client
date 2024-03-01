@@ -1,6 +1,6 @@
 import Modal from "@/components/Modal";
-import CreateMaterialStock from "@/modals/CreateMaterialStock";
-import CreateMaterial from "@/modals/CreateMaterial";
+// import CreateMaterialStock from "@/modals/CreateMaterialStock";
+// import CreateMaterial from "@/modals/CreateMaterial";
 import { useProducts } from "@/store/hooks/apps";
 import materialStocksToExcel from "@/utils/materialStocksToExcel";
 
@@ -16,7 +16,7 @@ const Header = ({ stocks }) => {
   return (
     <div className="flex-1 flex max-[576px]:flex-col justify-between gap-y-4 mb-6">
       <div className="flex justify-center items-center gap-4">
-      <Modal
+      {/* <Modal
         className="bg-purple hover:bg-purple-hover text-white rounded-full py-2 px-4 flex justify-center items-center gap-2"
         text={
           <>
@@ -25,8 +25,8 @@ const Header = ({ stocks }) => {
         }
       >
         {({ close }) => <CreateMaterialStock closeModal={close} />}
-      </Modal>
-      <Modal
+      </Modal> */}
+      {/* <Modal
         className="bg-purple hover:bg-purple-hover text-white rounded-full py-2 px-4 flex justify-center items-center gap-2"
         text={
           <>
@@ -35,7 +35,7 @@ const Header = ({ stocks }) => {
         }
       >
         {({ close }) => <CreateMaterial closeModal={close} />}
-      </Modal>
+      </Modal> */}
       </div>
       <div className="flex justify-center items-center gap-4">
         <button

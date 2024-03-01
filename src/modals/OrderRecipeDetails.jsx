@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import {
   useProductionRecipes,
-  useRecipeMaterials,
+  useRecipeMaterialStocks,
   useRecipes,
 } from "@/store/hooks/apps";
 import { useUser } from "@/store/hooks/user";
@@ -9,7 +9,7 @@ import { useUser } from "@/store/hooks/user";
 const OrderRecipeDetails = ({ order_id, recipe_id, production }) => {
   const recipes = useRecipes();
   const user = useUser();
-  const recipeMaterials = useRecipeMaterials();
+  const recipeMaterials = useRecipeMaterialStocks();
   const productionRecipes = useProductionRecipes();
 
   const [recipeDetails, setRecipeDetails] = useState();

@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import Col from "@/components/Col";
 import ChartGPTCard from "@/components/ChartGPTCard";
 
-import { useRawMaterials } from "@/store/hooks/apps";
+import { useRawMaterialStocks } from "@/store/hooks/apps";
 
 ChartJS.register(
   CategoryScale,
@@ -33,7 +33,7 @@ const BarChart = () => {
   const { t } = useTranslation();
   const { width } = useWindowSize();
 
-  const rawmaterialstocks = useRawMaterials();
+  const rawmaterialstocks = useRawMaterialStocks();
 
   const stockNames = Object.entries(rawmaterialstocks).map(
     ([key, val]) => val.material

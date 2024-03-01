@@ -1,7 +1,7 @@
 import Card from "@/components/Card";
 import Col from "@/components/Col";
 import Modal from "@/components/Modal";
-import CreateMaterialStock from "@/modals/CreateMaterialStock";
+// import CreateMaterialStock from "@/modals/CreateMaterialStock";
 import { useProducts } from "@/store/hooks/apps";
 import {
   dateToIsoFormatWithTimezoneOffset,
@@ -10,11 +10,11 @@ import {
 } from "@/utils/helpers";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useRecipeMaterialLogs, useRecipeMaterials } from "@/store/hooks/apps";
+// import { useRecipeMaterialLogs, useRecipeMaterials } from "@/store/hooks/apps";
 
 const Selected = ({ selected }) => {
-  const RecipeMaterialLogs = useRecipeMaterialLogs();
-  const recipeMaterialStocks = useRecipeMaterials();
+  // const RecipeMaterialLogs = useRecipeMaterialLogs();
+  // const recipeMaterialStocks = useRecipeMaterials();
 
   const { t } = useTranslation();
 
@@ -57,39 +57,39 @@ const Selected = ({ selected }) => {
                     </div>
                     <hr className="border-body-fg-dark dark:border-body-fg-light w-full" />
                     <div className="flex flex-col max-h-[160px] gap-2 overflow-y-auto scroller">
-                      {stocks.map((stock, _indx) => {
+                      {/* {stocks.map((stock, _indx) => {
                         return (
-                          <Modal
-                            key={_indx}
-                            text={
-                              <>
-                                <span>
-                                  {t("price")}: {stock.price}{" $"}
-                                </span>
-                                <span>
-                                  {t("quantity")}: {stock.quantity}{" kg"}
-                                </span>
-                                <span>
-                                  {t("totalPrice")}: {stock.quantity*stock.price}{" $"}
-                                </span>
-                                <span>
-                                  {t("supplier")}: {stock.supplier}
-                                </span>
-                                <span>{t("waybill")}: {stock.waybill}</span>
-                              </>
-                            }
-                            className="flex justify-between items-center p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer"
-                          >
-                            {({ close }) => (
-                              <CreateMaterialStock
-                                closeModal={close}
-                                editing={true}
-                                selected={stock}
-                              />
-                            )}
-                          </Modal>
+                          // <Modal
+                          //   key={_indx}
+                          //   text={
+                          //     <>
+                          //       <span>
+                          //         {t("price")}: {stock.price}{" $"}
+                          //       </span>
+                          //       <span>
+                          //         {t("quantity")}: {stock.quantity}{" kg"}
+                          //       </span>
+                          //       <span>
+                          //         {t("totalPrice")}: {stock.quantity*stock.price}{" $"}
+                          //       </span>
+                          //       <span>
+                          //         {t("supplier")}: {stock.supplier}
+                          //       </span>
+                          //       <span>{t("waybill")}: {stock.waybill}</span>
+                          //     </>
+                          //   }
+                          //   className="flex justify-between items-center p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer"
+                          // >
+                          //   {({ close }) => (
+                          //     // <CreateMaterialStock
+                          //     //   closeModal={close}
+                          //     //   editing={true}
+                          //     //   selected={stock}
+                          //     // />
+                          //   )}
+                          // </Modal>
                         );
-                      })}
+                      })} */}
                     </div>
                   </div>
                 );
