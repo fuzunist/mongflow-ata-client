@@ -72,14 +72,14 @@ const CreateProduction = ({ closeModal, editing = false, selected }) => {
           readOnly: editing,
           products: products.map((product) => ({
             id: product.product_id,
-            attributes: product.attributes.map((attr) => ({
+            attributes: product?.attributes ? product?.attributes?.map((attr) => ({
               id: attr.attribute_id,
               name: attr.attribute_name,
               values: attr.values.map((val) => ({
                 id: val.value_id,
                 name: val.value,
               })),
-            })),
+            })) : [],
           })),
         },
         [`orders`]: {
@@ -188,14 +188,14 @@ const CreateProduction = ({ closeModal, editing = false, selected }) => {
           readOnly: editing,
           products: products.map((product) => ({
             id: product.product_id,
-            attributes: product?.attributes.map((attr) => ({
+            attributes: product?.attributes ? product?.attributes?.map((attr) => ({
               id: attr.attribute_id,
               name: attr.attribute_name,
               values: attr.values.map((val) => ({
                 id: val.value_id,
                 name: val.value,
               })),
-            })),
+            })) : [],
           })),
         },
         [`orders`]: {
