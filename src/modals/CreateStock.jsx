@@ -149,9 +149,11 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
       }).toISOString(),
       userid: user.userid,
       price: values.price * values.exchange_rate,
+      attributes: !values?.attributes ? {} : values?.attributes
     };
     delete data["address"];
 
+     console.log("dtata", data)
     const response = await pageForm.addToDB(user.tokens.access_token, data);
     console.log("response", response);
 

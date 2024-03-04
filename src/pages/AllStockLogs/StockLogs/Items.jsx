@@ -64,7 +64,7 @@ const Items = ({
         log.customer_county
           .toLocaleLowerCase("TR")
           .includes(searchValue.toLocaleLowerCase("TR")) ||
-        JSON.stringify(log.attributedetails)
+       ( log.attributedetails ? JSON.stringify(log.attributedetails) : log.product_name )
           .toLocaleLowerCase("TR")
           .includes(searchValue.toLocaleLowerCase("TR")) ||
         log.companyname
@@ -83,7 +83,7 @@ const Items = ({
     date: dayjs(log.date).format("DD-MM-YYYY"),
     companyname: log?.companyname,
     product: log?.product_name,
-    attributedetails: log?.attributedetails,
+    attributedetails: log?.attributedetails ? log.attributedetails : null,
     price: log?.price,
     currency: [log.currency_code, log.exchange_rate, log.price],
     exchange_rate: log.exchange_rate,
@@ -122,14 +122,14 @@ const Items = ({
       key: "attributedetails",
       className: "text-sm ",
       render: (_, record) => {
-        return Object.entries(record?.attributedetails).map(
+        return record?.attributedetails ? Object.entries(record?.attributedetails).map(
           ([key, value], index) => (
             <div key={index}>
               <span className="font-bold px-2">{key}:</span>
               <span>{value}</span>
             </div>
           )
-        );
+        ) : null
       },
     },
     {

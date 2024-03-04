@@ -19,7 +19,7 @@ export const addRawStockLogToDB = async (access_token, params) => {
   }
 };
 
-export const getRawMaterialsFromDB = async (access_token) => {
+export const getRawMaterialsFromDB = async (access_token, signal) => {
   try {
     const { data } = await axios.get(
       `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial`,
@@ -27,12 +27,14 @@ export const getRawMaterialsFromDB = async (access_token) => {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
+        signal: signal
       }
     );
-    console.log("Successfully fetched recipeRawMaterials:", data); // Log the fetched data
+    console.log("Successfully fetched RawMaterials:", data); // Log the fetched data
 
     return data;
   } catch (e) {
+     console.log("error in raw material stocks")
     console.log(e);
     return e.response.data;
   }

@@ -13,7 +13,7 @@ import { mergeDeep } from "@/utils/helpers";
 
 import FormikForm from "@/components/FormikForm";
 
-const CreateProduct = ({ closeModal, selectedProduct, type }) => {
+const CreateProduct = ({ closeModal, selectedProduct, type, title }) => {
   const user = useUser();
   const [error, setError] = useState("");
   const { t } = useTranslation();
@@ -68,14 +68,16 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
 
   const onSubmit = async (values, { setSubmitting }) => {
     setError("");
-    const response = await addProductToDB(
-      user.tokens.access_token,
-      values.productName,
-      0, // values.defaultPrice,
-      "USD", // values.defaultCurrency,
-      values.attributes,
-      type
-    );
+    const data = {
+      productName: values.productName,
+      defaultPrice: 0,
+      defaultCurrency: "USD",
+      attributes: values.attributes,
+      type: type,
+      hasAttributes: values.attributes.length === 0 ? false : true,
+    };
+    console.log(data, "data od product");
+    const response = await addProductToDB(user.tokens.access_token, data);
     if (response?.error) return setError(response.error);
     setSubmitting(false);
     addProduct(response);
@@ -84,13 +86,18 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
 
   const onEdit = async (values, { setSubmitting }) => {
     setError("");
+    const data = {
+      productName: values.productName,
+      defaultPrice: 0,
+      defaultCurrency: "USD",
+      attributes: values.attributes,
+      hasAttributes: values.attributes.length === 0 ? false : true,
+    };
+    console.log(data, "data of edit product");
     const response = await editProductToDB(
       user.tokens.access_token,
       selectedProduct.product_id,
-      values.productName,
-      0, // values.defaultPrice,
-      "USD", // values.defaultCurrency,
-      values.attributes
+      data
     );
     if (response?.error) return setError(response.error);
     editProduct(response);
@@ -116,15 +123,7 @@ const CreateProduct = ({ closeModal, selectedProduct, type }) => {
         validate={validate}
         initialValues={initialValues}
         error={error}
-        title={t(
-          selectedProduct
-            ? !!type
-              ? "editOtherProduct"
-              : "editProduct"
-            : !!type
-            ? "addOtherProduct"
-            : "addProduct"
-        )}
+        title={t(title)}
       />
       {selectedProduct && (
         <button

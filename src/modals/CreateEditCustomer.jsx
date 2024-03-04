@@ -69,12 +69,12 @@ const CreateEditCustomer = ({ closeModal, selectedCustomer, editing }) => {
     setError("");
 
     const data = {
-      companyname: values.companyname.toLocaleUpperCase('TR'),
+      companyname: values.companyname?.toLocaleUpperCase('TR'),
       taxid: values.taxid,
-      taxoffice: values.taxoffice.toLocaleUpperCase('TR'),
+      taxoffice: values.taxoffice?.toLocaleUpperCase('TR'),
       email: values.email,
       phone: values.phone,
-      address: values.address.toLocaleUpperCase('TR'),
+      address: values.address?.toLocaleUpperCase('TR'),
       website: values.website,
       products: values.products,
       customer_type: values.customer_type,

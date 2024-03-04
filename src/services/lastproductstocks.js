@@ -31,7 +31,7 @@ export const getProductStockLogsFromDB = async (access_token, params) => {
         },
       }
     );
-
+ console.log("Successfully fetched getProductStockLogsFromDB", data)
     return data;
   } catch (e) {
     return e.response.data;
@@ -68,9 +68,11 @@ export const getProductStocks = async (access_token) => {
       }
     );
 
-     console.log("getProductStocks", data)
+ console.log("Successfully fetched getProductStocks", data)
+
     return data;
   } catch (e) {
+     console.log("erorr in getProductStocks ", e)
     return e.response.data;
   }
 };

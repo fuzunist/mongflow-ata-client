@@ -27,15 +27,15 @@ const Product = ({ product, authenticate }) => {
                                     className='text-base font-normal relative border-2 border-border-light dark:border-border-dark rounded p-4'
                                 >
                                     <span className='absolute -top-[8.1px] left-2 bg-card-bg-light dark:bg-card-bg-dark leading-none text-lg font-semibold w-min max-w-[calc(100%_-_16px)] overflow-hidden text-ellipsis whitespace-nowrap'>
-                                        {attr.attribute_name}
+                                        {attr?.attribute_name}
                                     </span>
                                     <div className='flex justify-center items-center gap-4'>
-                                        {attr.values.map((val, valIndex) => (
+                                        {attr?.values?.map((val, valIndex) => (
                                             <div
                                                 key={valIndex}
                                                 className='py-2 px-3 border-2 border-border-light dark:border-border-dark rounded whitespace-nowrap'
                                             >
-                                                {val.value}
+                                                {val?.value}
                                             </div>
                                         ))}
                                     </div>

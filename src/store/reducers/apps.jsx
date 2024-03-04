@@ -52,7 +52,6 @@ export const _promiseAll = createAsyncThunk(
       customers,
       contacts,
       orders,
-      stocks,
       lastProductStocks,
       lastProductStockLogs,
       productions,
@@ -83,7 +82,6 @@ export const _promiseAll = createAsyncThunk(
         endDate: todayDate,
       }),
       getOrdersFromDB(access_token),
-      getStocksFromDB(access_token),
       getProductStocks(access_token),
       getProductStockLogsFromDB(access_token, {
         startDate: lastMonthDate,
@@ -131,13 +129,13 @@ export const _promiseAll = createAsyncThunk(
       });
     else if (orders?.error)
       return rejectWithValue({ type: "getOrdersFromDB", error: orders.error });
-    else if (stocks?.error)
-      return rejectWithValue({ type: "getStocksFromDB", error: stocks.error });
+
     else if (lastProductStocks?.error)
       return rejectWithValue({
         type: "lastProductStocksFromDB",
         error: lastProductStocks.error,
       });
+  
     else if (lastProductStockLogs?.error)
       return rejectWithValue({
         type: "getlastProductStockLogsFromDB",
@@ -203,7 +201,6 @@ export const _promiseAll = createAsyncThunk(
       customers,
       contacts,
       orders,
-      stocks,
       lastProductStocks,
       lastProductStockLogs,
       productions,
@@ -262,11 +259,11 @@ const apps = createSlice({
   name: "apps",
   initialState,
   reducers: {
-    _addStock: (state, action) => {
-      state.stocks = [...state.stocks, action.payload].sort(
-        (a, b) => new Date(a.date) - new Date(b.date)
-      );
-    },
+    // _addStock: (state, action) => {
+    //   state.stocks = [...state.stocks, action.payload].sort(
+    //     (a, b) => new Date(a.date) - new Date(b.date)
+    //   );
+    // },
     _addLastProductStock: (state, action) => {
       if (
         state.lastProductStocks.find((item) => item.id === action.payload.id)
@@ -409,18 +406,18 @@ const apps = createSlice({
       );
     },
 
-    _editStock: (state, action) => {
-      state.stocks = state.stocks.map((stock) => {
-        if (stock.stock_id === action.payload.stock_id)
-          stock = { ...stock, ...action.payload };
-        return stock;
-      });
-    },
-    _delStock: (state, action) => {
-      state.stocks = state.stocks.filter(
-        (stock) => stock.stock_id !== action.payload
-      );
-    },
+    // _editStock: (state, action) => {
+    //   state.stocks = state.stocks.map((stock) => {
+    //     if (stock.stock_id === action.payload.stock_id)
+    //       stock = { ...stock, ...action.payload };
+    //     return stock;
+    //   });
+    // },
+    // _delStock: (state, action) => {
+    //   state.stocks = state.stocks.filter(
+    //     (stock) => stock.stock_id !== action.payload
+    //   );
+    // },
     _addProduction: (state, action) => {
       state.productions = [...state.productions, action.payload].sort(
         (a, b) => new Date(a.date) - new Date(b.date)
@@ -801,7 +798,6 @@ const apps = createSlice({
       state.orders = [];
       state.customers = [];
       state.contacts = [];
-      state.stocks = [];
       state.lastProductStocks = [];
       state.lastProductStockLogs = [];
       state.productions = [];
@@ -837,7 +833,6 @@ const apps = createSlice({
       state.orders = action.payload.orders;
       state.customers = action.payload.customers;
       state.contacts = action.payload.contacts;
-      state.stocks = action.payload.stocks;
       state.lastProductStocks = action.payload.lastProductStocks;
       state.lastProductStockLogs = action.payload.lastProductStockLogs;
       state.productions = action.payload.productions;

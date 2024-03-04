@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 const Navigation = ({ page, setPage }) => {
-    const pages = ['products', 'recipeMaterialProducts', 'rawMaterialProducts']
+    const pages = ['products', 'secondProducts', 'recipeMaterialProducts', 'rawMaterialProducts', "filters"]
     const { t } = useTranslation()
 
     return (

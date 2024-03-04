@@ -21,7 +21,7 @@ const Items = ({
 
     return stocks.filter(
       (stock) =>
-        JSON.stringify(stock.attributedetails)
+         ( stock?.hasAttributes ? JSON.stringify(stock.attributedetails) : stock.product_name)
           .toLocaleLowerCase()
           .includes(searchValue.toLocaleLowerCase()) ||
         stock.product_name
@@ -36,7 +36,7 @@ const Items = ({
     key: index,
     id: stock?.id,
     product: stock?.product_name,
-    attributedetails: stock?.attributedetails,
+    attributedetails: stock?.hasAttributes ? stock?.attributedetails : null,
     price: stock?.price,
     quantity: stock?.quantity,
 
@@ -56,14 +56,14 @@ const Items = ({
       key: "attributedetails",
       className: "text-sm ",
       render: (_, record) => {
-        return Object.entries(record?.attributedetails).map(
+        return record?.attributedetails ? Object.entries(record?.attributedetails).map(
           ([key, value], index) => (
             <div key={index}>
               <span className="font-bold px-2">{key}:</span>
               <span>{value}</span>
             </div>
           )
-        );
+        ) : null
       },
     },
     {
