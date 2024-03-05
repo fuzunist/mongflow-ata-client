@@ -27,7 +27,6 @@ import {
   _delProduct,
   _delRecipe,
   _delSpecialRecipe,
-  _addStock,
   _editStock,
   _delStock,
   _delOrder,
@@ -66,51 +65,86 @@ import {
   _addRecipeMaterialStock,
   _addRecipeMaterialStockLog,
   _editRecipeMaterialStockLog,
-  // _addLastProductStockWarehouse,
-  // _editLastProductStockWarehouse,
   _addAllRangeProductStockLogs,
   _addAllRangeRawMaterialStockLogs,
   _addAllRangeRecipeMaterialStockLogs,
   _delLastProductStockLog,
-  // _addAllProductStockWarehouse,
-  _addAllProductStocks
+  _addAllProductStocks,
+  _addSecondQualityProductStock,
+  _addSecondQualityProductStockLog,
+  _addAllRangeSecondQualityProductStockLogs,
+  _addAllSecondQualityProductStocks,
+  _delSecondQualityProductStockLog,
+  _addConsumableProductStock,
+  _addConsumableProductStockLog,
+  _addAllRangeConsumableProductStockLogs,
+  _addAllConsumableProductStocks,
+  _delConsumableProductStockLog,
+  _delRecipeMaterialLog,
+  _delRawMaterialLog,
+  _addAllRawMaterialStocks,
+  _addAllRecipeMaterialStocks,
 } from "../reducers/apps";
 
 export const promiseAll = (access_token, usertype) =>
   store.dispatch(_promiseAll({ access_token, usertype }));
 
-export const addStock = (stock) => store.dispatch(_addStock(stock));
-
 export const addLastProductStock = (stock) =>
   store.dispatch(_addLastProductStock(stock));
 
-  export const addLastProductStockLog = (log) =>
+export const addLastProductStockLog = (log) =>
   store.dispatch(_addLastProductStockLog(log));
- 
-  export const addAllRangeProductStockLogs = (log) =>
-  store.dispatch(_addAllRangeProductStockLogs(log));
-  
 
-  export const addAllProductStocks = (stock) =>
+export const addAllRangeProductStockLogs = (log) =>
+  store.dispatch(_addAllRangeProductStockLogs(log));
+
+export const addAllLastProductStocks = (stock) =>
   store.dispatch(_addAllProductStocks(stock));
-  
-  // export const addAllProductStockWarehouse = (stock) =>
-  // store.dispatch(_addAllProductStockWarehouse(stock));
-  
-  export const addAllRangeRawMaterialStockLogs = (log) =>
+
+export const delLastProductStockLog = (stock) =>
+  store.dispatch(_delLastProductStockLog(stock));
+
+export const addConsumableProductStock = (stock) =>
+  store.dispatch(_addConsumableProductStock(stock));
+
+export const addConsumableProductStockLog = (log) =>
+  store.dispatch(_addConsumableProductStockLog(log));
+
+export const addAllRangeConsumableProductStockLogs = (log) =>
+  store.dispatch(_addAllRangeConsumableProductStockLogs(log));
+
+export const addAllConsumableProductStocks = (stock) =>
+  store.dispatch(_addAllConsumableProductStocks(stock));
+
+export const delConsumableProductStockLog = (log) =>
+  store.dispatch(_delConsumableProductStockLog(log));
+
+export const delRawMaterialLog = (log) =>
+  store.dispatch(_delRawMaterialLog(log));
+
+export const delRecipeMaterialLog = (log) =>
+  store.dispatch(_delRecipeMaterialLog(log));
+
+export const addSecondQualityProductStock = (stock) =>
+  store.dispatch(_addSecondQualityProductStock(stock));
+
+export const addSecondQualityProductStockLog = (log) =>
+  store.dispatch(_addSecondQualityProductStockLog(log));
+
+export const addAllRangeSecondQualityProductStockLogs = (log) =>
+  store.dispatch(_addAllRangeSecondQualityProductStockLogs(log));
+
+export const addAllSecondQualityProductStocks = (stock) =>
+  store.dispatch(_addAllSecondQualityProductStocks(stock));
+
+export const delSecondQualityProductStockLog = (log) =>
+  store.dispatch(_delSecondQualityProductStockLog(log));
+
+export const addAllRangeRawMaterialStockLogs = (log) =>
   store.dispatch(_addAllRangeRawMaterialStockLogs(log));
 
-  export const addAllRangeRecipeMaterialStockLogs = (log) =>
+export const addAllRangeRecipeMaterialStockLogs = (log) =>
   store.dispatch(_addAllRangeRecipeMaterialStockLogs(log));
-
-  // export const addLastProductStockWarehouse = (stock) =>
-  // store.dispatch(_addLastProductStockWarehouse(stock));
-
-  // export const editLastProductStockWarehouse = (stock) =>
-  // store.dispatch(_editLastProductStockWarehouse(stock));
-
-  export const delLastProductStockLog = (stock) =>
-  store.dispatch(_delLastProductStockLog(stock));
 
 export const addRawMaterialStock = (rawStock) =>
   store.dispatch(_addRawMaterialStock(rawStock));
@@ -118,15 +152,20 @@ export const addRawMaterialStock = (rawStock) =>
 export const addRawMaterialStockLog = (rawStockLog) =>
   store.dispatch(_addRawMaterialStockLog(rawStockLog));
 
-  export const addRecipeMaterialStock = (recipeStock) =>
+export const addRecipeMaterialStock = (recipeStock) =>
   store.dispatch(_addRecipeMaterialStock(recipeStock));
-
 
 export const editRawMaterial = (rawMaterial) =>
   store.dispatch(_editRawMaterial(rawMaterial));
 
 export const editRawMaterialLog = (rawMaterialLog) =>
   store.dispatch(_editRawMaterialLog(rawMaterialLog));
+
+  export const addAllRawMaterialStocks = (stocks) =>
+  store.dispatch(_addAllRawMaterialStocks(stocks));
+
+  export const addAllRecipeMaterialStocks = (stocks) =>
+  store.dispatch(_addAllRecipeMaterialStocks(stocks));
 
 export const editStock = (stock) => store.dispatch(_editStock(stock));
 export const delSock = (stock_id) => store.dispatch(_delStock(stock_id));
@@ -222,7 +261,14 @@ export const addSelectProduct = (
   delivery_date
 ) =>
   store.dispatch(
-    _addSelectProduct({ attributes, quantity, productType, orderStatus, weight, delivery_date })
+    _addSelectProduct({
+      attributes,
+      quantity,
+      productType,
+      orderStatus,
+      weight,
+      delivery_date,
+    })
   );
 export const editSelectProduct = (index, unitPrice) =>
   store.dispatch(_editSelectProduct({ index, unitPrice }));

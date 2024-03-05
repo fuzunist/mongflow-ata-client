@@ -56,7 +56,7 @@ export const getProductStockLogsFromDB = async (access_token, params) => {
 //   }
 // };
 
-export const getProductStocks = async (access_token) => {
+export const getLastProductStocksFromDB = async (access_token) => {
   try {
 
     const { data } = await axios.get(

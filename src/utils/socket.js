@@ -1,6 +1,6 @@
 import { io } from 'socket.io-client'
 import store from '@/store'
-import { addOrder, addProduction, addStock, delOrder, editOrder, editProduction, editStock } from '@/store/actions/apps'
+import { addOrder, addProduction, delOrder, editOrder, editProduction, editStock } from '@/store/actions/apps'
 import { addNotification, delNotification } from '@/store/actions/notifications'
 
 export const socket = io(import.meta.env.VITE_API_ENDPOINT, { autoConnect: false })
@@ -26,10 +26,10 @@ socket.on('notification', (arg) => {
             delOrder(arg.orderid)
             delNotification('order', arg.orderid)
             break
-        case 'stock':
-            addStock(arg.stock)
-            addNotification('stock', arg.stock.stock_id)
-            break
+        // case 'stock':
+        //     addStock(arg.stock)
+        //     addNotification('stock', arg.stock.stock_id)
+        //     break
         case 'stock_update':
             editStock(arg.stock)
             break

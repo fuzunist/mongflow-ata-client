@@ -3,7 +3,7 @@ import axios from "axios";
 export const addRecipeStockLogToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs`,
       params,
       {
         headers: {
@@ -18,10 +18,10 @@ export const addRecipeStockLogToDB = async (access_token, params) => {
   }
 };
 
-export const getRecipeMaterialsFromDB = async (access_token) => {
+export const getRecipeMaterialStocksFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/stocks`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -65,7 +65,7 @@ export const updateRecipeMaterialStocksToDB = async (
     const { data } = await axios.put(
       `${
         import.meta.env.VITE_API_ENDPOINT
-      }/recipe/materials/stocks/${order_id}`,
+      }/stock/recipematerial/stocks/${order_id}`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -81,7 +81,6 @@ export const updateRecipeMaterialStocksToDB = async (
   }
 };
 
-
 export const updateRecipeMaterialStocksInProductionToDB = async (
   access_token,
   recipe_id
@@ -90,14 +89,17 @@ export const updateRecipeMaterialStocksInProductionToDB = async (
     const { data } = await axios.put(
       `${
         import.meta.env.VITE_API_ENDPOINT
-      }/recipe/materials/stocks/production/${recipe_id}`,
+      }/stock/recipematerial/stocks/production/${recipe_id}`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
       }
     );
-    console.log("Successfully updated updateRecipeMaterialStocksInProductionToDB Stocks:", data);
+    console.log(
+      "Successfully updated updateRecipeMaterialStocksInProductionToDB Stocks:",
+      data
+    );
 
     return data;
   } catch (e) {
@@ -109,7 +111,7 @@ export const updateRecipeMaterialStocksInProductionToDB = async (
 export const addRecipeMaterialLogToDB = async (access_token, params) => {
   try {
     const { data } = await axios.post(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs`,
       params,
       {
         headers: {
@@ -127,7 +129,7 @@ export const addRecipeMaterialLogToDB = async (access_token, params) => {
 export const getRecipeMaterialLogsFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -144,10 +146,17 @@ export const getRecipeMaterialLogsFromDB = async (access_token) => {
 };
 
 //tarih aralığı olacak son bir ay default olacak
-export const getRecipeMaterialStockLogsFromDB = async (access_token, params) => {
+export const getRecipeMaterialStockLogsFromDB = async (
+  access_token,
+  params
+) => {
   try {
     const { data } = await axios.get(
-      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs?startDate=${params.startDate}&endDate=${params.endDate}`,
+      `${
+        import.meta.env.VITE_API_ENDPOINT
+      }/stock/recipematerial/logs?startDate=${params.startDate}&endDate=${
+        params.endDate
+      }`,
       {
         headers: {
           Authorization: `Bearer ${access_token}`,
@@ -155,19 +164,18 @@ export const getRecipeMaterialStockLogsFromDB = async (access_token, params) => 
       }
     );
 
-     console.log("getRecipeMaterialStockLogsFromDB", data)
+    console.log("getRecipeMaterialStockLogsFromDB", data);
     return data;
   } catch (e) {
-     console.log(e)
+    console.log(e);
     return e.response.data;
   }
 };
 
-
 export const editRecipeMaterialLogToDB = async (access_token, params, id) => {
   try {
     const { data } = await axios.patch(
-      `${import.meta.env.VITE_API_ENDPOINT}/recipe/materials/logs/${id}`,
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs/${id}`,
       params,
       {
         headers: {
@@ -180,6 +188,22 @@ export const editRecipeMaterialLogToDB = async (access_token, params, id) => {
     return data;
   } catch (e) {
     console.log(e);
+    return e.response.data;
+  }
+};
+
+export const delRecipeMaterialLogFromDB = async (access_token, log_id) => {
+  try {
+    const { data } = await axios.delete(
+      `${import.meta.env.VITE_API_ENDPOINT}/stock/recipematerial/logs/${log_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+    return data;
+  } catch (e) {
     return e.response.data;
   }
 };

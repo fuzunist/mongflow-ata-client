@@ -1,6 +1,6 @@
 import Badge from '@/components/Badge'
 import { clearReads, setRead } from '@/store/actions/notifications'
-import { useOrders, useProductions, useStocks } from '@/store/hooks/apps'
+import { useOrders, useProductions } from '@/store/hooks/apps'
 import { useNotifications } from '@/store/hooks/notifications'
 import { dateToIsoFormatWithTimezoneOffset } from '@/utils/helpers'
 import { Popover, Transition } from '@headlessui/react'
@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 const Bell = () => {
     const { t } = useTranslation()
     const notifications = useNotifications()
-    const stocks = useStocks()
+    // const stocks = useStocks()
     const productions = useProductions()
     const orders = useOrders()
 
@@ -27,7 +27,7 @@ const Bell = () => {
         return {
             newCount: notifications.orders.news.concat(notifications.stocks.news).length,
             notifications: {
-                stocks: notifications.stocks.news.concat(notifications.stocks.reads),
+                // stocks: notifications.stocks.news.concat(notifications.stocks.reads),
                 orders: notifications.orders.news.concat(notifications.orders.reads),
                 productions: notifications.productions.news.concat(notifications.productions.reads)
             }
@@ -62,7 +62,7 @@ const Bell = () => {
             >
                 <Popover.Panel className='flex flex-col py-2 px-4 gap-2 max-h-32'>
                     {!!(
-                        notification.notifications.stocks.length +
+                        // notification.notifications.stocks.length +
                         notification.notifications.orders.length +
                         notification.notifications.productions.length
                     ) ? (
@@ -73,10 +73,10 @@ const Bell = () => {
                                         {key === 'orders' &&
                                             `${orders.find((order) => order.order_id === notification)?.username}, ${t('added a new order.')}`}
 
-                                        {key === 'stocks' &&
+                                        {/* {key === 'stocks' &&
                                             `${stocks.find((stock) => stock.stock_id === notification).constituent_username}, ${t(
                                                 'added a new daily stock.'
-                                            )}`}
+                                            )}`} */}
 
                                         {key === 'productions' &&
                                             `${productions.find((production) => production.production_id === notification).constituent_username}, ${t(

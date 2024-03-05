@@ -30,20 +30,32 @@ export const useCustomers = () => useSelector((state) => state.apps.customers);
 export const useContacts = () => useSelector((state) => state.apps.contacts);
 
 export const useOrders = () => useSelector((state) => state.apps.orders);
-export const useStocks = () => useSelector((state) => state.apps.stocks);
-export const useLastProductStocks = () => useSelector((state) => state.apps.lastProductStocks);
-// export const useLastProductStockWarehouse = () => useSelector((state) => state.apps.lastProductStockWarehouse);
-export const useLastProductStockLogs= () => useSelector((state) => state.apps.lastProductStockLogs);
+export const useLastProductStocks = () =>
+  useSelector((state) => state.apps.lastProductStocks);
+export const useLastProductStockLogs = () =>
+  useSelector((state) => state.apps.lastProductStockLogs);
 
-export const useRawMaterialStocks = () => useSelector((state) => state.apps.rawMaterialStocks);
-export const useRecipeMaterialStocks = () => useSelector((state) => state.apps.recipeMaterialStocks);
+export const useSecondQualityProductStocks = () =>
+  useSelector((state) => state.apps.secondQualityProductStocks);
+export const useSecondQualityProductStockLogs = () =>
+  useSelector((state) => state.apps.secondQualityProductStockLogs);
+
+export const useConsumableProductStocks = () =>
+  useSelector((state) => state.apps.consumableProductStocks);
+export const useConsumableProductStockLogs = () =>
+  useSelector((state) => state.apps.consumableProductStockLogs);
+
+export const useRawMaterialStocks = () =>
+  useSelector((state) => state.apps.rawMaterialStocks);
+export const useRecipeMaterialStocks = () =>
+  useSelector((state) => state.apps.recipeMaterialStocks);
 
 export const useProductions = () =>
   useSelector((state) => state.apps.productions);
 
 export const useCustomer = () =>
   useSelector((state) => state.apps.selected.customer);
-  export const useContact = () =>
+export const useContact = () =>
   useSelector((state) => state.apps.selected.contact);
 export const useProduct = () =>
   useSelector((state) => state.apps.selected.product);

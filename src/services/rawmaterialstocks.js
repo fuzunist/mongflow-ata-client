@@ -19,7 +19,7 @@ export const addRawStockLogToDB = async (access_token, params) => {
   }
 };
 
-export const getRawMaterialsFromDB = async (access_token, signal) => {
+export const getRawMaterialStocksFromDB = async (access_token, signal) => {
   try {
     const { data } = await axios.get(
       `${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial`,
@@ -138,3 +138,16 @@ export const editRawMaterialLogToDB = async (access_token, params, id) => {
     return e.response.data;
   }
 };
+
+export const delRawMaterialLogFromDB = async (access_token, log_id) => {
+  try {
+      const { data } = await axios.delete(`${import.meta.env.VITE_API_ENDPOINT}/stock/rawmaterial/log/${log_id}`, {
+          headers: {
+              Authorization: `Bearer ${access_token}`
+          }
+      })
+      return data
+  } catch (e) {
+      return e.response.data
+  }
+}

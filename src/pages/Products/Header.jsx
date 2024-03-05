@@ -19,7 +19,7 @@ const Header = ({ authenticate, page, setPage, type }) => {
       ? "addMaterial" 
       : page === "secondProducts" 
       ? "addSecondProducts"
-      : page === "filters" 
+      : page === "consumableProductStocks" 
       ? "addFilters" : ""
   return (
     <>

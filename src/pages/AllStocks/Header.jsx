@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import Navigation from "./Navigation";
-import { getRawMaterialsFromDB } from "@/services/rawmaterialstocks";
 import { useEffect } from "react";
 import { useUser } from "@/store/hooks/user";
 const Header = ({ page, setPage }) => {

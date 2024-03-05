@@ -8,11 +8,11 @@ import {
   getProductionRecipesFromDB,
 } from "@/services/recipe";
 import {
-  getRecipeMaterialsFromDB,
+  getRecipeMaterialStocksFromDB,
   getRecipeMaterialStockLogsFromDB,
 } from "@/services/recipematerialstocks";
 import {
-  getRawMaterialsFromDB,
+  getRawMaterialStocksFromDB,
   getRawMaterialStockLogsFromDB,
 } from "@/services/rawmaterialstocks";
 import { getStocksFromDB } from "@/services/stock";
@@ -29,8 +29,16 @@ import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 import {
   getProductStockLogsFromDB,
-  getProductStocks,
+  getLastProductStocksFromDB,
 } from "@/services/lastproductstocks";
+import {
+  getSecondQualityProductLogsFromDB,
+  getSecondQualityProductStocksFromDB,
+} from "@/services/secondqualityproductstocks";
+import {
+  getConsumableProductLogsFromDB,
+  getConsumableProductStocksFromDB,
+} from "@/services/consumableproductstocks";
 
 const todayDate = dayjs().format("YYYY-MM-DD");
 const threeDaysAgo = dayjs().subtract(3, "day").format("YYYY-MM-DD");
@@ -54,6 +62,10 @@ export const _promiseAll = createAsyncThunk(
       orders,
       lastProductStocks,
       lastProductStockLogs,
+      secondQualityProductStocks,
+      secondQualityProductStockLogs,
+      consumableProductStocks,
+      consumableProductStockLogs,
       productions,
       expensesItems,
       expensesClasses,
@@ -69,12 +81,12 @@ export const _promiseAll = createAsyncThunk(
         startDate: lastMonthDate,
         endDate: todayDate,
       }),
-      getRecipeMaterialsFromDB(access_token),
+      getRecipeMaterialStocksFromDB(access_token),
       getRawMaterialStockLogsFromDB(access_token, {
         startDate: lastMonthDate,
         endDate: todayDate,
       }),
-      getRawMaterialsFromDB(access_token),
+      getRawMaterialStocksFromDB(access_token),
       getSetsFromDB(access_token),
       getCustomersFromDB(access_token),
       getContactsFromDB(access_token, {
@@ -82,8 +94,18 @@ export const _promiseAll = createAsyncThunk(
         endDate: todayDate,
       }),
       getOrdersFromDB(access_token),
-      getProductStocks(access_token),
+      getLastProductStocksFromDB(access_token),
       getProductStockLogsFromDB(access_token, {
+        startDate: lastMonthDate,
+        endDate: todayDate,
+      }),
+      getSecondQualityProductStocksFromDB(access_token),
+      getSecondQualityProductLogsFromDB(access_token, {
+        startDate: lastMonthDate,
+        endDate: todayDate,
+      }),
+      getConsumableProductStocksFromDB(access_token),
+      getConsumableProductLogsFromDB(access_token, {
         startDate: lastMonthDate,
         endDate: todayDate,
       }),
@@ -129,17 +151,35 @@ export const _promiseAll = createAsyncThunk(
       });
     else if (orders?.error)
       return rejectWithValue({ type: "getOrdersFromDB", error: orders.error });
-
     else if (lastProductStocks?.error)
       return rejectWithValue({
         type: "lastProductStocksFromDB",
         error: lastProductStocks.error,
       });
-  
     else if (lastProductStockLogs?.error)
       return rejectWithValue({
         type: "getlastProductStockLogsFromDB",
         error: lastProductStockLogs.error,
+      });
+    else if (secondQualityProductStocks?.error)
+      return rejectWithValue({
+        type: "secondQualityProductStocks",
+        error: secondQualityProductStocks.error,
+      });
+    else if (secondQualityProductStockLogs?.error)
+      return rejectWithValue({
+        type: "secondQualityProductStockLogs",
+        error: secondQualityProductStockLogs.error,
+      });
+    else if (consumableProductStocks?.error)
+      return rejectWithValue({
+        type: "consumableProductStocks",
+        error: consumableProductStocks.error,
+      });
+    else if (consumableProductStockLogs?.error)
+      return rejectWithValue({
+        type: "consumableProductStockLogs",
+        error: consumableProductStockLogs.error,
       });
     else if (productions?.error)
       return rejectWithValue({
@@ -203,6 +243,10 @@ export const _promiseAll = createAsyncThunk(
       orders,
       lastProductStocks,
       lastProductStockLogs,
+      secondQualityProductStocks,
+      secondQualityProductStockLogs,
+      consumableProductStocks,
+      consumableProductStockLogs,
       productions,
       expensesItems,
       expensesClasses,
@@ -236,6 +280,10 @@ const initialState = {
   stocks: [],
   lastProductStocks: [],
   lastProductStockLogs: [],
+  secondQualityProductStocks: [],
+  secondQualityProductStockLogs: [],
+  consumableProductStocks: [],
+  consumableProductStockLogs: [],
   productions: [],
   users: [],
   exchangeRates: [],
@@ -259,11 +307,6 @@ const apps = createSlice({
   name: "apps",
   initialState,
   reducers: {
-    // _addStock: (state, action) => {
-    //   state.stocks = [...state.stocks, action.payload].sort(
-    //     (a, b) => new Date(a.date) - new Date(b.date)
-    //   );
-    // },
     _addLastProductStock: (state, action) => {
       if (
         state.lastProductStocks.find((item) => item.id === action.payload.id)
@@ -276,23 +319,6 @@ const apps = createSlice({
         });
       } else {
         state.lastProductStocks = [...state.lastProductStocks, action.payload];
-      }
-    },
-    _addLastProductStockLog: (state, action) => {
-      if (
-        state.lastProductStockLogs.find((item) => item.id === action.payload.id)
-      ) {
-        state.lastProductStockLogs = state.lastProductStockLogs.map((stock) => {
-          if (stock.id === action.payload.id) {
-            stock = action.payload;
-          }
-          return stock;
-        });
-      } else {
-        state.lastProductStockLogs = [
-          ...state.lastProductStockLogs,
-          action.payload,
-        ];
       }
     },
 
@@ -308,6 +334,124 @@ const apps = createSlice({
         (log) => log.id !== action.payload
       );
     },
+
+    ///
+    _addSecondQualityProductStock: (state, action) => {
+      if (
+        state.secondQualityProductStocks.find(
+          (item) => item.id === action.payload.id
+        )
+      ) {
+        state.secondQualityProductStocks = state.secondQualityProductStocks.map(
+          (stock) => {
+            if (stock.id === action.payload.id) {
+              stock = action.payload;
+            }
+            return stock;
+          }
+        );
+      } else {
+        state.secondQualityProductStocks = [
+          ...state.secondQualityProductStocks,
+          action.payload,
+        ];
+      }
+    },
+    _addSecondQualityProductStockLog: (state, action) => {
+      if (
+        state.secondQualityProductStockLogs.find(
+          (item) => item.id === action.payload.id
+        )
+      ) {
+        state.secondQualityProductStockLogs =
+          state.secondQualityProductStockLogs.map((stock) => {
+            if (stock.id === action.payload.id) {
+              stock = action.payload;
+            }
+            return stock;
+          });
+      } else {
+        state.secondQualityProductStockLogs = [
+          ...state.secondQualityProductStockLogs,
+          action.payload,
+        ];
+      }
+    },
+
+    _addAllRangeSecondQualityProductStockLogs: (state, action) => {
+      state.secondQualityProductStockLogs = [...action.payload];
+    },
+    _addAllSecondQualityProductStocks: (state, action) => {
+      state.secondQualityProductStocks = [...action.payload];
+    },
+
+    _delSecondQualityProductStockLog: (state, action) => {
+      state.secondQualityProductStockLogs =
+        state.secondQualityProductStockLogs.filter(
+          (log) => log.id !== action.payload
+        );
+    },
+    ////
+
+    _addConsumableProductStock: (state, action) => {
+      if (
+        state.consumableProductStocks.find(
+          (item) => item.id === action.payload.id
+        )
+      ) {
+        state.consumableProductStocks = state.consumableProductStocks.map(
+          (stock) => {
+            if (stock.id === action.payload.id) {
+              stock = action.payload;
+            }
+            return stock;
+          }
+        );
+      } else {
+        state.consumableProductStocks = [
+          ...state.consumableProductStocks,
+          action.payload,
+        ];
+      }
+    },
+    _addConsumableProductStockLog: (state, action) => {
+      if (
+        state.consumableProductStockLogs.find(
+          (item) => item.id === action.payload.id
+        )
+      ) {
+        state.consumableProductStockLogs = state.consumableProductStockLogs.map(
+          (stock) => {
+            if (stock.id === action.payload.id) {
+              stock = action.payload;
+            }
+            return stock;
+          }
+        );
+      } else {
+        state.consumableProductStockLogs = [
+          ...state.consumableProductStockLogs,
+          action.payload,
+        ];
+      }
+    },
+
+    _addAllRangeConsumableProductStockLogs: (state, action) => {
+      state.consumableProductStockLogs = [...action.payload];
+    },
+    _addAllConsumableProductStocks: (state, action) => {
+      state.consumableProductStocks = [...action.payload];
+    },
+
+    _delConsumableProductStockLog: (state, action) => {
+      state.consumableProductStockLogs =
+        state.consumableProductStockLogs.filter(
+          (log) => log.id !== action.payload
+        );
+    },
+
+    ///
+
     _addAllRangeRawMaterialStockLogs: (state, action) => {
       state.rawMaterialStockLogs = [...action.payload];
     },
@@ -389,8 +533,24 @@ const apps = createSlice({
         }
       );
     },
-    _addRecipeMaterial: (state, action) => {
-      // state.recipeMaterials = [...state.recipeMaterials, action.payload];
+
+    _addAllRawMaterialStocks: (state, action) => {
+      state.rawMaterialStocks = [...action.payload];
+    },
+
+    _addAllRecipeMaterialStocks: (state, action) => {
+      state.recipeMaterialStocks = [...action.payload];
+    },
+    _delRecipeMaterialLog: (state, action) => {
+      state.recipeMaterialStockLogs = state.recipeMaterialStockLogs.filter(
+        (log) => log.id !== action.payload
+      );
+    },
+
+    _delRawMaterialLog: (state, action) => {
+      state.rawMaterialStockLogs = state.rawMaterialStockLogs.filter(
+        (log) => log.id !== action.payload
+      );
     },
 
     _editRecipeMaterial: (state, action) => {
@@ -800,6 +960,10 @@ const apps = createSlice({
       state.contacts = [];
       state.lastProductStocks = [];
       state.lastProductStockLogs = [];
+      state.secondQualityProductStocks = [];
+      state.secondQualityProductStockLogs = [];
+      state.consumableProductStocks = [];
+      state.consumableProductStockLogs = [];
       state.productions = [];
       state.users = [];
       state.exchangeRates = [];
@@ -835,6 +999,13 @@ const apps = createSlice({
       state.contacts = action.payload.contacts;
       state.lastProductStocks = action.payload.lastProductStocks;
       state.lastProductStockLogs = action.payload.lastProductStockLogs;
+      state.secondQualityProductStocks =
+        action.payload.secondQualityProductStocks;
+      state.secondQualityProductStockLogs =
+        action.payload.secondQualityProductStockLogs;
+      state.consumableProductStocks = action.payload.consumableProductStocks;
+      state.consumableProductStockLogs =
+        action.payload.consumableProductStockLogs;
       state.productions = action.payload.productions;
       state.users = action.payload.users;
       state.exchangeRates = action.payload.exchangeRates;
@@ -851,7 +1022,6 @@ const apps = createSlice({
 });
 
 export const {
-  _addStock,
   _addLastProductStock,
   _addLastProductStockLog,
   _addLastProductStockWarehouse,
@@ -862,6 +1032,16 @@ export const {
   _addAllRangeProductStockLogs,
   _addAllRangeRawMaterialStockLogs,
   _addAllRangeRecipeMaterialStockLogs,
+  _addSecondQualityProductStock,
+  _addSecondQualityProductStockLog,
+  _addAllRangeSecondQualityProductStockLogs,
+  _addAllSecondQualityProductStocks,
+  _delSecondQualityProductStockLog,
+  _addConsumableProductStock,
+  _addConsumableProductStockLog,
+  _addAllRangeConsumableProductStockLogs,
+  _addAllConsumableProductStocks,
+  _delConsumableProductStockLog,
   _editStock,
   _delStock,
   _addProduction,
@@ -924,5 +1104,9 @@ export const {
   _addExpenseItem,
   _editExpenses,
   _editExpenseItemFreq,
+  _delRecipeMaterialLog,
+  _delRawMaterialLog,
+  _addAllRawMaterialStocks,
+  _addAllRecipeMaterialStocks,
 } = apps.actions;
 export default apps.reducer;

@@ -1,6 +1,8 @@
 import ProductStockForm from "@/components/AntForm/ProductStockForm";
 import { addProductStockLogToDB } from "@/services/lastproductstocks";
 import {
+  addConsumableProductStock,
+  addConsumableProductStockLog,
   addLastProductStock,
   addLastProductStockLog,
   addRawMaterialStock,
@@ -23,6 +25,7 @@ import { getCityOptions } from "@/utils/getCityOptions";
 import dayjs from "dayjs";
 import { addRawStockLogToDB } from "@/services/rawmaterialstocks";
 import { addRecipeStockLogToDB } from "@/services/recipematerialstocks";
+import { addConsumableProductLogToDB } from "@/services/consumableproductstocks";
 
 const CreateStock = ({ closeModal, editing = false, selected, page }) => {
   const [fields, setFields] = useState(null);
@@ -37,7 +40,7 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    setProduct(null)
+    setProduct(null);
     switch (page) {
       case "lastProductStocks":
         setPageForm({
@@ -64,11 +67,18 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
           products: products.filter((prod) => prod.product_type === 2),
         });
         break;
+      case "consumableProductStocks":
+        setPageForm({
+          addToDB: addConsumableProductLogToDB,
+          addStock: addConsumableProductStock,
+          addLog: addConsumableProductStockLog,
+          products: products.filter((prod) => prod.product_type === 4),
+        });
+        break;
 
       default:
         break;
     }
-
   }, [page, products]);
 
   const cityOptions = getCityOptions();
@@ -85,7 +95,7 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
       product_id: { value: "", options: pageForm.products, label: "Ürün" },
       attributes: { value: {}, options: [], label: "Özellikler" },
       price: { value: 0, label: "Birim Fiyat" },
-      quantity: { value: 0, label: "Miktar (ton)" },
+      quantity: { value: 0, label: "Miktar" },
       waybill: { value: "", label: "İrsaliye No" },
       date: { value: "", label: "İrsaliye Tarihi" },
       customer_id: {
@@ -149,11 +159,11 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
       }).toISOString(),
       userid: user.userid,
       price: values.price * values.exchange_rate,
-      attributes: !values?.attributes ? {} : values?.attributes
+      attributes: !values?.attributes ? {} : values?.attributes,
     };
     delete data["address"];
 
-     console.log("dtata", data)
+    console.log("dtata", data);
     const response = await pageForm.addToDB(user.tokens.access_token, data);
     console.log("response", response);
 

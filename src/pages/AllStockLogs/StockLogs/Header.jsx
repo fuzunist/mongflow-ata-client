@@ -9,21 +9,27 @@ import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
 import locale from "antd/es/date-picker/locale/tr_TR";
 import { getProductStockLogsFromDB } from "@/services/lastproductstocks";
-import { addAllRangeProductStockLogs, addAllRangeRawMaterialStockLogs, addAllRangeRecipeMaterialStockLogs } from "@/store/actions/apps";
+import {
+  addAllRangeConsumableProductStockLogs,
+  addAllRangeProductStockLogs,
+  addAllRangeRawMaterialStockLogs,
+  addAllRangeRecipeMaterialStockLogs,
+} from "@/store/actions/apps";
 import { useUser } from "@/store/hooks/user";
 import { getRawMaterialStockLogsFromDB } from "@/services/rawmaterialstocks";
 import { getRecipeMaterialStockLogsFromDB } from "@/services/recipematerialstocks";
 import Search from "@/components/Search";
+import {
+  getConsumableProductLogsFromDB,
+  getConsumableProductStocksFromDB,
+} from "@/services/consumableproductstocks";
 
 const Header = ({ logs, page }) => {
   const { t } = useTranslation();
   const products = useProducts();
-  const user= useUser();
+  const user = useUser();
   const [pageForm, setPageForm] = useState({});
   const [title, setTitle] = useState("");
-
-
-
 
   const onRangeChange = async (dates, dateStrings) => {
     if (dates && dates[0] && dates[1]) {
@@ -37,7 +43,7 @@ const Header = ({ logs, page }) => {
         data
       );
 
-       console.log("getProductStockLogsResponse", getProductStockLogsResponse)
+      console.log("getProductStockLogsResponse", getProductStockLogsResponse);
       if (getProductStockLogsResponse?.error) {
         console.log(getProductStockLogsResponse?.error);
         return setError(getProductStockLogsResponse.error);
@@ -86,30 +92,37 @@ const Header = ({ logs, page }) => {
   ];
 
   useEffect(() => {
-    
     switch (page) {
       case "lastProductStocks":
         setPageForm({
           addRangeLog: addAllRangeProductStockLogs,
-          getLogs :getProductStockLogsFromDB,
+          getLogs: getProductStockLogsFromDB,
         });
-        setTitle("Ürün Alımı Ekle")
+        setTitle("Ürün Alımı Ekle");
         break;
 
       case "recipeMaterialStocks":
         setPageForm({
-            addRangeLog: addAllRangeRecipeMaterialStockLogs,
-            getLogs :getRecipeMaterialStockLogsFromDB,
-          });
-        setTitle("İşlenmiş Hammadde Alımı Ekle")
+          addRangeLog: addAllRangeRecipeMaterialStockLogs,
+          getLogs: getRecipeMaterialStockLogsFromDB,
+        });
+        setTitle("İşlenmiş Hammadde Alımı Ekle");
 
         break;
       case "rawMaterialStocks":
         setPageForm({
-            addRangeLog: addAllRangeRawMaterialStockLogs,
-            getLogs :getRawMaterialStockLogsFromDB,
-          });
-        setTitle("İşlenecek Hammadde Alımı Ekle")
+          addRangeLog: addAllRangeRawMaterialStockLogs,
+          getLogs: getRawMaterialStockLogsFromDB,
+        });
+        setTitle("İşlenecek Hammadde Alımı Ekle");
+
+        break;
+      case "consumableProductStocks":
+        setPageForm({
+          addRangeLog: addAllRangeConsumableProductStockLogs,
+          getLogs: getConsumableProductLogsFromDB,
+        });
+        setTitle("Filtre/Başlık Alımı Ekle");
 
         break;
 
@@ -119,7 +132,6 @@ const Header = ({ logs, page }) => {
 
     // return ()=> onRangeChange([])
   }, [page]);
-
 
   return (
     <div className="flex-1 flex max-[576px]:flex-col items-center justify-between gap-y-4 mb-6">
@@ -132,7 +144,9 @@ const Header = ({ logs, page }) => {
           </>
         }
       >
-        {({ close }) => <CreateStock closeModal={close} page={page} title= {title} />}
+        {({ close }) => (
+          <CreateStock closeModal={close} page={page} title={title} />
+        )}
       </Modal>
 
       <div className="flex bg-slate-50 p-2 px-4 rounded-full items-center gap-x-4">
@@ -145,7 +159,6 @@ const Header = ({ logs, page }) => {
         />
       </div>
       <Search />
-
     </div>
   );
 };

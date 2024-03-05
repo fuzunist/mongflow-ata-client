@@ -1,8 +1,6 @@
 import FormikForm from "@/components/FormikForm/DailyProductionForm";
 import { addProductionToDB, updateProductionToDB } from "@/services/production";
 import {
-  addProduction,
-  addStock,
   editProduction,
   editStock,
 } from "@/store/actions/apps";

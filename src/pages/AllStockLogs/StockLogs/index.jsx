@@ -1,5 +1,5 @@
 import Header from './Header'
-import { useLastProductStockLogs, useRawMaterialLogs, useRecipeMaterialLogs } from '@/store/hooks/apps'
+import { useConsumableProductStockLogs, useLastProductStockLogs, useRawMaterialLogs, useRecipeMaterialLogs } from '@/store/hooks/apps'
 import { useEffect, useState } from 'react'
 import Items from './Items'
 
@@ -8,6 +8,7 @@ const StockLogs = ({page}) => {
     const lastProductLogs=useLastProductStockLogs();
     const rawMaterialLogs=useRawMaterialLogs();
     const recipeMaterialLogs=useRecipeMaterialLogs();
+    const consumableProductLogs= useConsumableProductStockLogs()
 
     useEffect(() => {
         if (page === "lastProductStocks") {
@@ -16,8 +17,10 @@ const StockLogs = ({page}) => {
             setLogs([...rawMaterialLogs]);
         } else if (page === "recipeMaterialStocks") {
             setLogs([...recipeMaterialLogs]);
+        } else if (page === "consumableProductStocks") {
+            setLogs([...consumableProductLogs]);
         }
-    }, [page,lastProductLogs, rawMaterialLogs, recipeMaterialLogs]);
+    }, [page,lastProductLogs, rawMaterialLogs, recipeMaterialLogs, consumableProductLogs]);
 
     return (
         <>

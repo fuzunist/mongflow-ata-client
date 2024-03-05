@@ -3,7 +3,6 @@ import Col from "@/components/Col";
 import Orders from "./Orders";
 import StockChart from "./StockChart";
 import { useTranslation } from "react-i18next";
-import { useProductions, useStocks } from "@/store/hooks/apps";
 import ProductionChart from "./ProductionChart";
 import SalesChart from "./SalesChart";
 import RecipeStockChart from "./RecipeStockChart";
@@ -19,8 +18,7 @@ import { useUser } from "@/store/hooks/user";
 
 const Dasboard = () => {
   const { t } = useTranslation();
-  const stocks = useStocks();
-  const productions = useProductions();
+
   const user = useUser();
 
   return (

@@ -222,6 +222,8 @@
   "editMaterialStock": "Hammadde Alım Güncelle",
   "rawMaterialStocks": "İşlenecek Hammadde",
   "recipeMaterialStocks": "Hazırda Hammadde",
+  "secondQualityProductStocks": "2. Kalite Ürün",
+  "consumableProductStocks": "Filtre/Başlık",
   "warehouseStocks": "Depolar",
   "buyinghistory": "Alım Geçmişi",
   "totalstock": "Toplam Stok",

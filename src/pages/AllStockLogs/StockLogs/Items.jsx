@@ -2,52 +2,103 @@ import Card from "@/components/Card";
 import Row from "@/components/Row";
 import {
   delLastProductLogFromDB,
+  getLastProductStocksFromDB,
   // getProductStockWarehouse,
-  getProductStocks,
+  
 } from "@/services/lastproductstocks";
 import {
+  addAllConsumableProductStocks,
   //addAllProductStockWarehouse,
-  addAllProductStocks,
+  addAllLastProductStocks,
+  addAllRawMaterialStocks,
+  addAllRecipeMaterialStocks,
   delLastProductStockLog,
+  delRawMaterialLog,
+  delRecipeMaterialLog,
 } from "@/store/actions/apps";
 import { useSearch } from "@/store/hooks/apps";
 import { useUser } from "@/store/hooks/user";
 import { Space, Table, Tag} from "antd";
 import Column from "antd/es/table/Column";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Trash2Icon } from "lucide-react";
+import { delRecipeMaterialLogFromDB, getRecipeMaterialStocksFromDB } from "@/services/recipematerialstocks";
+import { delRawMaterialLogFromDB, getRawMaterialStocksFromDB } from "@/services/rawmaterialstocks";
+import { delConsumableProductLogFromDB, getConsumableProductStocksFromDB } from "@/services/consumableproductstocks";
 
 const Items = ({
   logs,
   page,
   // selected, setSelected
 }) => {
-
   const { t } = useTranslation();
   const searchValue = useSearch();
   const user = useUser();
+  const [pageForm, setPageForm] = useState({});
+
+  useEffect(() => {
+    switch (page) {
+      case "lastProductStocks":
+        setPageForm({
+          deleteDB: delLastProductLogFromDB,
+          delete: delLastProductStockLog,
+          getStocks: getLastProductStocksFromDB,
+          addStocks: addAllLastProductStocks
+        });
+        break;
+
+      case "recipeMaterialStocks":
+        setPageForm({
+          deleteDB: delRecipeMaterialLogFromDB,
+          delete: delRecipeMaterialLog,
+          getStocks: getRecipeMaterialStocksFromDB,
+          addStocks: addAllRecipeMaterialStocks
+        });
+
+        break;
+      case "rawMaterialStocks":
+        setPageForm({
+          deleteDB: delRawMaterialLogFromDB,
+          delete: delRawMaterialLog,
+          getStocks: getRawMaterialStocksFromDB,
+          addStocks: addAllRawMaterialStocks
+        });
+        break;
+      case "consumableProductStocks":
+        setPageForm({
+          deleteDB: delConsumableProductLogFromDB,
+          delete: delConsumableProductLogFromDB,
+          getStocks: getConsumableProductStocksFromDB,
+          addStocks: addAllConsumableProductStocks
+        });
+        break;
+
+      default:
+        break;
+    }
+
+  }, [page]);
 
   const deleteLog = async (id) => {
-    const response = await delLastProductLogFromDB(
+    const response = await pageForm.deleteDB(
       user.tokens.access_token,
       id
     );
 
+     console.log( "response of del log and id " , response, "::id::", id) 
     if (response?.error) {
       return console.log(response?.error);
     }
 
-    delLastProductStockLog(id);
-    // const productWareHouses = await getProductStockWarehouse(
-    //   user.tokens.access_token
-    // );
+    pageForm.delete(id);
+  
 
-    const productStocks = await getProductStocks(user.tokens.access_token);
+    //burayı da case a ekle
+    const productStocks = await pageForm.getStocks(user.tokens.access_token);
 
-    addAllProductStocks(productStocks);
-    // addAllProductStockWarehouse(productWareHouses);
+    pageForm.addStocks(productStocks);
   };
 
   //Buraya customer name ve attributes ler de gelmeli ama belki veritabaından get ile
@@ -77,28 +128,28 @@ const Items = ({
   }, [page, logs, searchValue]);
 
   console.log("logs in items", logs);
-  const dataSource = filteredLogs.map((log, index) => ({
+  const dataSource = filteredLogs?.map((log, index) => ({
     key: index,
-    id: log.id,
-    date: dayjs(log.date).format("DD-MM-YYYY"),
+    id: log?.id,
+    date: dayjs(log?.date).format("DD-MM-YYYY"),
     companyname: log?.companyname,
     product: log?.product_name,
-    attributedetails: log?.attributedetails ? log.attributedetails : null,
+    attributedetails: log?.attributedetails ? log?.attributedetails : null,
     price: log?.price,
-    currency: [log.currency_code, log.exchange_rate, log.price],
-    exchange_rate: log.exchange_rate,
+    currency: [log?.currency_code, log?.exchange_rate, log?.price],
+    exchange_rate: log?.exchange_rate,
     quantity: log?.quantity,
     warehouse: log?.customer_city + "/" + log?.customer_county,
     customer_city: log?.customer_city,
     customer_county: log?.customer_county,
-    waybill: log.waybill,
+    waybill: log?.waybill,
     otherDetails: [
       {
         key: 0,
         username: log?.username,
-        payment_type: log.payment_type,
-        payment_date: dayjs(log.payment_date).format("DD-MM-YYYY"),
-        details: log.details,
+        payment_type: log?.payment_type,
+        payment_date: dayjs(log?.payment_date)?.format("DD-MM-YYYY"),
+        details: log?.details,
       },
     ],
   }));
@@ -155,9 +206,9 @@ const Items = ({
         <span className="">
           <Tag color={tags[0] === "TL" ? "geekblue" : "green"} className="m-1">
             {tags[0] === "TL"
-              ? tags[0].toUpperCase()
+              ? tags[0]?.toLocaleUpperCase("TR")
               : ` ${
-                  tags[0].toUpperCase()
+                  tags[0]?.toLocaleUpperCase("tr")
                 } (${tags[1]} ₺)`}
           </Tag>
         </span>

@@ -31,7 +31,7 @@ const Products = () => {
       ? 2
       : page === "secondProducts"
       ? 3
-      : page === "filters"
+      : page === "consumableProductStocks"
       ? 4
       : 0;
 
