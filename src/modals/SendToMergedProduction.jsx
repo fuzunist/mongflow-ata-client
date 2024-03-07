@@ -143,7 +143,7 @@ const [otherInputs, setOtherInputs] = useState([]);
       unit_bunker_cost: cost,
       total_bunker_cost: parseFloat(cost * otherInputs.total_bunker).toFixed(2),
       recipe_id: recipe_id,
-      wastage_percentage: otherInputs.wastage_percentage,
+      wastage_percentage: otherInputs.wastage_percentage*100,
       total_bunker: otherInputs.total_bunker,
     };
 
@@ -254,7 +254,7 @@ const [otherInputs, setOtherInputs] = useState([]);
       unit_bunker_cost: cost,
       total_bunker_cost: (cost * otherInputs.total_bunker).toFixed(2),
       recipe_id: recipe_id,
-      wastage_percentage: parseInt(otherInputs.wastage_percentage),
+      wastage_percentage: otherInputs.wastage_percentage/100,
       total_bunker: parseInt(otherInputs.total_bunker),
     };
 

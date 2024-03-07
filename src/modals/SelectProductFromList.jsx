@@ -30,7 +30,7 @@ const SelectProductFromList = ({
 
   const groupedAttributes = useMemo(() => {
     if (selectedProduct)
-      return groupAttributesByName(selectedProduct?.attributes);
+      return groupAttributesByName(selectedProduct.attributes);
     return {};
   }, [selectedProduct]);
 
@@ -67,6 +67,10 @@ const SelectProductFromList = ({
       {}
     );
   }, [selectedProduct, groupedAttributes]);
+
+  console.log("selectedProduct?.attributes:: xs12 ", selectedProduct?.attributes)
+   console.log("groupped attr:: xs12", groupedAttributes)
+   console.log("initialValues:: xs12", initialValues)
 
   useEffect(() => {
     setQuantity(1);

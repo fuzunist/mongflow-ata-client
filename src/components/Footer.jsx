@@ -18,15 +18,17 @@ const navs = [
 const Footer = () => {
     return (
         <footer className='-mx-3 bg-footer-bg-light dark:bg-footer-bg-dark text-footer-fg-light dark:text-footer-fg-dark pt-[19px] px-[15px] pb-5 flex justify-between max-[768px]:justify-center items-center'>
-            <div>
-                2023 © Ata Fiber Şİrket Yazılımı{' '}
-                <Link
-                    to='/'
-                    className='text-link-fg-light dark:text-link-fg-dark hover:text-link-hover-light hover:dark:text-link-hover-dark transition-colors'
-                >
-                    Mongery Yazılım tarafından yapılmıştır.
-                </Link>
-            </div>
+           <div>
+    2023 © Ata Fiber Şİrket Yazılımı{' '}
+    <Link
+        to='https://www.mongerysoft.com/'
+        target='_blank'
+        rel='noopener noreferrer' // recommended for security reasons
+        className='text-link-fg-light dark:text-link-fg-dark hover:text-link-hover-light hover:dark:text-link-hover-dark transition-colors'
+    >
+        Mongery Yazılım tarafından yapılmıştır.
+    </Link>
+</div>
             <div className='flex justify-end items-center gap-4 max-[768px]:hidden'>
                 {navs.map((nav, index) => (
                     <Link

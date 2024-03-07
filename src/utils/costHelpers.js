@@ -7,7 +7,7 @@ export const recipeCost = (values, recipeMaterials) => {
       const material = recipeMaterials.find((mat) => mat.id === parseInt(id));
 
       if (material) {
-        const cost = material.cost * quantity; // bunker cinsi için *0.44
+        const cost = material.price * quantity; // bunker cinsi için *0.44
         totalCost += cost;
       }
     }

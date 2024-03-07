@@ -53,11 +53,11 @@ const CreateRecipe = ({
     recipeMaterials?.forEach((row) => {
       initialValues[String(row.id)] = {
         id: row.id,
-        name: row.material,
-        label: row.material,
+        name: row.product_name,
+        label: row.product_name,
         tag: "input",
         type: "number",
-        stock: row.stock,
+        stock: row.quantity,
         placeholder: "Miktar girin (kg)",
         value: selectedSpecialRecipe
           ? JSON.parse(selectedSpecialRecipe)[row.id.toString()]
@@ -131,11 +131,13 @@ const CreateRecipe = ({
       details: values,
       cost: cost,
       unit_bunker_cost: cost,
-      total_bunker_cost: parseFloat(cost * otherInputs.total_bunker).toFixed(2),
+      total_bunker_cost: parseFloat(cost * otherInputs.total_bunker),
       recipe_id: recipe_id,
-      wastage_percentage: otherInputs.wastage_percentage,
+      wastage_percentage: parseFloat(otherInputs?.wastage_percentage/100),
       total_bunker: otherInputs.total_bunker,
     };
+
+     console.log("data of recipe values", data)
 
     const addRecipePromise = addRecipeToDB(user.tokens.access_token, data)
       .then((response) => {
@@ -238,12 +240,12 @@ const CreateRecipe = ({
       details: values,
       cost: cost,
       unit_bunker_cost: cost,
-      total_bunker_cost: (cost * otherInputs.total_bunker).toFixed(2),
+      total_bunker_cost: parseFloat(cost * otherInputs.total_bunker),
       recipe_id: recipe_id,
-      wastage_percentage: parseInt(otherInputs.wastage_percentage),
+      wastage_percentage: parseFloat(otherInputs.wastage_percentage/100),
       total_bunker: parseInt(otherInputs.total_bunker),
     };
-
+ console.log("data of edit recipes", data)
     let saveRecipePromise;
     if (saveRecipe) {
       const data = {
@@ -281,12 +283,10 @@ const CreateRecipe = ({
     let allCost = 0;
     for (const key in orderProducts) {
       if (orderProducts[key].recipe_id === recipe_id) {
-        orderProducts[key].unitCost = parseFloat(data.unit_bunker_cost).toFixed(
-          2
-        ); // cost;
+        orderProducts[key].unitCost = parseFloat(data.unit_bunker_cost) // cost;
         orderProducts[key].totalCost = parseFloat(
           data.total_bunker_cost
-        ).toFixed(2); //cost * orderProducts[key].quantity;
+        ); //cost * orderProducts[key].quantity;
       }
       allCost += parseFloat(orderProducts[key].totalCost);
     }

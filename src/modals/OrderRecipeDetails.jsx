@@ -43,7 +43,7 @@ const OrderRecipeDetails = ({ order_id, recipe_id, production }) => {
   console.log("recipe_id.....", recipe_id)
 
   useEffect(() => {
-    if (foundRecipe.length!==0) {
+    if (Object.keys(foundRecipe).length!=0) {
       let recipeDetails = Object.entries(foundRecipe?.details)
         ?.map(([key, value]) => {
           if (value === "") return;
@@ -51,10 +51,10 @@ const OrderRecipeDetails = ({ order_id, recipe_id, production }) => {
             (item) => parseInt(item.id) === parseInt(key)
           );
           return {
-            material: material.material,
+            material: material.product_name,
             value: value,
-            cost: material.cost,
-            stock: material.stock,
+            cost: material.price,
+            stock: material.quantity,
             total_bunker: foundRecipe?.total_bunker,
             unit_bunker_cost: foundRecipe?.unit_bunker_cost,
             total_bunker_cost: foundRecipe?.total_bunker_cost,

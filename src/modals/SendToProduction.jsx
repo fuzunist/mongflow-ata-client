@@ -29,6 +29,7 @@ const SendToProduction = ({
   product,
   checkedRecipes,
 }) => {
+   console.log("product in SendToProduction", product)
   const specialRecipes = useSpecialRecipes();
   const recipeMaterials = useRecipeMaterialStocks();
   const recipes = useRecipes();
@@ -42,25 +43,24 @@ const SendToProduction = ({
   const [selectedSpecialRecipe, setSelectedSpecialRecipe] = useState(null);
   const { t } = useTranslation();
 
-
   const selectedRecipe = recipes.find((recipe) => recipe.id === recipe_id);
+
   const [otherInputs, setOtherInputs] = useState({
-    wastage_percentage: selectedRecipe?.wastage_percentage ?? 1,
+    wastage_percentage: parseInt(selectedRecipe?.wastage_percentage * 100) ?? 1,
     total_bunker: selectedRecipe?.total_bunker ?? 1,
     total_production: 1,
   });
-  // const [otherInputs, setOtherInputs] = useState();
 
   const formValues = useMemo(() => {
     const initialValues = {};
     recipeMaterials?.forEach((row) => {
       initialValues[String(row.id)] = {
         id: row.id,
-        name: row.material,
-        label: row.material,
+        name: row.product_name,
+        label: row.product_name,
         tag: "input",
         type: "number",
-        stock: row.stock,
+        stock: row.quantity,
         placeholder: "Miktar girin (kg)",
         value: selectedSpecialRecipe
           ? JSON.parse(selectedSpecialRecipe)[row.id.toString()]
@@ -143,14 +143,13 @@ const SendToProduction = ({
       const data = {
         id: productionRecipeId,
         order_id: order_id,
+        product_id: product.product_id,
         details: values,
         cost: cost,
         unit_bunker_cost: cost,
-        total_bunker_cost: parseFloat(cost * otherInputs.total_bunker).toFixed(
-          2
-        ),
+        total_bunker_cost: parseFloat(cost * otherInputs.total_bunker),
         recipe_id: recipe_id,
-        wastage_percentage: otherInputs.wastage_percentage,
+        wastage_percentage: parseFloat(otherInputs.wastage_percentage / 100),
         total_bunker: otherInputs.total_bunker,
         total_kg: otherInputs.total_production,
         status: "Üretiliyor",

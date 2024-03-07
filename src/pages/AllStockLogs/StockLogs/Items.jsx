@@ -135,7 +135,7 @@ const Items = ({
     companyname: log?.companyname,
     product: log?.product_name,
     attributedetails: log?.attributedetails ? log?.attributedetails : null,
-    price: log?.price,
+    price: log?.price_with_vat,
     currency: [log?.currency_code, log?.exchange_rate, log?.price],
     exchange_rate: log?.exchange_rate,
     quantity: log?.quantity,
@@ -143,6 +143,7 @@ const Items = ({
     customer_city: log?.customer_city,
     customer_county: log?.customer_county,
     waybill: log?.waybill,
+    currency_code: log?.currency_code,
     otherDetails: [
       {
         key: 0,
@@ -191,11 +192,13 @@ const Items = ({
       render: (tag) => <span>{tag} ton</span>,
     },
     {
-      title: "Fiyat",
+      title: "Birim Fiyat (Tevkifatlı)",
       dataIndex: "price",
       key: "price",
       className: "text-sm",
-      render: (tag) => <span>{tag} ₺</span>,
+      render: (tag, record) => {
+       console.log("recc", record)
+      return <span>{tag} {record.currency_code} </span>},
     },
     {
       title: "Döviz",

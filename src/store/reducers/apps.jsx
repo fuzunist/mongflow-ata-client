@@ -307,6 +307,13 @@ const apps = createSlice({
   name: "apps",
   initialState,
   reducers: {
+
+    _addLastProductStockLog: (state, action) => {
+      state.lastProductStockLogs = [
+        ...state.lastProductStockLogs,
+        action.payload,
+      ];
+    },
     _addLastProductStock: (state, action) => {
       if (
         state.lastProductStocks.find((item) => item.id === action.payload.id)

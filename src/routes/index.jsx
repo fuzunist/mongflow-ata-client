@@ -18,7 +18,7 @@ import Sets from "@/pages/Sets";
 import Customers from "@/pages/Customers";
 import Orders from "@/pages/Orders";
 import Stocks from "@/pages/Stocks";
-import DailyProductions from "@/pages/DailyProductions";
+import Shifts from "@/pages/Shifts";
 import Productions from "@/pages/Productions";
 
 
@@ -121,8 +121,8 @@ const routes = createBrowserRouter([
       //   errorElement: <NotFound />,
       // },
       {
-        path: "apps/productions-daily",
-        element:  <DailyProductions />,
+        path: "apps/shifts",
+        element:  <Shifts />,
         errorElement: <NotFound />,
       },
       {

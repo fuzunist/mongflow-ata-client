@@ -209,7 +209,7 @@ export default [
   {
     key: "apps-shifts-daily",
     icon: BookOpenCheck,
-    url: "/apps/productions-daily",
+    url: "/apps/shifts",
     authenticate: {
       type: "usertype",
       value: ["admin", "stock_manager", "boss", "production_manager"],

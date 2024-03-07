@@ -187,8 +187,7 @@ const Products = ({ products }) => {
           //burada async selectedRowKeys ile 
           //orders ta product içine sevk status, 
          // shipment veritabanına post: kaç satışa bağlı array order_number , state güncelleme
-         // bu da onay aşamasında ; ortak stok ve alım stoğundan düşme ama öncelikle onaylanmadan önce depo alımstok
-         //bilgilerinin sipariş onay aşamasında alınması gerekiyor. ve product içinde yazılması lazım
+
 
         },
       },

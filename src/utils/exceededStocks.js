@@ -9,7 +9,7 @@ const getExceededStock = (values, recipeMaterials, totalBunker) => {
     });
 
     if (stock) {
-      if (value !== "" && (parseInt(value)* parseInt(totalBunker)) > parseInt(stock.stock)) {
+      if (value !== "" && (parseInt(value)* parseInt(totalBunker)) > parseInt(stock.quantity)) {
         exceedsStock[id] = true;
       }
     }

@@ -127,6 +127,7 @@ const SendToProductionForm = ({
                       return { ...prev, wastage_percentage: value };
                     })
                   }
+                  
                   options={Array.from({ length: 20 }, (_, index) => index).map(
                     (number) => ({
                       value: `${number}`,

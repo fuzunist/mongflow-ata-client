@@ -30,6 +30,7 @@ import { addConsumableProductLogToDB } from "@/services/consumableproductstocks"
 const CreateStock = ({ closeModal, editing = false, selected, page }) => {
   const [fields, setFields] = useState(null);
   const exchangeRates = useExchangeRates();
+   console.log(exchangeRates,"exchangeRates")
   const user = useUser();
   const customers = useCustomers();
   const products = useProducts();
@@ -88,7 +89,15 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
         (exchangeRate) => exchangeRate.currency_code === currency
       )?.banknote_selling ?? 1
     );
-  }, [currency]);
+  }, [currency, exchangeRates]);
+
+  const USDRate=  useMemo(() => {
+    return parseFloat(
+      exchangeRates?.find(
+        (exchangeRate) => exchangeRate.currency_code === "USD"
+      )?.banknote_selling
+    );
+  }, [exchangeRates]);
 
   const initialValues = useMemo(() => {
     return {
@@ -158,8 +167,8 @@ const CreateStock = ({ closeModal, editing = false, selected, page }) => {
         format: "DD/MM/YYYY",
       }).toISOString(),
       userid: user.userid,
-      price: values.price * values.exchange_rate,
       attributes: !values?.attributes ? {} : values?.attributes,
+      usd_rate: USDRate
     };
     delete data["address"];
 

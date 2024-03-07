@@ -3,12 +3,14 @@ import store from "@/store";
 export const groupAttributesByName = (attributes) => {
   const groupedAttrs = {};
   for (let attr of attributes) {
+     console.log("attr in groupAttributesByName", attr)
     if (!groupedAttrs[attr.attribute_name]) {
       groupedAttrs[attr.attribute_name] = [...attr.values];
     }
   }
   return groupedAttrs;
 };
+
 
 let daily_domestic_order_counter = 10;
 let daily_foreign_order_counter = 10;
