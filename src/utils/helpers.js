@@ -6,6 +6,7 @@ export const groupAttributesByName = (attributes) => {
      console.log("attr in groupAttributesByName", attr)
     if (!groupedAttrs[attr.attribute_name]) {
       groupedAttrs[attr.attribute_name] = [...attr.values];
+      groupedAttrs[attr.attribute_id]
     }
   }
   return groupedAttrs;

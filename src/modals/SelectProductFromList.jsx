@@ -35,38 +35,39 @@ const SelectProductFromList = ({
   }, [selectedProduct]);
 
   const initialValues = useMemo(() => {
-    if (!selectedProduct) return {};
+    if (!selectedProduct || !selectedProduct.attributes) return {};
 
-    return Object.entries(groupedAttributes).reduce(
-      (acc, [attrName, attrValues]) => {
-        if (attrValues.length > 1) {
-          // Multiple values, create a dropdown
-          acc[attrName] = {
-            tag: "select",
-            label: attrName,
-            value: attrValues[0].value, // default to the first value
-            options: attrValues.map((val) => ({
-              key: val.value,
-              // value: `${val.value} (${val.extra_price} ${selectedProduct.currency_code})`
-              value: val.value,
-            })),
-          };
+    return Object.values(selectedProduct.attributes).reduce((acc, item) => {
+        console.log("attr name and vals item", item);
+        const attributeName = item.attribute_name;
+        const attributeId = item.attribute_id;
+
+        if (item.values.length > 1) {
+            // Multiple values, create a dropdown
+            acc[attributeId] = {
+                tag: "select",
+                label: attributeName,
+                value:  `${item.attribute_id}:${item.values[0].value_id},${attributeName}:${item.values[0].value}`, // default to the first value
+                options: item.values.map((val) => ({
+                    key: `${item.attribute_id}:${val.value_id},${attributeName}:${val.value}`,
+                    value: val.value,
+                })),
+            };
         } else {
-          // Single value, display as plain text
-          const singleAttr = attrValues[0];
-          acc[attrName] = {
-            tag: "input",
-            readOnly: true,
-            label: attrName,
-            // value: `${singleAttr.value} (${singleAttr.extra_price} ${selectedProduct.currency_code})`
-            value: singleAttr.value,
-          };
+            // Single value, display as plain text
+            const singleAttr = item.values[0];
+            acc[attributeName] = {
+                tag: "input",
+                readOnly: true,
+                label: attributeName,
+                value: singleAttr.value,
+            };
         }
+
         return acc;
-      },
-      {}
-    );
-  }, [selectedProduct, groupedAttributes]);
+    }, {});
+}, [selectedProduct]);
+
 
   console.log("selectedProduct?.attributes:: xs12 ", selectedProduct?.attributes)
    console.log("groupped attr:: xs12", groupedAttributes)
@@ -93,14 +94,35 @@ const SelectProductFromList = ({
           title={t("product_detail_selection")}
           initialValues={initialValues}
           onSubmit={(values) =>
-            onContinueOrder(
-              values,
+            
+         { 
+          console.log("vals of select prod", values)
+
+          const attributesIds={}
+          const attributes={}
+           Object.values(values).forEach((item)=> {
+            const attr_id= item.split(',')[0].split(':')[0]
+            const val_id=item.split(',')[0].split(':')[1]
+            attributesIds[attr_id]= parseInt(val_id)
+
+            const attr_name= item.split(',')[1].split(':')[0]
+            const val_name=item.split(',')[1].split(':')[1]
+            attributes[attr_name]= val_name
+            
+           }
+          )
+
+           console.log("attribute detss ",attributes)
+            console.log("attribute detss ids",attributesIds)
+          return onContinueOrder(
+              attributes,
+              attributesIds,
               quantity,
               productType,
               close,
               setQuantity,
               setProductType
-            )
+            )}
           }
         >
           {/* Quantity ("Adet") section */}

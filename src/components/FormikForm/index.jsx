@@ -20,6 +20,7 @@ const FormikForm = ({
   recipe,
   material,
   product,
+  subtitle
 }) => {
   const { t } = useTranslation();
   const [message, setMessage] = useState("");
@@ -56,8 +57,17 @@ const FormikForm = ({
           {title && (
             <h2 className="text-center w-full text-2xl font-semibold uppercase">
               {title}
+            
             </h2>
           )}
+
+          {
+            subtitle && (
+              <h5 className=" text-red-700 text-center">
+                {subtitle}
+              </h5>
+            )
+          }
 
           {recipe && (
             <div className="flex flex-col justify-center items-center">
@@ -97,7 +107,6 @@ const FormikForm = ({
               {Object.entries(initialValues).map(([key, value], index) => {
                 const Element = FormElements[value?.tag];
                 const elementValue = values[key] ?? value.value;
-
                 return (
                   <div
                     key={index}

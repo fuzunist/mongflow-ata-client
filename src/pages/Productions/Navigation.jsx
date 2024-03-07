@@ -7,7 +7,6 @@ const Navigation = ({ page, setPage }) => {
         'upcomingProductions',
         'currentlyProducings',
         'completedProductions',
-        'shippedOrders'
       ];
       
     const { t } = useTranslation()

@@ -44,7 +44,7 @@ const CreateRecipe = ({
 
   const selectedRecipe = recipes.find((recipe) => recipe.id === recipe_id);
   const [otherInputs, setOtherInputs] = useState({
-    wastage_percentage: selectedRecipe?.wastage_percentage ?? 1,
+    wastage_percentage: parseInt(selectedRecipe?.wastage_percentage*100) ?? 1,
     total_bunker: selectedRecipe?.total_bunker ?? 1,
   });
 
@@ -128,6 +128,8 @@ const CreateRecipe = ({
     const cost = recipeCost(values, recipeMaterials);
     const data = {
       order_id: order_id,
+      product_id: product.product_id,
+      attributes: product.attributedetails,
       details: values,
       cost: cost,
       unit_bunker_cost: cost,

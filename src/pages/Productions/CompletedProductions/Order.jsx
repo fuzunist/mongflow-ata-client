@@ -106,7 +106,7 @@ const Order = ({ order }) => {
                     <span className="basis-[calc(16%_-_0.5rem)] mx-1 text-center">
                       <Modal
                         className={`text-white text-xs md:text-sm rounded-full py-2 px-2  gap-2 bg-yellow-500 hover:bg-yellow-700 `}
-                        text={"Sevk Başlat"}
+                        text={"Sevkiyata Yolla"}
                       >
                         {({ close }) => (
                           <ShipProduction

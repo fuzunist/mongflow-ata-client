@@ -254,6 +254,7 @@ export const setSelectProducts = (products) =>
   store.dispatch(_setSelectProducts(products));
 export const addSelectProduct = (
   attributes,
+  attributesIds,
   quantity,
   productType,
   orderStatus,
@@ -263,6 +264,7 @@ export const addSelectProduct = (
   store.dispatch(
     _addSelectProduct({
       attributes,
+      attributesIds,
       quantity,
       productType,
       orderStatus,

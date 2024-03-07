@@ -30,13 +30,14 @@ const ProformaInvoice = () => {
 
   const handleContinueOrder = (
     attributes,
+    attributesIds,
     quantity,
     productType,
     closeModal,
     setQuantity,
     setProductType
   ) => {
-    addSelectProduct(attributes, quantity, productType, OrderStatus[0]);
+    addSelectProduct(attributes, attributesIds, quantity, productType, OrderStatus[0]);
     setProduct(null);
     setQuantity(1);
     setProductType("kg");

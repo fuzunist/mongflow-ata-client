@@ -144,6 +144,7 @@ const SendToProduction = ({
         id: productionRecipeId,
         order_id: order_id,
         product_id: product.product_id,
+        attributes: product.attributedetails,
         details: values,
         cost: cost,
         unit_bunker_cost: cost,

@@ -24,8 +24,8 @@ const ShipProduction = ({ closeModal, order_id, recipe_id, product }) => {
     production: {
       tag: "input",
       type: "number",
-      placeholder: "Sevk edilecek miktar",
-      label: "Sevk edilecek miktar",
+      placeholder: "Sevke gönderilecek miktar",
+      label: "Sevke gönderilecek miktar",
       value: product.production.kg_quantity ?? 0,
       min: 1,
     },
@@ -44,66 +44,36 @@ const ShipProduction = ({ closeModal, order_id, recipe_id, product }) => {
       setSubmitting(true);
       console.log(values, "values");
 
-      const receivedQuantity = product.orderStatus.find(
-        (status) => status.type === "Alındı"
-      ).quantity;
-      const producingQuantity = product.production.quantity;
-
-      const remainingTotal = producingQuantity + receivedQuantity;
-      console.log("remainingTotal", remainingTotal);
-      //yani sipariş
-      if (values.production > remainingTotal) {
-        return setError(
-          "Hata! Üretilen miktar kalan sipariş miktarından büyük olamaz."
-        );
-      }
-
-      const finalReceivedQuantity = remainingTotal - values.production;
-      const producedQuantity = values.production;
+      const shipQuantity = values.production;
 
       const selectedOrder = orders.find((order) => order.order_id === order_id);
       const orderProducts = JSON.parse(JSON.stringify(selectedOrder.products));
 
       for (const key in orderProducts) {
         if (orderProducts[key].recipe_id === product.recipe_id) {
-          const receivedStatusIndex = orderProducts[key].orderStatus.findIndex(
-            (status) => status.type === "Alındı"
-          );
-          const producingStatusIndex = orderProducts[key].orderStatus.findIndex(
+          const producedStatusIndex = orderProducts[key].orderStatus.findIndex(
             (status) => status.recipe_id === product.production.recipe_id
           );
 
-          const producedStatusIndex = orderProducts[key].orderStatus.findIndex(
-            (status) => status.type === "Üretildi"
-          );
-
-          // Alındı durumu miktarı güncellendi
-          if (receivedStatusIndex !== -1) {
-            orderProducts[key].orderStatus[receivedStatusIndex].quantity -=
-              finalReceivedQuantity;
-          }
-
-          //üretildi status e miktar eklendi
+  
+          
           if (producedStatusIndex !== -1) {
-            console.log("üretildi 1st if");
-            orderProducts[key].orderStatus[producedStatusIndex].quantity +=
-              producedQuantity;
-          } else {
-            console.log("üretildi else ");
-            orderProducts[key].orderStatus.push({
-              type: "Üretildi",
-              quantity: producedQuantity,
-              recipe_id: product.production.recipe_id,
-              kg_quantity: product.production.kg_quantity,
-              bunker_quantity: product.production.bunker_quantity,
-            });
-          }
-
-          // üretiliyor silindi
-          if (producingStatusIndex !== -1) {
-            delete orderProducts[key].orderStatus[producingStatusIndex];
+            //burada Furkan, senin vardiyandan gelecek üretim ile kontrol olacak
+            if(shipQuantity>=orderProducts[key].orderStatus[producedStatusIndex].kg_quantity ){
+              
+              orderProducts[key].orderStatus[producedStatusIndex].type =
+              "Sevk Bekliyor";
+           orderProducts[key].orderStatus[producedStatusIndex].ship_quantity =shipQuantity;
+            }else{
+              //yani eğer az olursa o zman üretildi durumunda hala miktar kalıyor
+              // ya da o miktarı stoğa da ekleme yapılabilir. bilemedim
+            return  setError("Sevk Miktarı sipariş miktarından küçük olamaz")
+            
+            }
+            
           }
         }
+
 
         console.log("orderProducts::", orderProducts);
 
@@ -161,7 +131,8 @@ const ShipProduction = ({ closeModal, order_id, recipe_id, product }) => {
         validate={validate}
         initialValues={formValues}
         error={error}
-        title={"Sevki Başlat"}
+        title={"Sevke Yolla"}
+        subtitle={"Sevkiyatlar Bölümünden Takip Ediniz."}
         // recipe={true}
         // product={product}
 

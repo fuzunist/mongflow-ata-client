@@ -19,10 +19,11 @@ const PendingShipments = () => {
         const updatedProducts = order.products.flatMap((product) => {
           return product.orderStatus
             .map((status) => {
-              if (status && status.type === "Alındı" && status.quantity !== 0) {
+
+              if (status && status.type === "Sevk Bekliyor" && status.ship_quantity !== 0) {
                 // Merge product properties with order properties and omit 'products'
                 const { products, ...merged } = order;
-                return { ...merged, ...product, shipment: status.quantity };
+                return { ...merged, ...product, shipment: status.ship_quantity };
               }
               return null;
             })

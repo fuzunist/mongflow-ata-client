@@ -799,13 +799,14 @@ const apps = createSlice({
       state.selected.products.push({
         ...state.selected.product,
         attributes: action.payload.attributes,
-        quantity: action.payload.quantity, // ton olarak alıp kg olarak kaydediyoruz
+        attributedetails: action.payload.attributesIds,
+        quantity: action.payload.quantity, 
         weight: action.payload.weight,
         delivery_date: action.payload.delivery_date,
         productType: action.payload.productType,
         orderStatus: [
           {
-            quantity: action.payload.quantity, // ton olarak alıp kg olarak kaydediyoruz
+            quantity: action.payload.quantity, 
             type: action.payload.orderStatus,
           },
         ],
