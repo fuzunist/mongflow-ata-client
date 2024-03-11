@@ -11,6 +11,7 @@ import Card from "@/components/Card";
 import Col from "@/components/Col";
 import SendToMergedProduction from "@/modals/SendToMergedProduction";
 import Modal from "@/components/Modal";
+import { update } from "lodash";
 
 const UpComingProductions = ({ page, setPage }) => {
   const user = useUser();

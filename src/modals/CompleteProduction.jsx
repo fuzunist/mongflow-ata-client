@@ -12,7 +12,7 @@ import { updateSomeOrderInDB } from "@/services/order";
 
 import FormikForm from "@/components/FormikForm";
 
-const CompleteProduction = ({ closeModal, order_id, recipe_id, product }) => {
+const CompleteProduction = ({ closeModal, order_id, production_recipe_id, product }) => {
   console.log("product CompleteProduction", product);
 
   const user = useUser();
@@ -52,8 +52,9 @@ const CompleteProduction = ({ closeModal, order_id, recipe_id, product }) => {
 
       for (const key in orderProducts) {
         if (orderProducts[key].recipe_id === product.recipe_id) {
+
           const producingStatusIndex = orderProducts[key].orderStatus.findIndex(
-            (status) => status.recipe_id === product.production.recipe_id
+            (status) => status?.recipe_id && status?.recipe_id === product.production.recipe_id
           );
 
           //üretildi status e miktar eklendi

@@ -44,7 +44,7 @@ const CreateRecipe = ({
 
   const selectedRecipe = recipes.find((recipe) => recipe.id === recipe_id);
   const [otherInputs, setOtherInputs] = useState({
-    wastage_percentage: parseInt(selectedRecipe?.wastage_percentage*100) ?? 1,
+    wastage_percentage: selectedRecipe ? parseInt(selectedRecipe?.wastage_percentage*100) : 0,
     total_bunker: selectedRecipe?.total_bunker ?? 1,
   });
 

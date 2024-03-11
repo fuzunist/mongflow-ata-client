@@ -1,5 +1,27 @@
 import axios from "axios";
 
+
+export const addShiftToDB = async (access_token, params) => {
+  
+  try {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_API_ENDPOINT}/shift/add`,
+      params,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+      }
+    );
+     console.log("add shift to db data res:", data )
+    return data;
+  } catch (e) {
+     console.log(e)
+    return e.response.data;
+  }
+};
+
+
 export const getShiftsForOrderFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(

@@ -10,12 +10,15 @@ import {
 } from "@/store/hooks/apps"; // Assuming this hook fetches all products.
 import { Row, Col } from "antd";
 import { Typography } from "antd";
+import FormError from "../FormikForm/FormError";
+import locale from "antd/es/date-picker/locale/tr_TR";
 
-const CreateProductionForm = ({
+const CreateShiftForm = ({
   onSubmit,
   closeModal,
   editing = false,
   selected,
+  error
 }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
@@ -56,6 +59,9 @@ const CreateProductionForm = ({
   // Filter for recipe material products
   const recipeMaterialProducts = products.filter(
     (product) => product.product_type === 1
+  );
+  const lastProducts = products.filter(
+    (product) => product.product_type === 0
   );
 
   useEffect(() => {
@@ -171,12 +177,12 @@ const CreateProductionForm = ({
     if (secondQualityStocks.length > 0) {
       const secondQualityInitialValues = secondQualityStocks.reduce(
         (acc, stock) => {
-          acc[`secondQuality.${stock.product_id}`] = ""; // Initialize with empty string or fetch existing values if editing
+          acc[`secondQualityStocks.${stock.product_id}`] = ""; // Initialize with empty string or fetch existing values if editing
           return acc;
         },
         {}
       );
-
+      console.log("secondQualityInitialValues", secondQualityInitialValues);
       form.setFieldsValue({ secondQuality: secondQualityInitialValues });
     }
   }, [secondQualityStocks, form]);
@@ -187,9 +193,9 @@ const CreateProductionForm = ({
       layout="vertical"
       onFinish={onSubmit}
       initialValues={{
-        date: moment(),
+         date: moment(),
         shift: 1,
-        productions: [{ type: "customer" }],
+        productions: [{ type: "orderproduction" }],
       }}
     >
       <Row gutter={16}>
@@ -200,10 +206,11 @@ const CreateProductionForm = ({
           {/* Adjust the span as needed for your layout */}
           <Form.Item
             name="date"
-            label={t("Date")}
+            label={t("Tarih")}
             rules={[{ required: false, message: t("Please select a date!") }]}
           >
-            <DatePicker style={{ width: "100%" }} />
+            <DatePicker  style={{ width: "100%" }} locale={locale}
+            placeholder="Tarih Seçiniz" format={"DD-MM-YYYY"} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -225,7 +232,7 @@ const CreateProductionForm = ({
       <Form.List name="productions">
         {(fields, { add, remove }) => (
           <>
-            {fields.map(({ key, name, fieldKey }, index) => (
+            {fields.map(({ key, name }, index) => (
               <div
                 key={key}
                 style={{
@@ -236,22 +243,34 @@ const CreateProductionForm = ({
                 }}
               >
                 {form.getFieldValue(["productions", name, "type"]) ===
-                "customer" ? (
+                "orderproduction" ? (
                   <Space
                     direction="vertical"
                     size="large"
-                    style={{ display: "flex" }}
+                    // style={{display:"flex"}}
+                    style={{
+                      display: "flex",
+                      rowGap: 0.5,
+                      flexDirection: "column",
+                    }}
                   >
                     <Title level={4} style={{ textAlign: "center" }}>
-                      MÜŞTERİYE ÜRETİM
+                      Siparişe Üretim 
                     </Title>
+                    {
+                     <FormError
+                     error={error}
+                     variant={"danger"}
+                   />
+                    }
                     {/* Product Selection */}
                     <Form.Item
+                      isListField={true}
                       name={[name, "product_id"]}
-                      fieldKey={[fieldKey, "product_id"]}
+                      key={[key, "product_id"]}
                       rules={[
                         {
-                          required: false,
+                          required: true,
                           message: t("Please select a product!"),
                         },
                       ]}
@@ -261,7 +280,7 @@ const CreateProductionForm = ({
                         placeholder={t("Select a product")}
                         onChange={(value) => handleProductChange(value, index)}
                       >
-                        {products.map((product) => (
+                        {lastProducts.map((product) => (
                           <Select.Option
                             key={product.product_id}
                             value={product.product_id}
@@ -276,17 +295,21 @@ const CreateProductionForm = ({
                     {selectedProductsAttributes[index]?.map(
                       (attribute, attrIndex) => (
                         <Form.Item
-                          key={attribute.attribute_id}
-                          name={[name, "attributes", attribute.attribute_id]}
-                          fieldKey={[
-                            fieldKey,
+                          isListField={true}
+                          name={[
+                            name,
                             "attributes",
-                            attribute.attribute_id,
+                            attribute.attribute_id.toString(),
+                          ]}
+                          key={[
+                            key,
+                            "attributes",
+                            attribute.attribute_id.toString(),
                           ]}
                           label={attribute.attribute_name}
                           rules={[
                             {
-                              required: false,
+                              required: true,
                               message: `${t("Please select")} ${
                                 attribute.attribute_name
                               }`,
@@ -309,12 +332,13 @@ const CreateProductionForm = ({
 
                     {/* "Select Order" Dropdown */}
                     <Form.Item
+                      isListField={true}
                       name={[name, "order_id"]}
-                      fieldKey={[fieldKey, "order_id"]}
+                      key={[key, "order_id"]}
                       label={t("Select Order")}
                       rules={[
                         {
-                          required: false,
+                          required: true,
                           message: t("Please select an order!"),
                         },
                       ]}
@@ -336,12 +360,13 @@ const CreateProductionForm = ({
 
                     {filteredProductionRecipes[index] && (
                       <Form.Item
+                        isListField={true}
                         name={[name, "production_recipe_id"]}
-                        fieldKey={[fieldKey, "production_recipe_id"]}
+                        key={[key, "production_recipe_id"]}
                         label={t("Select Production Recipe")}
                         rules={[
                           {
-                            required: false,
+                            required: true,
                             message: t("Please select a production recipe!"),
                           },
                         ]}
@@ -349,8 +374,7 @@ const CreateProductionForm = ({
                         <Select placeholder={t("Select a production recipe")}>
                           {filteredProductionRecipes[index].map((recipe) => (
                             <Select.Option key={recipe.id} value={recipe.id}>
-                              {recipe.id} // Assuming you want to display the
-                              recipe ID here
+                              {recipe.id}
                             </Select.Option>
                           ))}
                         </Select>
@@ -359,20 +383,26 @@ const CreateProductionForm = ({
 
                     {/* Quantity Input */}
                     <Form.Item
+                      isListField={true}
                       name={[name, "quantity"]}
-                      fieldKey={[fieldKey, "quantity"]}
+                      key={[key, "quantity"]}
                       rules={[
                         {
-                          required: false,
+                          required: true,
                           message: t("Please enter a quantity!"),
                         },
                       ]}
                       label={t("Quantity")}
                     >
-                      <Input type="number" placeholder={t("Enter quantity")} />
+                      <Input
+                        type="number"
+                        min={0}
+                        placeholder={t("Enter quantity")}
+                      />
                     </Form.Item>
 
                     <Form.Item
+                      isListField={true}
                       name={[name, "wastage"]}
                       label={t("Wastage %")}
                       rules={[
@@ -384,36 +414,58 @@ const CreateProductionForm = ({
                     >
                       <Select placeholder={t("Select wastage")}>
                         {Array.from({ length: 20 }, (_, i) => (
-                          <Select.Option key={i + 1} value={i + 1}>
+                          <Select.Option key={i + 1} value={parseFloat((i + 1)/100)}>
                             {i + 1}
                           </Select.Option>
                         ))}
                       </Select>
                     </Form.Item>
 
-                    {secondQualityStocks.map((stock, index) => (
-                      <Form.Item
-                        key={stock.product_id}
-                        name={[name, "secondQualityStocks", stock.product_id]}
-                        label={`${stock.product_name}`}
-                        rules={[
-                          {
-                            required: false,
-                            message: t("Please enter a quantity!"),
-                          },
-                        ]}
-                      >
-                        <Input
-                          type="number"
-                          placeholder={t("Enter quantity")}
-                        />
-                      </Form.Item>
-                    ))}
+                    {secondQualityStocks.map((stock, index) => {
+                      console.log("nammeee", name);
+                      return (
+                        <Form.Item
+                          isListField={true}
+                          name={[
+                            name,
+                            "secondQualityStocks",
+                            stock.product_id.toString(),
+                          ]}
+                          key={[
+                            key,
+                            "secondQualityStocks",
+                            stock.product_id.toString(),
+                          ]}
+                          label={`${stock.product_name}`}
+                          rules={[
+                            {
+                              required: false,
+                              message: t("Please enter a quantity!"),
+                            },
+                          ]}
+                        >
+                          <Input
+                            type="number"
+                            min={0}
+                            placeholder={t("Enter quantity")}
+                          />
+                        </Form.Item>
+                      );
+                    })}
 
                     {consumableProducts.map((stock, index) => (
                       <Form.Item
-                        key={stock.product_id}
-                        name={[name, "consumableProducts", stock.product_id]}
+                        isListField={true}
+                        name={[
+                          name,
+                          "consumableProducts",
+                          stock.product_id.toString(),
+                        ]}
+                        key={[
+                          key,
+                          "consumableProducts",
+                          stock.product_id.toString(),
+                        ]}
                         label={`${stock.product_name}`}
                         rules={[
                           {
@@ -424,6 +476,7 @@ const CreateProductionForm = ({
                       >
                         <Input
                           type="number"
+                          min={0}
                           placeholder={t("Enter quantity")}
                         />
                       </Form.Item>
@@ -437,12 +490,12 @@ const CreateProductionForm = ({
                     style={{ display: "flex" }}
                   >
                     <Title level={4} style={{ textAlign: "center" }}>
-                      KENDİMİZE ÜRETİM
+                      Hammadde İşleme {" "}
                     </Title>
                     {/* Used Product */}
                     <Form.Item
                       name={[name, "used_product"]}
-                      label="Used Product"
+                      label="Kullanılan Hammadde"
                       rules={[
                         {
                           required: true,
@@ -465,7 +518,7 @@ const CreateProductionForm = ({
                     {/* Usage Quantity */}
                     <Form.Item
                       name={[name, "usage_quantity"]}
-                      label="Usage Quantity"
+                      label="Kullanılan Miktar "
                       rules={[
                         {
                           required: true,
@@ -473,13 +526,17 @@ const CreateProductionForm = ({
                         },
                       ]}
                     >
-                      <Input type="number" placeholder="Enter quantity" />
+                      <Input
+                        type="number"
+                        min={0}
+                        placeholder="Enter quantity"
+                      />
                     </Form.Item>
 
                     {/* Output Product */}
                     <Form.Item
                       name={[name, "output_product"]}
-                      label="Output Product"
+                      label="Üretilen Hammadde"
                       rules={[
                         {
                           required: true,
@@ -502,7 +559,7 @@ const CreateProductionForm = ({
                     {/* Output Quantity */}
                     <Form.Item
                       name={[name, "output_quantity"]}
-                      label="Output Quantity"
+                      label="Üretilen Miktar"
                       rules={[
                         {
                           required: true,
@@ -510,7 +567,11 @@ const CreateProductionForm = ({
                         },
                       ]}
                     >
-                      <Input type="number" placeholder="Enter quantity" />
+                      <Input
+                        type="number"
+                        min={0}
+                        placeholder="Enter quantity"
+                      />
                     </Form.Item>
                     <Form.Item
                       name={[name, "wastage"]}
@@ -524,7 +585,7 @@ const CreateProductionForm = ({
                     >
                       <Select placeholder={t("Select wastage")}>
                         {Array.from({ length: 20 }, (_, i) => (
-                          <Select.Option key={i + 1} value={i + 1}>
+                          <Select.Option key={i + 1} value={parseFloat((i + 1)/100)}>
                             {i + 1}
                           </Select.Option>
                         ))}
@@ -549,6 +610,8 @@ const CreateProductionForm = ({
                       >
                         <Input
                           type="number"
+                        min={0}
+
                           placeholder={t("Enter quantity")}
                         />
                       </Form.Item>
@@ -556,8 +619,9 @@ const CreateProductionForm = ({
                   </Space>
                 )}
                 <MinusCircleOutlined
+                className="text-2xl text-red-600 font-black text-center flex justify-center items-center my-2 mb-2"
                   onClick={() => remove(name)}
-                  style={{ color: "red", marginTop: 8 }}
+                  
                 />
               </div>
             ))}
@@ -565,34 +629,38 @@ const CreateProductionForm = ({
             <Form.Item>
               <Button
                 type="dashed"
-                onClick={() => add({ type: "customer" })}
+                onClick={() => add({ type: "orderproduction" })}
                 block
                 icon={<PlusOutlined />}
               >
-                Add production for customer
+                Sipariş Üretimi Ekle{" "}
               </Button>
             </Form.Item>
             <Form.Item>
               <Button
                 type="dashed"
-                onClick={() => add({ type: "ourselves" })}
+                onClick={() => add({ type: "materialproduction" })}
                 block
                 icon={<PlusOutlined />}
               >
-                Add production for ourselves
+                Hammade Üretimi Ekle
               </Button>
             </Form.Item>
           </>
         )}
       </Form.List>
 
-      <Form.Item>
+      <Form.Item className="flex justify-center items-center">
         <Button type="primary" htmlType="submit">
-          {editing ? t("Update Production") : t("Create Production")}
+          {editing ? t("Update Production") : t("Vardiya Ekle")}
         </Button>
       </Form.Item>
+      <FormError
+                     error={error}
+                     variant={"danger"}
+                   />
     </Form>
   );
 };
 
-export default CreateProductionForm;
+export default CreateShiftForm;

@@ -107,7 +107,7 @@ const RecipeForm = ({
                   </label>
                   <Select
                     name="wastage_percentage"
-                    defaultValue={otherInputs.wastage_percentage ?? 0}
+                    defaultValue={otherInputs?.wastage_percentage ?? 0}
                     style={{ width: 120 }}
                     onChange={(value) =>
                       setOtherInputs((prev) => {

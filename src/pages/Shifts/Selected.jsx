@@ -1,7 +1,7 @@
 import Card from '@/components/Card'
 import Col from '@/components/Col'
 import Modal from '@/components/Modal'
-import CreateProduction from '@/modals/CreateProduction'
+import CreateShift from '@/modals/CreateShift'
 import { useProducts } from '@/store/hooks/apps'
 import { dateToIsoFormatWithTimezoneOffset, filterOlderThan10Days, zipArray } from '@/utils/helpers'
 import { useMemo } from 'react'
@@ -99,7 +99,7 @@ const Selected = ({ selected, productions }) => {
                                                 className='flex justify-between items-center p-2 rounded border border-body-fg-dark dark:border-body-fg-light select-none cursor-pointer'
                                             >
                                                 {({ close }) => (
-                                                    <CreateProduction
+                                                    <CreateShift
                                                         closeModal={close}
                                                         editing={true}
                                                         selected={production}

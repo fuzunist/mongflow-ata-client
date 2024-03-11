@@ -1,5 +1,5 @@
 import Modal from '@/components/Modal'
-import CreateProduction from '@/modals/CreateProduction'
+import CreateShift from '@/modals/CreateShift'
 
 import { PlusIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +22,7 @@ const Header = () => {
                         </>
                     }
                 >
-                    {({ close }) => <CreateProduction closeModal={close} />}
+                    {({ close }) => <CreateShift closeModal={close} />}
                 </Modal>
             </div>
         </div>
