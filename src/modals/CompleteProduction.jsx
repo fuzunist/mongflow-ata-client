@@ -12,7 +12,12 @@ import { updateSomeOrderInDB } from "@/services/order";
 
 import FormikForm from "@/components/FormikForm";
 
-const CompleteProduction = ({ closeModal, order_id, production_recipe_id, product }) => {
+const CompleteProduction = ({
+  closeModal,
+  order_id,
+  production_recipe_id,
+  product,
+}) => {
   console.log("product CompleteProduction", product);
 
   const user = useUser();
@@ -49,12 +54,14 @@ const CompleteProduction = ({ closeModal, order_id, production_recipe_id, produc
 
       const selectedOrder = orders.find((order) => order.order_id === order_id);
       const orderProducts = JSON.parse(JSON.stringify(selectedOrder.products));
-
+      console.log("beforrre product in complete production:: guss0", product);
+      console.log("beforrre orderProducts:: guss0", orderProducts);
       for (const key in orderProducts) {
         if (orderProducts[key].recipe_id === product.recipe_id) {
-
           const producingStatusIndex = orderProducts[key].orderStatus.findIndex(
-            (status) => status?.recipe_id && status?.recipe_id === product.production.recipe_id
+            (status) =>
+              status?.recipe_id &&
+              status?.recipe_id === product.production.recipe_id
           );
 
           //üretildi status e miktar eklendi
@@ -66,46 +73,47 @@ const CompleteProduction = ({ closeModal, order_id, production_recipe_id, produc
           }
         }
 
-        console.log("product in complete production:: guss0", product);
-        console.log("orderProducts:: guss0", orderProducts);
+    
+      }
 
-        const orderStatusNumber = calculateAverageType({
+      console.log("product in complete production:: guss0", product);
+      console.log("orderProducts:: guss0", orderProducts);
+      const orderStatusNumber = calculateAverageType({
+        products: orderProducts,
+        sets: [],
+      });
+
+      const orderStatus =
+        orderStatusNumber === 0
+          ? "İş Alındı"
+          : orderStatusNumber === 3
+          ? "İş Tamamen Bitti"
+          : "Hazırlıklar Başladı";
+
+      const updateOrderResponse = await updateSomeOrderInDB(
+        user.tokens.access_token,
+        order_id,
+        {
           products: orderProducts,
-          sets: [],
+          // total_cost: parseFloat(allCost),
+          order_status: orderStatus,
+        }
+      )
+        .then((response) => {
+          if (response?.error) {
+            console.log(response.error);
+            setError(response.error);
+          }
+          return response;
+        })
+        .catch((error) => {
+          console.error("Error in updateSomeOrderInDB:", error);
+          throw error;
         });
 
-        const orderStatus =
-          orderStatusNumber === 0
-            ? "İş Alındı"
-            : orderStatusNumber === 3
-            ? "İş Tamamen Bitti"
-            : "Hazırlıklar Başladı";
-
-        const updateOrderResponse = await updateSomeOrderInDB(
-          user.tokens.access_token,
-          order_id,
-          {
-            products: orderProducts,
-            // total_cost: parseFloat(allCost),
-            order_status: orderStatus,
-          }
-        )
-          .then((response) => {
-            if (response?.error) {
-              console.log(response.error);
-              setError(response.error);
-            }
-            return response;
-          })
-          .catch((error) => {
-            console.error("Error in updateSomeOrderInDB:", error);
-            throw error;
-          });
-
-        editOrder(updateOrderResponse);
-        closeModal();
-        setSubmitting(false);
-      }
+      editOrder(updateOrderResponse);
+      closeModal();
+      setSubmitting(false);
     } catch (error) {
       setError(error);
       setSubmitting(false);

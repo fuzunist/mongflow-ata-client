@@ -10,6 +10,7 @@ import { setFilter, setSearch, setSorter } from "@/store/actions/apps";
 import { useTranslation } from "react-i18next";
 import Navigation from "./Navigation";
 import { useState } from "react";
+import { getStatusMergeOrders } from "@/utils/helpers";
 
 const Orders = () => {
   const user = useUser();
@@ -19,45 +20,53 @@ const Orders = () => {
   const sorter = useSorter();
   const { t } = useTranslation();
   const [page, setPage] = useState("myOrders");
+  const [statusMergeOrders, setStatusMergeOrders] = useState([]);
+
+  useEffect(() => {
+    if (orders?.length !== 0) {
+      const ordermerge = getStatusMergeOrders(orders);
+      setStatusMergeOrders(ordermerge);
+    }
+  }, [orders]);
 
   // siparişler arasından kullanıcıya ait olanlar ayıklanır.
   const myOrders = useMemo(() => {
     if (!user.userid) return [[], []];
-    if (!orders.length) return [[], []];
+    if (!statusMergeOrders.length) return [[], []];
     return [
-      orders.filter(
-        (order) => order.userid === user.userid && order.status.length>=4
+      statusMergeOrders.filter(
+        (order) => order.userid === user.userid && order.status.length >= 4
       ),
-      orders.filter(
-        (order) => order.userid !== user.userid && order.status.length>=4
+      statusMergeOrders.filter(
+        (order) => order.userid !== user.userid && order.status.length >= 4
       ),
     ];
-  }, [user, orders]);
+  }, [user, statusMergeOrders]);
 
   const myPendingRecipeOrders = useMemo(() => {
     if (!user.userid) return [];
-    if (!orders.length) return [];
-    return orders.filter(
-      (order) => order.userid === user.userid && order.status.length===2
+    if (!statusMergeOrders.length) return [];
+    return statusMergeOrders.filter(
+      (order) => order.userid === user.userid && order.status.length === 2
     );
-  }, [user, orders]);
+  }, [user, statusMergeOrders]);
 
   const myCanceledOrders = useMemo(() => {
     if (!user.userid) return [];
-    if (!orders.length) return [];
-    return orders.filter(
-      (order) => order.userid === user.userid && order.status.length===1
+    if (!statusMergeOrders.length) return [];
+    return statusMergeOrders.filter(
+      (order) => order.userid === user.userid && order.status.length === 1
     );
-  }, [user, orders]);
+  }, [user, statusMergeOrders]);
 
   const myPendingBossOrders = useMemo(() => {
     if (!user.userid) return [];
-    if (!orders.length) return [];
-    return orders.filter(
-      (order) => order.userid === user.userid && order.status.length===3
+    if (!statusMergeOrders.length) return [];
+    return statusMergeOrders.filter(
+      (order) => order.userid === user.userid && order.status.length === 3
     );
-  }, [user, orders]);
-  
+  }, [user, statusMergeOrders]);
+
   const searchedOrders = useMemo(() => {
     if (!search) return [myOrders[0], myOrders[1]];
     return [
@@ -164,7 +173,11 @@ const Orders = () => {
         page={page}
         setPage={setPage}
         t={t}
-        myOrders={[...myOrders[0]].concat(...myCanceledOrders, ...myPendingRecipeOrders, ...myPendingBossOrders)}
+        myOrders={[...myOrders[0]].concat(
+          ...myCanceledOrders,
+          ...myPendingRecipeOrders,
+          ...myPendingBossOrders
+        )}
       />
       {page === "myOrders" && myCanceledOrders.length > 0 && (
         <Row>

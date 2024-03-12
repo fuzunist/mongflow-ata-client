@@ -23,9 +23,10 @@ const UpComingProductions = ({ page, setPage }) => {
 
   //Henüz üretilmemiş ürünü olanlar ve sadece üretilmemiş ürünü içerecek
   //ve ürünün ne kadarı Alındı durumundaysa o miktar order.quantity yerine yazıldı
+
   const nonProducedProductsOrders = useMemo(() => {
     if (!user.userid || !orders.length) return [];
-
+  
     const updatedOrders = orders
       .filter((order) => order.status.length === 4)
       .map((order) => {
@@ -41,12 +42,18 @@ const UpComingProductions = ({ page, setPage }) => {
             return null;
           })
           .filter(Boolean);
-
-        return { ...order, products: updatedProducts };
-      });
-
+  
+        // Only return the order if it has at least one product with received status and quantity !== 0
+        if (updatedProducts.length > 0) {
+          return { ...order, products: updatedProducts };
+        }
+        return null;
+      })
+      .filter(Boolean); // Filter out null orders
+  
     return updatedOrders;
   }, [user, orders]);
+  
 
   console.log("nonProducedProductsOrders::", nonProducedProductsOrders);
 

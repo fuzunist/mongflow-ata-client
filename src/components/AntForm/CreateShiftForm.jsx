@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Select, DatePicker, Space, Switch } from "antd";
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  Space,
+  Switch,
+  InputNumber,
+} from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -18,7 +27,7 @@ const CreateShiftForm = ({
   closeModal,
   editing = false,
   selected,
-  error
+  error,
 }) => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
@@ -60,9 +69,7 @@ const CreateShiftForm = ({
   const recipeMaterialProducts = products.filter(
     (product) => product.product_type === 1
   );
-  const lastProducts = products.filter(
-    (product) => product.product_type === 0
-  );
+  const lastProducts = products.filter((product) => product.product_type === 0);
 
   useEffect(() => {
     console.log("Initial 'selected' object:", selected);
@@ -193,7 +200,7 @@ const CreateShiftForm = ({
       layout="vertical"
       onFinish={onSubmit}
       initialValues={{
-         date: moment(),
+        date: moment(),
         shift: 1,
         productions: [{ type: "orderproduction" }],
       }}
@@ -209,8 +216,12 @@ const CreateShiftForm = ({
             label={t("Tarih")}
             rules={[{ required: false, message: t("Please select a date!") }]}
           >
-            <DatePicker  style={{ width: "100%" }} locale={locale}
-            placeholder="Tarih Seçiniz" format={"DD-MM-YYYY"} />
+            <DatePicker
+              style={{ width: "100%" }}
+              locale={locale}
+              placeholder="Tarih Seçiniz"
+              format={"DD-MM-YYYY"}
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -255,14 +266,9 @@ const CreateShiftForm = ({
                     }}
                   >
                     <Title level={4} style={{ textAlign: "center" }}>
-                      Siparişe Üretim 
+                      Siparişe Üretim
                     </Title>
-                    {
-                     <FormError
-                     error={error}
-                     variant={"danger"}
-                   />
-                    }
+                    {<FormError error={error} variant={"danger"} />}
                     {/* Product Selection */}
                     <Form.Item
                       isListField={true}
@@ -394,8 +400,8 @@ const CreateShiftForm = ({
                       ]}
                       label={t("Quantity")}
                     >
-                      <Input
-                        type="number"
+                      <InputNumber
+                        className="w-full"
                         min={0}
                         placeholder={t("Enter quantity")}
                       />
@@ -414,7 +420,10 @@ const CreateShiftForm = ({
                     >
                       <Select placeholder={t("Select wastage")}>
                         {Array.from({ length: 20 }, (_, i) => (
-                          <Select.Option key={i + 1} value={parseFloat((i + 1)/100)}>
+                          <Select.Option
+                            key={i + 1}
+                            value={parseFloat((i + 1) / 100)}
+                          >
                             {i + 1}
                           </Select.Option>
                         ))}
@@ -444,8 +453,8 @@ const CreateShiftForm = ({
                             },
                           ]}
                         >
-                          <Input
-                            type="number"
+                          <InputNumber
+                            className="w-full"
                             min={0}
                             placeholder={t("Enter quantity")}
                           />
@@ -474,8 +483,8 @@ const CreateShiftForm = ({
                           },
                         ]}
                       >
-                        <Input
-                          type="number"
+                        <InputNumber
+                          className="w-full"
                           min={0}
                           placeholder={t("Enter quantity")}
                         />
@@ -490,7 +499,7 @@ const CreateShiftForm = ({
                     style={{ display: "flex" }}
                   >
                     <Title level={4} style={{ textAlign: "center" }}>
-                      Hammadde İşleme {" "}
+                      Hammadde İşleme{" "}
                     </Title>
                     {/* Used Product */}
                     <Form.Item
@@ -526,8 +535,8 @@ const CreateShiftForm = ({
                         },
                       ]}
                     >
-                      <Input
-                        type="number"
+                      <InputNumber
+                        className="w-full"
                         min={0}
                         placeholder="Enter quantity"
                       />
@@ -567,8 +576,8 @@ const CreateShiftForm = ({
                         },
                       ]}
                     >
-                      <Input
-                        type="number"
+                      <InputNumber
+                        className="w-full"
                         min={0}
                         placeholder="Enter quantity"
                       />
@@ -585,7 +594,10 @@ const CreateShiftForm = ({
                     >
                       <Select placeholder={t("Select wastage")}>
                         {Array.from({ length: 20 }, (_, i) => (
-                          <Select.Option key={i + 1} value={parseFloat((i + 1)/100)}>
+                          <Select.Option
+                            key={i + 1}
+                            value={parseFloat((i + 1) / 100)}
+                          >
                             {i + 1}
                           </Select.Option>
                         ))}
@@ -608,10 +620,9 @@ const CreateShiftForm = ({
                           },
                         ]}
                       >
-                        <Input
-                          type="number"
-                        min={0}
-
+                        <InputNumber
+                          className="w-full"
+                          min={0}
                           placeholder={t("Enter quantity")}
                         />
                       </Form.Item>
@@ -619,9 +630,8 @@ const CreateShiftForm = ({
                   </Space>
                 )}
                 <MinusCircleOutlined
-                className="text-2xl text-red-600 font-black text-center flex justify-center items-center my-2 mb-2"
+                  className="text-2xl text-red-600 font-black text-center flex justify-center items-center my-2 mb-2"
                   onClick={() => remove(name)}
-                  
                 />
               </div>
             ))}
@@ -655,10 +665,7 @@ const CreateShiftForm = ({
           {editing ? t("Update Production") : t("Vardiya Ekle")}
         </Button>
       </Form.Item>
-      <FormError
-                     error={error}
-                     variant={"danger"}
-                   />
+      <FormError error={error} variant={"danger"} />
     </Form>
   );
 };

@@ -24,17 +24,43 @@ const AllOrders = ({page,setPage}) => {
 
   //Siparişlerden onaylı olanlar
   const allApprovedOrders = useMemo(() => {
-    if (!user.userid) return [];
-    if (!orders.length) return [];
-    return [
-      ...orders.filter(
-        (order) => order.status.length>=4
-      )
-    ];
-  }, [user, orders]);
-
-
+    if (!user.userid || !orders.length) return [];
   
+    const filteredOrders = orders
+      .filter(order => order.status.length >= 4)
+      .map(order => {
+        const updatedProducts = order.products.map(product => {
+          const mergedProducts = {};
+  
+          product.orderStatus.forEach(status => {
+            if (status === null) return;
+  
+            const { type, quantity } = status;
+  
+            if (mergedProducts[type]) {
+              mergedProducts[type] += quantity;
+            } else {
+              mergedProducts[type] = quantity;
+            }
+          });
+  
+          const mergedArray = Object.keys(mergedProducts).map(type => ({
+            type,
+            quantity: mergedProducts[type]
+          }));
+  
+          return { ...product, orderStatus: mergedArray };
+        });
+  
+        return { ...order, products: updatedProducts };
+      });
+  
+    console.log("filteredOrders", filteredOrders);
+  
+    return filteredOrders;
+  }, [user, orders]);
+  
+
   const searchedOrders = useMemo(() => {
     if (!search) return [...allApprovedOrders];
     return [

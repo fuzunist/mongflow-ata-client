@@ -110,9 +110,9 @@ const Order = ({ order, checkedRecipes, setCheckedRecipes }) => {
                 <span className="basis-[calc(18%_-_0.5rem)] mx-1">
                   {t("sendToProduction")}
                 </span>
-                <span className="basis-[calc(18%_-_0.5rem)] mx-1">
+                {/* <span className="basis-[calc(18%_-_0.5rem)] mx-1">
                   {t("mergeProduction")}
-                </span>
+                </span> */}
               </div>
               <hr className="border-border-light dark:border-border-dark" />
               {order?.products?.map((product, index) => {
@@ -181,7 +181,7 @@ const Order = ({ order, checkedRecipes, setCheckedRecipes }) => {
                         )}
                       </Modal>
                     </span>
-                    <span className="basis-[calc(18%_-_0.5rem)] mx-1 text-center">
+                    {/* <span className="basis-[calc(18%_-_0.5rem)] mx-1 text-center">
                       <input
                         type="checkbox"
                         name={product.recipe_id}
@@ -189,7 +189,7 @@ const Order = ({ order, checkedRecipes, setCheckedRecipes }) => {
                         value={product.recipe_id}
                         onChange={() => handleCheckboxChange(product.recipe_id)}
                       />
-                    </span>
+                    </span> */}
                   </div>
                 );
               })}

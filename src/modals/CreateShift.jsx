@@ -154,13 +154,15 @@ const CreateShift = ({ closeModal }) => {
   };
 
   const getStockArray = (stocks, products) => {
+    console.log("products: cbb:", products);
     const filteredProducts = Object.entries(products)
-      .filter(([_, value]) => value !== undefined)
+      .filter(([_, value]) => value !== undefined && value !== "")
       .map(([key, value]) => ({
         product_id: parseInt(key),
         production: parseInt(value),
       }));
 
+    console.log("filteredProducts: cbb:", filteredProducts);
     const newArr = filteredProducts
       .map(({ product_id, production }) => {
         if (stocks?.length !== 0) {
@@ -173,6 +175,7 @@ const CreateShift = ({ closeModal }) => {
               quantity: stockItem.quantity,
               production: production,
               price: stockItem.price,
+              product_name: stockItem.product_name,
             };
           } else {
             return null;
@@ -192,7 +195,7 @@ const CreateShift = ({ closeModal }) => {
   };
 
   const onFinish = async (values) => {
-    setError("")
+    setError("");
     const uuid = uuidv4();
     console.log("values of craete shifts", values);
 
@@ -211,9 +214,9 @@ const CreateShift = ({ closeModal }) => {
     const orderShifts = { ...values, productions: orderproductions, id: uuid };
 
     if (materialproductions?.length !== 0) {
-      // if (consumableStocks?.length === 0) {
-      //   return setError("Yeterli Filtre/Başlık Stoğu Yok!");
-      // }
+      if (consumableStocks?.length === 0) {
+        return setError("Yeterli Filtre/Başlık Stoğu Yok!");
+      }
 
       materialShifts?.productions?.forEach((production) => {
         const usedRawMaterialId = production.used_product;
@@ -227,21 +230,28 @@ const CreateShift = ({ closeModal }) => {
         ).product_name;
         const rawMaterialStock = rawMaterial?.quantity;
 
-        // if (!rawMaterialStock) {
-        //   return setError(`Hata! Stokta ${rawMaterialName} yok! `);
-        // }
-        // if (usedRawMaterialQuantity > rawMaterialStock) {
-        //   return setError(
-        //     `Hata! Stoktaki ${rawMaterialName} miktarı ${rawMaterialStock}. Kullanılan miktar: ${usedRawMaterialQuantity} `
-        //   );
-        // }
-        const newUsedProducts= getStockArray(rawMaterialStocks, {[usedRawMaterialId]: usedRawMaterialQuantity})
-        const usedProductsCosts= newUsedProducts.reduce((acc, val)=>  acc+(val?.price*val?.production), 0)
+        if (!rawMaterialStock) {
+          return setError(`Hata! Stokta ${rawMaterialName} yok! `);
+        }
+        if (usedRawMaterialQuantity > rawMaterialStock) {
+          console.log("237");
+          return setError(
+            `Hata! Stoktaki ${rawMaterialName} miktarı ${rawMaterialStock}. Kullanılan miktar: ${usedRawMaterialQuantity} `
+          );
+        }
+        const newUsedProducts = getStockArray(rawMaterialStocks, {
+          [usedRawMaterialId]: usedRawMaterialQuantity,
+        });
+        const usedProductsCosts = newUsedProducts.reduce(
+          (acc, val) => acc + val?.price * val?.production,
+          0
+        );
         // {id: usedRawMaterialId, production: usedRawMaterialQuantity, quantity:rawMaterialStock }
 
         production.usedProducts = newUsedProducts;
-        production.usedProductsCosts = isNaN(usedProductsCosts) ? 0 : usedProductsCosts;
-        
+        production.usedProductsCosts = isNaN(usedProductsCosts)
+          ? 0
+          : usedProductsCosts;
 
         console.log("rawmat stocks", rawMaterialStocks);
         if (production.consumableProducts) {
@@ -255,25 +265,28 @@ const CreateShift = ({ closeModal }) => {
             );
             const productName = product?.product_name;
             const productStock = product?.quantity;
-            // if (item.quantity < item.production) {
-            //   return setError(
-            //     `Hata! Stoktaki ${productName} miktarı ${productStock}. Girilen miktar: ${item.production} `
-            //   );
-            // }
+            if (item.quantity < item.production) {
+              console.log("268");
+              return setError(
+                `Hata! Stoktaki ${productName} miktarı ${productStock}. Girilen miktar: ${item.production} `
+              );
+            }
           });
-          const consumableProductsCosts= newConsumableProducts.reduce((acc, val)=>  acc+(val?.price*val?.production), 0)
+          const consumableProductsCosts = newConsumableProducts.reduce(
+            (acc, val) => acc + val?.price * val?.production,
+            0
+          );
 
           production.consumableProducts = newConsumableProducts;
           production.consumableProductsCosts = consumableProductsCosts;
-
         }
       });
     }
 
     if (orderproductions?.length !== 0) {
-      // if (consumableStocks?.length === 0) {
-      //   return setError("Yeterli Filtre/Başlık Stoğu Yok!");
-      // }
+      if (consumableStocks?.length === 0) {
+        return setError("Yeterli Filtre/Başlık Stoğu Yok!");
+      }
       orderShifts?.productions?.forEach((production) => {
         if (production.consumableProducts) {
           const newConsumableProducts = getStockArray(
@@ -286,13 +299,17 @@ const CreateShift = ({ closeModal }) => {
             );
             const productName = product?.product_name;
             const productStock = product?.quantity;
-            // if (item.quantity < item.production) {
-            //   return setError(
-            //     `Hata! Stoktaki ${productName} miktarı ${productStock}. Girilen miktar: ${item.production} `
-            //   );
-            // }
+            if (item.quantity < item.production) {
+              console.log("301");
+              return setError(
+                `Hata! Stoktaki ${productName} miktarı ${productStock}. Girilen miktar: ${item.production} `
+              );
+            }
           });
-          const consumableProductsCosts= newConsumableProducts.reduce((acc, val)=>  acc+(val?.price*val?.production), 0)
+          const consumableProductsCosts = newConsumableProducts.reduce(
+            (acc, val) => acc + val?.price * val?.production,
+            0
+          );
           production.consumableProductsCosts = consumableProductsCosts;
 
           production.consumableProducts = newConsumableProducts;
@@ -307,26 +324,31 @@ const CreateShift = ({ closeModal }) => {
         }
       });
     }
-    try {
-      const data = {
-        id: uuid,
-        date: values.date.format("YYYY-MM-DD"),
-        shift: values.shift,
-        materialproductions: materialShifts.productions,
-        orderproductions: orderShifts.productions,
-      
-      };
-      console.log("data of addShiftToDB", data);
-      const response = await addShiftToDB(user.tokens.access_token, data);
 
-      console.log("response of addShiftToDB::: cvx", response);
+    if (error === "") {
+      try {
+        const data = {
+          id: uuid,
+          date: values.date.format("YYYY-MM-DD"),
+          shift: values.shift,
+          materialproductions: materialShifts.productions,
+          orderproductions: orderShifts.productions,
+        };
+        console.log("data of addShiftToDB", data);
 
-      if (response?.error) {
-        console.log(response?.error);
-        return setError(response.error);
+        const response = await addShiftToDB(user.tokens.access_token, data);
+
+        console.log("response of addShiftToDB::: cvx", response);
+
+        if (response?.error) {
+          console.log(response?.error);
+          return setError(response.error);
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    } else {
+      console.log("erorr in form", error);
     }
   };
 

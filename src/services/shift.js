@@ -22,6 +22,44 @@ export const addShiftToDB = async (access_token, params) => {
 };
 
 
+export const getDayShiftsForOrderFromDB = async (access_token, signal, date) => {
+  try {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_ENDPOINT}/shift/ordershifts?date=${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        signal: signal
+
+      }
+    );
+     console.log("fetchedddd getDayShiftsForOrderFromDB ", data)
+    return data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
+export const getDayShiftsForProcessFromDB = async (access_token, signal, date) => {
+  try {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_ENDPOINT}/shift/processshifts?date=${date}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        signal: signal
+
+      }
+    );
+     console.log("fetchedddd getDayShiftsForProcessFromDB ", data)
+    return data;
+  } catch (e) {
+    return e.response.data;
+  }
+};
+
+
 export const getShiftsForOrderFromDB = async (access_token) => {
   try {
     const { data } = await axios.get(

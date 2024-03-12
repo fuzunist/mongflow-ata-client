@@ -29,7 +29,7 @@ const SendToProduction = ({
   product,
   checkedRecipes,
 }) => {
-   console.log("product in SendToProduction", product)
+  console.log("product in SendToProduction", product);
   const specialRecipes = useSpecialRecipes();
   const recipeMaterials = useRecipeMaterialStocks();
   const recipes = useRecipes();
@@ -169,14 +169,23 @@ const SendToProduction = ({
               otherInputs.total_production;
           }
           // Add a new "Üretiliyor" status to the orderStatus array
-          orderProducts[key].orderStatus.push({
+          // orderProducts[key].orderStatus.push({
+          //   recipe_id: productionRecipeId,
+          //   quantity: otherInputs.total_production,
+          //   type: "Üretiliyor",
+          //   bunker_quantity: otherInputs?.total_bunker,
+          //   kg_quantity: otherInputs?.total_production,
+          // });
+
+          orderProducts[key].orderStatus = orderProducts[
+            key
+          ].orderStatus.concat({
             recipe_id: productionRecipeId,
             quantity: otherInputs.total_production,
             type: "Üretiliyor",
             bunker_quantity: otherInputs?.total_bunker,
             kg_quantity: otherInputs?.total_production,
           });
-
           if (typeof orderProducts[key]["productionRecipes"] === "undefined") {
             orderProducts[key]["productionRecipes"] = [];
           }
@@ -298,6 +307,7 @@ const SendToProduction = ({
           await Promise.all(promises);
       }
 
+      console.log("addRecipeResponse", addRecipeResponse);
       addProductionRecipe(addRecipeResponse);
       editOrder(updateOrderResponse);
 

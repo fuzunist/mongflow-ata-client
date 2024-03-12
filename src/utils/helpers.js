@@ -193,7 +193,6 @@ export const formatDigits = (number) => {
 };
 
 
-
 export const formatFloat = (number) => {
   return number?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
@@ -208,3 +207,36 @@ export const transformToFloat = (numberString) => {
   return 0; 
 
 };
+
+
+//burada sipariş durumlarında aynı olanlar birleşiyor( üretildi, üretiliyor, sevk edildi vs)
+export const getStatusMergeOrders= (orders)=>{
+  return orders
+  .map(order => {
+    const updatedProducts = order.products.map(product => {
+      const mergedProducts = {};
+
+      product.orderStatus.forEach(status => {
+        if (status === null) return;
+
+        const { type, quantity } = status;
+
+        if (mergedProducts[type]) {
+          mergedProducts[type] += quantity;
+        } else {
+          mergedProducts[type] = quantity;
+        }
+      });
+
+      const mergedArray = Object.keys(mergedProducts).map(type => ({
+        type,
+        quantity: mergedProducts[type]
+      }));
+
+      return { ...product, orderStatus: mergedArray };
+    });
+
+    return { ...order, products: updatedProducts };
+  });
+
+}

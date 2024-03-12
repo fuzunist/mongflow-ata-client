@@ -92,24 +92,7 @@ export default [
     icon: TableProperties,
     url: "/apps/products",
   },
-  {
-    key: "apps-orders",
-    icon: ListChecks,
-    url: "/apps/orders",
-    authenticate: {
-      type: "usertype",
-      value: [
-        "admin",
-        "boss",
-        "domestic_market_manager",
-        "foreign_market_manager",
-        "domestic_market_marketing",
-        "foreign_market_marketing",
-        "stock_manager",
-        "production_manager",
-      ],
-    },
-  },
+
   {
     key: "apps-stocks",
     icon: Layers,
@@ -144,7 +127,33 @@ export default [
       ],
     },
   },
-
+  {
+    key: "apps-orders",
+    icon: ListChecks,
+    url: "/apps/orders",
+    authenticate: {
+      type: "usertype",
+      value: [
+        "admin",
+        "boss",
+        "domestic_market_manager",
+        "foreign_market_manager",
+        "domestic_market_marketing",
+        "foreign_market_marketing",
+        "stock_manager",
+        "production_manager",
+      ],
+    },
+  },
+  {
+    key: "apps-shifts-daily",
+    icon: BookOpenCheck,
+    url: "/apps/shifts",
+    authenticate: {
+      type: "usertype",
+      value: ["admin", "stock_manager", "boss", "production_manager"],
+    },
+  },
   {
     key: "apps-productions",
     icon: Factory,
@@ -206,13 +215,5 @@ export default [
       ],
     },
   },
-  {
-    key: "apps-shifts-daily",
-    icon: BookOpenCheck,
-    url: "/apps/shifts",
-    authenticate: {
-      type: "usertype",
-      value: ["admin", "stock_manager", "boss", "production_manager"],
-    },
-  },
+
 ];
